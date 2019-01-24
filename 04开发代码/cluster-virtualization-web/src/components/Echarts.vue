@@ -1,45 +1,46 @@
 <template>
   <!-- built files will be auto injected -->
-  <div id="main" style="width: 600px;height:400px;">
+  <div :id="id" class="echart">
   </div>
 </template>
 
 <script>
-import echarts from 'echarts' // 引入echarts
+  import echarts from 'echarts' // 引入echarts
 
-export default {
+  export default {
   name: 'Echarts',
-  data () {
+    props: ['id', 'options'],
+    data() {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      myChart: {}
     }
   },
   mounted () {
-    this.drawLine()
+    this.draw()
   },
   methods: {
-    drawLine () {
+    draw: function () {
       // 基于准备好的dom，初始化echarts实例
-      var myChart = echarts.init(document.getElementById('main'))
+      this.myChart = echarts.init(document.getElementById(this.id));
+
       // 绘制图表
-      myChart.setOption({
-        title: { text: '在Vue中使用echarts' },
-        tooltip: {},
-        xAxis: {
-          data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
+      this.myChart.setOption(this.options);
+    }
+  },
+    watch: {
+      options: {
+        handler(nval, oval) {
+          this.myChart.setOption(nval);
         },
-        yAxis: {},
-        series: [{
-          name: '销量',
-          type: 'bar',
-          data: [5, 20, 36, 10, 10, 20]
-        }]
-      })
+        deep: true
     }
   }
 }
 </script>
 
 <style scoped>
+  .echart {
+    height: 100%;
+  }
 
 </style>

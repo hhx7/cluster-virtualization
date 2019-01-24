@@ -4,8 +4,9 @@ import HelloWorld from '@/components/HelloWorld'
 import Echarts from '@/components/Echarts'
 import Excel from '@/components/Excel'
 import Welcome from '@/components/Welcome'
+import Dashboard from "../components/Dashboard";
 
-Vue.use(Router)
+Vue.use(Router);
 
 
 export default new Router({
@@ -29,6 +30,12 @@ export default new Router({
       path: '/welcome',
       name: 'Welcome',
       component: Welcome
+    },
+    {
+      path: '/dashboard',
+      name: 'Dashboard',
+      component: Dashboard
+
     }
   ]
 })

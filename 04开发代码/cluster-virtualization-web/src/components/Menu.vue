@@ -30,9 +30,11 @@
                     }
 
                     reader.onload = function (f) {
-                        this.addCsvFile(f.target.result)
-                    }.bind(this);
+                        return function (e) {
+                            this.addCsvFile({name: f.name.substring(0, f.name.indexOf('.')), content: e.target.result})
+                        }.bind(this)
 
+                    }.bind(this)(f);
                     reader.readAsText(f)
                 }
 

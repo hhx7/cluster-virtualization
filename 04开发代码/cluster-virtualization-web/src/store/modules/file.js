@@ -4,7 +4,8 @@ import scatter from "./scatter";
 
 const state = {
     csv_file: {
-        data: {}
+        name: '',
+        content: []
     },
     scatter_options: {
         tooltip: {},
@@ -15,10 +16,9 @@ const state = {
         //     offset: 1,
         //     color: '#cdd0d5'
         // }]),
-        title:
-            {
+        title: {
                 text: '1990 与 2015 年各国家人均寿命与 GDP'
-            },
+        },
         legend: {
             right: 10,
             data: ['1990', '2015']
@@ -106,25 +106,26 @@ const state = {
 };
 
 const mutations = {
-    addCsvFile(state, results) {
-        state.csv_file = results
+    addCsvFile(state, {name, content}) {
+        state.csv_file.name = name;
+        state.csv_file.content = content
     },
     updateCsv(state, i) {
         // state.scatter_options.series = [ { data: nval, type: 'scatter'  } ]
-        Vue.set(state.csv_file.data, i, state.csv_file.data[i])
+        Vue.set(state.csv_file.content, i, state.csv_file.data[i])
 
     }
 
 };
 
 const actions = {
-    addCsvFile({commit}, f) {
+    addCsvFile({commit}, {name, content}) {
 
-        Papa.parse(f, {
+        Papa.parse(content, {
             header: false,
             dynamicTyping: true,
             complete: function (results) {
-                commit('addCsvFile', results)
+                commit('addCsvFile', {name: name, content: results})
 
             }.bind(this)
         })
@@ -138,9 +139,9 @@ const getters = {
         var rows = [];
 
         try {
-            headers = state.csv_file.meta.fields;
+            headers = state.csv_file.content.meta.fields;
 
-            rows = state.csv_file.data
+            rows = state.csv_file.content.data
 
         } catch (e) {
 
@@ -155,8 +156,8 @@ const getters = {
 
     },
     getOptions: state => {
-        state.scatter_options.series = [{data: state.csv_file.data, type: 'scatter'}];
-        console.log('options update');
+        state.scatter_options.series = [{data: state.csv_file.content.data, type: 'scatter'}];
+        state.scatter_options.title.text = state.csv_file.name;
         return state.scatter_options
     }
 };

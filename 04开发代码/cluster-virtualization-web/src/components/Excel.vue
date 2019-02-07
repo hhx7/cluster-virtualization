@@ -49,10 +49,7 @@
                             this.deselectCell();
                         }
                     },
-                    data: this.data,
-                    colHeaders: this.colHeaders,
-                    trimRows: true
-
+                    afterRemoveRow: this.removeRows
                 }
             };
         },
@@ -70,7 +67,7 @@
             }
         },
         methods: {
-            ...mapMutations(['updateCsv']),
+            ...mapMutations(['updateCsv', 'removeRow']),
             updateData: function (changes) {
                 if (changes == null)
                     return;
@@ -122,6 +119,9 @@
                 if (col >= 0 && TH.childElementCount < 2) {
                     TH.appendChild(this.getInitializedElements(col));
                 }
+            },
+            removeRows: function (index, amount, array) {
+                this.removeRow({start: index, amount: amount});
             }
         },
         watch: {

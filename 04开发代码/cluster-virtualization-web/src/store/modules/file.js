@@ -118,7 +118,9 @@ const mutations = {
     updateCsv(state, i) {
         // state.scatter_options.series = [ { data: nval, type: 'scatter'  } ]
         Vue.set(state.csv_file.data, i, state.csv_file.data[i])
-
+    },
+    removeRow(state, {start, amount}) {
+        state.csv_file.data.splice(start, amount);
     },
     excelFilter(col, value) {
 
@@ -139,7 +141,7 @@ const actions = {
                     commit('addCsvFile', {name: name, headers: results.meta.fields, data: results.data});
                 } else {
                     console.log(results);
-                    var len = results.data[0].length == 0 ? 5 : results.data[0].length;
+                    var len = results.data[0].length === 0 ? 5 : results.data[0].length;
                     var data = [];
                     if (results.data.length > 0) {
                         data = results.data.map(function (item) {

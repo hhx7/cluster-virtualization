@@ -1,11 +1,15 @@
 import Papa from 'papaparse'
 import Vue from 'vue'
 import scatter from "./scatter";
+import api from '../../api'
 
 const state = {
+
     csv_file: {
         name: '',
-        content: []
+        containHeaders: false,
+        headers: [],
+        data: []
     },
     scatter_options: {
         tooltip: {},
@@ -106,26 +110,48 @@ const state = {
 };
 
 const mutations = {
-    addCsvFile(state, {name, content}) {
+    addCsvFile(state, {name, headers, data}) {
         state.csv_file.name = name;
-        state.csv_file.content = content
+        state.csv_file.headers = headers;
+        state.csv_file.data = data
     },
     updateCsv(state, i) {
         // state.scatter_options.series = [ { data: nval, type: 'scatter'  } ]
-        Vue.set(state.csv_file.content, i, state.csv_file.data[i])
+        Vue.set(state.csv_file.data, i, state.csv_file.data[i])
+
+    },
+    excelFilter(col, value) {
 
     }
 
 };
 
 const actions = {
-    addCsvFile({commit}, {name, content}) {
+    addCsvFile({commit, state}, {name, content}) {
 
         Papa.parse(content, {
-            header: false,
+            header: state.csv_file.containHeaders,
             dynamicTyping: true,
             complete: function (results) {
-                commit('addCsvFile', {name: name, content: results})
+                //commit('addCsvFile', {name: name, content: results})
+                if (state.csv_file.containHeaders) {
+                    console.log(results);
+                    commit('addCsvFile', {name: name, headers: results.meta.fields, data: results.data});
+                } else {
+                    console.log(results);
+                    var len = results.data[0].length == 0 ? 5 : results.data[0].length;
+                    var data = [];
+                    if (results.data.length > 0) {
+                        data = results.data.map(function (item) {
+                            var row = [];
+                            for (var key in item) {
+                                row.push(item[key]);
+                            }
+                            return row;
+                        })
+                    }
+                    commit('addCsvFile', {name: name, headers: api.generateHeaders(len), data: data});
+                }
 
             }.bind(this)
         })
@@ -141,14 +167,14 @@ const getters = {
         try {
             headers = state.csv_file.content.meta.fields;
 
-            rows = state.csv_file.content.data
+            rows = state.csv_file.content.data;
 
         } catch (e) {
 
         }
         return {
-            colHeaders: headers,
-            data: rows
+            colHeaders: state.csv_file.headers,
+            data: state.csv_file.data
         }
     },
     getZz: state => {
@@ -156,7 +182,7 @@ const getters = {
 
     },
     getOptions: state => {
-        state.scatter_options.series = [{data: state.csv_file.content.data, type: 'scatter'}];
+        state.scatter_options.series = [{data: state.csv_file.data, type: 'scatter'}];
         state.scatter_options.title.text = state.csv_file.name;
         return state.scatter_options
     }

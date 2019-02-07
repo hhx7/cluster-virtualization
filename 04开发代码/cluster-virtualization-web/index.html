@@ -3,10 +3,167 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+      <link href="node_modules/handsontable/dist/handsontable.full.min.css" rel="stylesheet" media="screen">
     <title>cluster-vistualization-web</title>
   </head>
   <body>
     <div id="app"></div>
   </body>
 </html>
+
+<!--<html>-->
+<!--<header>-->
+<!--<script src="./node_modules/handsontable/dist/handsontable.full.js"></script>-->
+<!--<link type="text/css" rel="stylesheet" href="https://handsontable.com/docs/1.18.1/components/handsontable/dist/handsontable.full.min.css">-->
+<!--<style>-->
+<!--.handsontable.as-you-type-demo tr:first-child th {-->
+<!--vertical-align: bottom;-->
+<!--}-->
+
+<!--.handsontable.as-you-type-demo th > div.filterHeader {-->
+<!--border-top: 1px solid #CCC;-->
+<!--}-->
+
+<!--.handsontable.as-you-type-demo th > div.filterHeader > input {-->
+<!--width: calc(100% - 10px);-->
+<!--box-shadow: none;-->
+<!--border: 1px solid #CCC;-->
+<!--margin-top: 1px;-->
+<!--}-->
+
+<!--#externalFilter {-->
+<!--display: none;-->
+<!--margin-left: 10px;-->
+<!-- -ms-user-select: none; /* Internet Explorer/Edge */-->
+<!--user-select: none;-->
+<!--margin-bottom: 50px;-->
+<!--}-->
+
+<!--#externalFilter > .button-holder {-->
+<!--position: relative;-->
+<!--}-->
+
+<!--#externalFilter > .button-holder .buttons {-->
+<!--left: 5px;-->
+<!--}-->
+
+<!--#externalFilter > .demo-columnChoose,-->
+<!--#externalFilter > .demo-columnChoose > select,-->
+<!--#externalFilter > .demo-filterSelect {-->
+<!--width: 200px;-->
+<!--}-->
+
+<!--#externalFilter > .demo-columnChoose > select {-->
+<!--display: block;-->
+<!--margin: 2px 0px 10px 0px;-->
+<!--}-->
+
+<!--#externalFilter > .demo-filterSelect {-->
+<!--border: 1px solid #cccccc;-->
+<!--max-height: 200px;-->
+<!--overflow: auto;-->
+<!--}-->
+
+<!--#externalFilter > .demo-filterSelect > .demo-controllers {-->
+<!--font-weight: bold;-->
+<!--border-bottom: 1px solid #cccccc;-->
+<!--background-color: rgb(243, 243, 243);-->
+<!--padding: 2px 0px;-->
+<!--}-->
+
+<!--#externalFilter > .demo-filterSelect > .demo-controllers {-->
+<!--padding: 5px;-->
+<!--}-->
+
+<!--#externalFilter > .demo-filterSelect > .demo-items {-->
+<!--padding: 5px;-->
+<!--}-->
+
+<!--#externalFilter > .demo-filterSelect > .demo-items > .demo-item > label:before {-->
+<!--content: ' ';-->
+<!--white-space: pre;-->
+<!--}-->
+
+<!--#externalFilter > .button-holder {-->
+<!--margin-top: 10px;-->
+<!--}-->
+<!--</style>-->
+<!--</header>-->
+<!--<body>-->
+<!--<div>-->
+<!--<div id="example3" class="hot as-you-type-demo handsontable htRowHeaders htColumnHeaders"></div>-->
+<!--</div>-->
+<!--<script>-->
+<!--document.addEventListener("DOMContentLoaded", function() {-->
+
+<!--var dataObj = [-->
+<!--['Lorem', 'ipsum', 'dolor', 'sit', '12/1/2015', 23],-->
+<!--['adipiscing', 'elit', 'Ut', 'imperdiet', '5/12/2015', 6],-->
+<!--['Pellentesque', 'vulputate', 'leo', 'semper', '10/23/2015', 26],-->
+<!--['diam', 'et', 'malesuada', 'libero', '12/1/2014', 98],-->
+<!--['orci', 'et', 'dignissim', 'hendrerit', '12/1/2016', 8.5]-->
+<!--];-->
+
+<!--// Event for `keydown` event. Add condition after delay of 200 ms which is counted from time of last pressed key.-->
+<!--var debounceFn = Handsontable.helper.debounce(function (colIndex, event) {-->
+<!--var filtersPlugin = hot.getPlugin('filters');-->
+
+<!--filtersPlugin.removeConditions(colIndex);-->
+<!--filtersPlugin.addCondition(colIndex, 'contains', [event.realTarget.value]);-->
+<!--filtersPlugin.filter();-->
+<!--}, 200);-->
+
+<!--var addEventListeners = function (input, colIndex) {-->
+<!--input.addEventListener('keydown', function(event) {-->
+<!--debounceFn(colIndex, event);-->
+<!--});-->
+<!--};-->
+
+<!--// Build elements which will be displayed in header.-->
+<!--var getInitializedElements = function(colIndex) {-->
+<!--var div = document.createElement('div');-->
+<!--var input = document.createElement('input');-->
+
+<!--div.className = 'filterHeader';-->
+
+<!--addEventListeners(input, colIndex);-->
+
+<!--div.appendChild(input);-->
+
+<!--return div;-->
+<!--};-->
+
+<!--// Add elements to header on `afterGetColHeader` hook.-->
+<!--var addInput = function(col, TH) {-->
+<!--// Hooks can return value other than number (for example `columnSorting` plugin use this).-->
+<!--if (typeof col !== 'number') {-->
+<!--return col;-->
+<!--}-->
+
+<!--if (col >= 0 && TH.childElementCount < 2) {-->
+<!--TH.appendChild(getInitializedElements(col));-->
+<!--}-->
+<!--};-->
+
+<!--// Deselect column after click on input.-->
+<!--var doNotSelectColumn = function (event, coords) {-->
+<!--if (coords.row === -1 && event.realTarget.nodeName === 'INPUT') {-->
+<!--event.stopImmediatePropagation();-->
+<!--this.deselectCell();-->
+<!--}-->
+<!--};-->
+
+<!--var hot = new Handsontable(document.getElementById('example3'), {-->
+<!--data: dataObj,-->
+<!--colHeaders: true,-->
+<!--rowHeaders: true,-->
+<!--className: 'as-you-type-demo',-->
+<!--filters: true,-->
+<!--colWidths: 100,-->
+<!--afterGetColHeader: addInput,-->
+<!--beforeOnCellMouseDown: doNotSelectColumn-->
+<!--});-->
+<!--});-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->

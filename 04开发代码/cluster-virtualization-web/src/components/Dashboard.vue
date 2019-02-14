@@ -2,7 +2,8 @@
     <div class="dashboard columns">
         <Menu class="has-background-grey-light column is-2"/>
         <div class="column">
-            <Excel v-bind:data="getCsv.data" v-bind:col-headers="getCsv.colHeaders"/>
+            <Table v-bind:data="getCsv.data" v-bind:col-headers="getCsv.colHeaders"/>
+            <!--<Excel id="excel" v-bind:data="getCsv.data" v-bind:col-headers="getCsv.colHeaders"/>-->
             <div class="columns chart">
                 <Echarts class="column" v-bind:id="echart_id1" v-bind:options="getOptions"/>
                 <Echarts class="column" v-bind:id="echart_id2" v-bind:options="heatmap_options"/>
@@ -16,6 +17,7 @@
     import Echarts from "./Echarts"
     import Menu from "./Menu" // 引入echarts
     import {mapGetters, mapMutations, mapState} from 'vuex'
+    import Table from './Table'
 
     export default {
         name: "Dashboard",
@@ -102,7 +104,7 @@
         methods: {
             ...mapMutations(['updateCsv'])
         },
-        components: {Menu, Excel, Echarts}
+        components: {Menu, Excel, Echarts, Table}
     }
 </script>
 

@@ -1,10 +1,12 @@
 import Papa from 'papaparse'
 import Vue from 'vue'
-import scatter from "./scatter";
+import scatter from "./scatter"
+import Handsontable from 'handsontable'
 import api from '../../api'
 
+Papa.SCRIPT_PATH = '../../../static/js/papaparse.js';
 const state = {
-
+    temp: [],
     csv_file: {
         name: '',
         containHeaders: false,
@@ -111,19 +113,82 @@ const state = {
 
 const mutations = {
     addCsvFile(state, {name, headers, data}) {
+        console.log('copy start');
         state.csv_file.name = name;
         state.csv_file.headers = headers;
-        state.csv_file.data = data
+        state.csv_file.data = data;
+        console.log('copy complete');
     },
-    updateCsv(state, i) {
+    addCsvRows(state, {data}) {
+
+        if (state.csv_file.data.length === 0) {
+            state.csv_file.data = data;
+            return;
+        }
+
+        data.forEach((v, i) => {
+            if (!(v.length === 1 && v[0] === null)) { // [null]
+                state.csv_file.data.push(v);
+            }
+        });
+    },
+    addCsvRow(state, {row}) {
+        // if (state.csv_file.containHeaders) {
+        //     commit('addCsvFile', {name: name, headers: results.meta.fields, data: results.data});
+        // } else {
+        //     var len = results.data[0].length === 0 ? 5 : results.data[0].length;
+        //     var data = [];
+        //     if (results.data.length > 0) {
+        //         data = results.data.map(function (item) {
+        //             var row = [];
+        //             for (var key in item) {
+        //                 row.push(item[key]);
+        //             }
+        //             return row;
+        //         })
+        //     }
+        //     commit('addCsvFile', {name: name, headers: api.generateHeaders(len), data: data});
+        // }
+        if (state.csv_file.data.length === 0) {
+            state.csv_file.data = row;
+        } else {
+            state.csv_file.data.push(row[0]);
+        }
+    },
+    updateCsv(state, {row, prop, newValue}) {
         // state.scatter_options.series = [ { data: nval, type: 'scatter'  } ]
-        Vue.set(state.csv_file.data, i, state.csv_file.data[i])
+        state.csv_file.data[row][prop] = newValue;
+        Vue.set(state.csv_file.data, row, state.csv_file.data[row]);
+    },
+    updateTableData(state, rowData) {
+        state.csv_file.data = rowData;
     },
     removeRow(state, {start, amount}) {
         state.csv_file.data.splice(start, amount);
     },
+    createRow(state, i) {
+        var nrow = {};
+        state.csv_file.headers.forEach(function (item) {
+            console.log(item);
+            nrow[item.field] = undefined;
+        });
+        state.csv_file.data.splice(i, 0, nrow);
+
+    },
+    addRow(state, {data}) {
+        state.temp.push(data[0]);
+    },
+    assignToData(state) {
+        console.log('assignData');
+
+        state.csv_file.data = state.temp;
+        console.log(state.csv_file.data);
+    },
     excelFilter(col, value) {
 
+    },
+    initData(state) {
+        state.csv_file.data = Handsontable.helper.createSpreadsheetData(400000, 2);
     }
 
 };
@@ -133,29 +198,67 @@ const actions = {
 
         Papa.parse(content, {
             header: state.csv_file.containHeaders,
+            worker: true,
             dynamicTyping: true,
+            // step: function (row) {
+            //     //console.log(row);
+            //     //commit('addRow', {data: row.data});
+            //     commit('addCsvRow', { row: row.data});
+            //     console.log(row);
+            // },
+            // complete: function () {
+            //     console.log('complete');
+            //     //commit('assignToData');
+            // }
+            // chunk: function (rows) {
+            //     commit('addCsvRows', {data: rows.data});
+            // }
+            // complete: function (results) {
+            //     console.log('read file complete');
+            //     //commit('initData');
+            //     if (state.csv_file.containHeaders) {
+            //         var len = results.data[0].length === 0 ? 5 : results.data[0].length;
+            //         var data = [];
+            //         if (results.data.length > 0) {
+            //             data = results.data.map(function (item) {
+            //                 var row = [];
+            //                 for (var key in item) {
+            //                     row.push(item[key]);
+            //                 }
+            //                 return row;
+            //             })
+            //         }
+            //         commit('addCsvFile', {name: name, headers: results.meta.fields, data: results.data});
+            //     } else {
+            //         var len = results.data[0].length === 0 ? 5 : results.data[0].length;
+            //         commit('addCsvFile', {name: name, headers: api.generateHeaders(len), data: data});
+            //
+            //     }
+            //
+            // }.bind(this)
             complete: function (results) {
-                //commit('addCsvFile', {name: name, content: results})
+                console.log('read file complete');
                 if (state.csv_file.containHeaders) {
-                    console.log(results);
                     commit('addCsvFile', {name: name, headers: results.meta.fields, data: results.data});
                 } else {
-                    console.log(results);
                     var len = results.data[0].length === 0 ? 5 : results.data[0].length;
                     var data = [];
+                    var headers = api.generateHeaders(len);
                     if (results.data.length > 0) {
                         data = results.data.map(function (item) {
-                            var row = [];
-                            for (var key in item) {
-                                row.push(item[key]);
+                            var row = {};
+                            for (var i in headers) {
+                                row[headers[i]] = item[i];
                             }
                             return row;
                         })
                     }
-                    commit('addCsvFile', {name: name, headers: api.generateHeaders(len), data: data});
+                    headers = headers.map(function (item) {
+                        return {headerName: item, field: item, sortable: true, filter: true};
+                    });
+                    commit('addCsvFile', {name: name, headers: headers, data: data});
                 }
-
-            }.bind(this)
+            }
         })
     }
 };
@@ -184,7 +287,14 @@ const getters = {
 
     },
     getOptions: state => {
-        state.scatter_options.series = [{data: state.csv_file.data, type: 'scatter'}];
+        var scatter_data = state.csv_file.data.map(function (item) {
+            var row = [];
+            for (var key in item) {
+                row.push(item[key]);
+            }
+            return row;
+        });
+        state.scatter_options.series = [{data: scatter_data, type: 'scatter'}];
         state.scatter_options.title.text = state.csv_file.name;
         return state.scatter_options
     }

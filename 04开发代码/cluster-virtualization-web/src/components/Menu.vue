@@ -24,18 +24,16 @@
                 var files = evt.target.files;
                 var reader = new FileReader();
                 for (var i = 0, f; f = files[i]; i++) {
-
                     if (!f.type.match('csv')) {
                         continue;
                     }
-
                     reader.onload = function (f) {
                         return function (e) {
                             this.addCsvFile({name: f.name.substring(0, f.name.indexOf('.')), content: e.target.result})
                         }.bind(this)
 
                     }.bind(this)(f);
-                    reader.readAsText(f)
+                    reader.readAsText(f);
                 }
 
 

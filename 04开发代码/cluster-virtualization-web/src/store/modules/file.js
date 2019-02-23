@@ -27,6 +27,8 @@ const state = {
         },
         legend: {
             right: 10,
+            height: 320,
+            width: 480,
             data: ['1990', '2015']
         },
         xAxis: {
@@ -163,6 +165,37 @@ const mutations = {
     updateTableData(state, rowData) {
         state.csv_file.data = rowData;
     },
+    updateTableHeader(state, {headerName, checked}) {
+        for (var i in state.csv_file.headers) {
+            if (state.csv_file.headers[i].headerName === headerName) {
+                state.csv_file.headers[i].show = checked;
+                Vue.set(state.csv_file.headers, i, state.csv_file.headers[i]);
+                break;
+            }
+        }
+    },
+    removeTableFeature(state, headerName) {
+        // remove header
+        for (var i in state.csv_file.headers) {
+            if (state.csv_file.headers[i].headerName === headerName) {
+                state.csv_file.headers.splice(i, 1);
+                break;
+            }
+        }
+        // delete data
+        state.csv_file.data.forEach((value, i) => {
+            Vue.delete(value, headerName);
+        });
+    },
+    addTableFeature(state, headerName) {
+        state.csv_file.headers.push({
+            headerName: headerName,
+            field: headerName,
+            sortable: true,
+            filter: true,
+            show: true
+        });
+    },
     removeRow(state, {start, amount}) {
         state.csv_file.data.splice(start, amount);
     },
@@ -254,7 +287,7 @@ const actions = {
                         })
                     }
                     headers = headers.map(function (item) {
-                        return {headerName: item, field: item, sortable: true, filter: true};
+                        return {headerName: item, field: item, sortable: true, filter: true, show: true};
                     });
                     commit('addCsvFile', {name: name, headers: headers, data: data});
                 }

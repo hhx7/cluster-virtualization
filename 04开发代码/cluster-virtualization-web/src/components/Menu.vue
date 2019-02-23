@@ -42,7 +42,7 @@
     }
 </script>
 
-<style scoped>
+<style>
     @import "../../static/css/bulma.min.css";
 
 </style>

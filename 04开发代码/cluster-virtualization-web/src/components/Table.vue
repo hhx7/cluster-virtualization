@@ -30,6 +30,9 @@
                     </div>
                 </div>
             </div>
+            <button class="button" @click="exportToCSV()">CSV</button>
+            <button class="button" @click="exportToExcel()">Excel</button>
+            <button class="button" @click="exportToPDF()">PDF</button>
 
         </div>
         <ag-grid-vue ref="table" style="width: 500px; height: 200px;"
@@ -89,7 +92,8 @@
             this.gridApi = this.gridOptions.api;
         },
         methods: {
-            ...mapMutations(['updateTableData', 'removeRow', 'createRow', 'updateTableHeader', 'removeTableFeature', 'addTableFeature']),
+            ...mapMutations(['updateTableData', 'removeRow', 'createRow', 'updateTableHeader', 'removeTableFeature', 'addTableFeature',
+                'saveAsCSV', 'saveAsExcel', 'saveAsPDF']),
             updateData(data) {
                 var dataSource = {
                     rowCount: null,
@@ -120,12 +124,17 @@
                 }
 
             },
+            exportToCSV() {
+                this.saveAsCSV('hello');
+            },
+            exportToExcel() {
+                this.saveAsExcel('excel');
+            },
+            exportToPDF() {
+                this.saveAsPDF('pdf');
+            },
             onGridReady(params) {
                 this.updateData(this.data);
-            },
-            dataModelChanged(rowData) {
-                //console.log(this.data);
-                //this.updateTableData(rowData);
             },
             onBtRemove() {
                 var selectedRows = this.gridApi.getSelectedNodes();
@@ -144,15 +153,6 @@
 
                 var selectedRow = selectedRows[0];
                 this.createRow(selectedRow.rowIndex);
-            },
-            onAddFeature() {
-
-            },
-            onRemoveFeature() {
-
-            },
-            onCellValueChanged(oldValue, newValue) {
-
             }
         },
         watch: {

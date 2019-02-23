@@ -2,9 +2,16 @@ import Papa from 'papaparse'
 import Vue from 'vue'
 import scatter from "./scatter"
 import Handsontable from 'handsontable'
+import {saveAs} from 'file-saver';
 import api from '../../api'
+import {json2excel} from 'js2excel'
+import jsPDF from 'jspdf'
 
 Papa.SCRIPT_PATH = '../../../static/js/papaparse.js';
+
+var FileSaver = require('file-saver');
+
+
 const state = {
     temp: [],
     csv_file: {
@@ -195,6 +202,45 @@ const mutations = {
             filter: true,
             show: true
         });
+    },
+    saveAsCSV(state, path) {
+        var items = state.csv_file.data;
+        const replacer = (key, value) => value === null ? '' : value;
+        const header = state.csv_file.headers.map(item => item.headerName);
+        let csv = items.map(row => header.map(headerName => JSON.stringify(row[headerName], replacer)).join(','));
+        csv.unshift(header.join(','));
+        let str = csv.join('\r\n');
+        var blob = new Blob([str], {type: "text/csv;charset=utf-8"});
+        FileSaver.saveAs(blob, "hello world.csv");
+    },
+    saveAsExcel(state, filename) {
+        let data = state.csv_file.data;
+        try {
+            json2excel({
+                data,
+                name: 'excel',
+                formatDate: 'yyyy/mm/dd'
+            });
+        } catch (e) {
+            console.error('export error');
+        }
+    },
+    saveAsPDF(state, filename) {
+        var doc = new jsPDF();
+        state.csv_file.headers.forEach((value, i) => {
+            doc.text(20 + (i * 20), 10, value.headerName);
+        });
+        state.csv_file.data.forEach((item, i) => {
+            let j = 0;
+            for (let key in item) {
+                let data = item[key] == null ? "" : item[key];
+                doc.text(20 + j * 30, 30 + i * 20, data.toString());
+                ++j;
+            }
+
+        });
+        doc.save(filename);
+
     },
     removeRow(state, {start, amount}) {
         state.csv_file.data.splice(start, amount);

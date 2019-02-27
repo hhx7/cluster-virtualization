@@ -35,8 +35,8 @@
             <button class="button" @click="exportToPDF()">PDF</button>
 
         </div>
-        <ag-grid-vue ref="table" style="width: 500px; height: 200px;"
-                     class="ag-theme-material"
+        <ag-grid-vue ref="table" style="width: 100%; height: 200px;"
+                     class="ag-theme-balham"
                      :columnDefs="getHeaders"
                      :gridOptions="gridOptions"
                      :rowSelection="rowSelection"
@@ -153,6 +153,18 @@
 
                 var selectedRow = selectedRows[0];
                 this.createRow(selectedRow.rowIndex);
+            },
+            onStartEditing(dataIndex) {
+                this.gridApi.setFocusedCell(dataIndex, this.colHeaders[0].headerName, null);
+                let node = this.gridApi.getRowNode(dataIndex.toString());
+                node.setSelected(true);
+                // this.gridApi.startEditingCell({
+                //     rowIndex: 0,
+                //     colKey: "lastName",
+                //     rowPinned: pinned,
+                //     keyPress: key,
+                //     charPress: char
+                // });
             }
         },
         watch: {

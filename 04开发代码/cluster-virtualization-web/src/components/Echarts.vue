@@ -24,7 +24,7 @@
       this.myChart = echarts.init(document.getElementById(this.id));
 
       // 绘制图表
-      this.myChart.setOption(this.options);
+      this.myChart.setOption(this.options, true);
     }
   },
     watch: {

@@ -20,6 +20,7 @@ const state = {
         headers: [],
         data: []
     },
+    scatter_data_start_pos_in_series: 1,
     scatter_options: {
         tooltip: {},
         // backgroundColor: new echarts.graphic.RadialGradient(0.3, 0.3, 0.8, [{
@@ -40,7 +41,7 @@ const state = {
         },
         grid: {},
         xAxis: {
-            // show: true,
+            show: false,
             // splitLine: {
             //     lineStyle: {
             //         type: 'dashed'
@@ -51,7 +52,7 @@ const state = {
             axisLine: {onZero: false}
         },
         yAxis: {
-            // show: true,
+            show: false,
             // splitLine: {
             //     lineStyle: {
             //         type: 'dashed'
@@ -63,15 +64,23 @@ const state = {
             axisLine: {onZero: false}
         },
         series: [{
+            id: "line",
+            type: 'line',
+            smooth: true,
+            animation: true,
+            symbolSize: 15,
+            data: []
+        }, {
             id: 'a',
             data: [[15, 0], [-50, 10], [-56.5, 20], [-46.5, 30], [-22.1, 40]], //,[43294,81.7,35939927,'Canada',2015],[13334,76.9,1376048943,'China',2015],[21291,78.5,11389562,'Cuba',2015],[38923,80.8,5503457,'Finland',2015],[37599,81.9,64395345,'France',2015],[44053,81.1,80688545,'Germany',2015],[42182,82.8,329425,'Iceland',2015],[5903,66.8,1311050527,'India',2015],[36162,83.5,126573481,'Japan',2015],[1390,71.4,25155317,'North Korea',2015],[34644,80.7,50293439,'South Korea',2015],[34186,80.6,4528526,'New Zealand',2015],[64304,81.6,5210967,'Norway',2015],[24787,77.3,38611794,'Poland',2015],[23038,73.13,143456918,'Russia',2015],[19360,76.5,78665830,'Turkey',2015],[38225,81.4,64715810,'United Kingdom',2015],[53354,79.1,321773631,'United States',2015]
-            type: 'line',
+            type: 'scatter',
             symbolSize: 10,
             smooth: true,
             // symbolSize: function (data) {
             //     return Math.sqrt(data[2]) / 5e2;
             // },
             label: {
+
                 emphasis: {
                     show: true,
                     formatter: function (param) {
@@ -95,8 +104,22 @@ const state = {
                     // }])
                 }
             }
+            // ,
+            // markLine: {
+            //     animation: true,
+            //     lineStyle: {
+            //         normal: {
+            //             type: 'solid'
+            //         }
+            //     },
+            //     data: [
+            //         [{coord: [15, 0], symbol: 'none'}, {coord: [-50, 10],  symbol: 'none'}],
+            //         [{coord: [-50, 10], symbol: 'none'},{coord: [-56.5, 20], symbol: 'none'}]
+            //     ]
+            // }
         }]
     },
+    scatter_graphic_points: [],
     test: {},
     zz: 'zz'
 };
@@ -245,6 +268,30 @@ const mutations = {
     updateScatterData(state, dataIndex) {
         Vue.set(state.scatter_options.series[0].data, dataIndex, state.scatter_options.series[0].data[dataIndex]);
     },
+    addScatterLinePointByData(state, sdata) {
+        let data = JSON.parse(JSON.stringify(sdata));
+        if (state.scatter_options.series[0].data.length >= 2) {
+            Vue.set(state.scatter_options.series[0].data, 1, data);
+        } else
+            state.scatter_options.series[0].data.push(data);
+    },
+    clearScatterLinePointByData(state) {
+        state.scatter_options.series[0].data.splice(0);
+    },
+    updateScatterGraphicPointByIndex(state, totalLength) {
+        let seriesIndex = 0, dataIndex = 0, currentLength = 0,
+            nextPartLength = state.scatter_options.series[seriesIndex].length;
+        while (currentLength + nextPartLength <= totalLength) {
+            currentLength += nextPartLength;
+            nextPartLength = state.scatter_options.series[++seriesIndex].length;
+        }
+
+        dataIndex = totalLength - currentLength;
+        state.scatter_graphic_points.push(state.scatter_options.series[seriesIndex].data[dataIndex]);
+    },
+    updateScatterGraphicPointByData(state, data) {
+        state.scatter_graphic_points.push(data);
+    },
     addRow(state, {data}) {
         state.temp.push(data[0]);
     },
@@ -365,10 +412,17 @@ const getters = {
                 }
                 return row;
             });
-            state.scatter_options.series = [{data: scatter_data, type: 'scatter'}];
+            state.scatter_options.series[1].data = scatter_data;
             state.scatter_options.title.text = state.csv_file.name;
         }
         return state.scatter_options
+    },
+
+    getScatterGraphicPoints: state => {
+        return state.scatter_graphic_points;
+    },
+    getScatterDataStartPosInSeries: state => {
+        return state.scatter_data_start_pos_in_series;
     }
 };
 

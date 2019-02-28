@@ -33,7 +33,6 @@
             <button class="button" @click="exportToCSV()">CSV</button>
             <button class="button" @click="exportToExcel()">Excel</button>
             <button class="button" @click="exportToPDF()">PDF</button>
-
         </div>
         <ag-grid-vue ref="table" style="width: 100%; height: 200px;"
                      class="ag-theme-balham"
@@ -41,17 +40,19 @@
                      :gridOptions="gridOptions"
                      :rowSelection="rowSelection"
                      :rowModelType="rowModelType"
+                     :infiniteInitialRowCount="infiniteInitialRowCount"
                      @grid-ready="onGridReady"
+                     @cell-value-changed="onCellValueChanged"
         >
         </ag-grid-vue>
-
     </div>
 
 </template>
 
 <script>
     import {AgGridVue} from "ag-grid-vue";
-    import {mapMutations} from 'vuex'
+    import {mapGetters, mapMutations} from 'vuex'
+    import MyCellEditor from './MyCellEditor'
 
     export default {
         name: "Table",
@@ -64,13 +65,16 @@
                 rowSelection: 'single',
                 gridOptions: {
                     defaultColDef: {
-                        editable: true
+                        editable: true,
+                        cellEditorFramework: 'MyCellEditor'
                     }
                 },
+                infiniteInitialRowCount: 500,
                 rowModelType: 'infinite'
             }
         },
         computed: {
+            ...mapGetters({getOptions: 'getOptions'}),
             getData: function () {
                 return Object.freeze(
                     this.data.map(row => {
@@ -83,22 +87,20 @@
             }
         },
         components: {
-            AgGridVue
+            AgGridVue, MyCellEditor
         },
         beforeMount() {
-
         },
         mounted() {
             this.gridApi = this.gridOptions.api;
         },
         methods: {
             ...mapMutations(['updateTableData', 'removeRow', 'createRow', 'updateTableHeader', 'removeTableFeature', 'addTableFeature',
-                'saveAsCSV', 'saveAsExcel', 'saveAsPDF']),
+                'saveAsCSV', 'saveAsExcel', 'saveAsPDF', 'updateScatterGraphicPointByIndex', 'addScatterLinePointByData']),
             updateData(data) {
                 var dataSource = {
                     rowCount: null,
                     getRows: function (params) {
-                        console.log("asking for " + params.startRow + " to " + params.endRow);
                         setTimeout(function () {
                             var rowsThisPage = data.slice(params.startRow, params.endRow);
                             var lastRow = -1;
@@ -135,6 +137,7 @@
             },
             onGridReady(params) {
                 this.updateData(this.data);
+                params.api.sizeColumnsToFit();
             },
             onBtRemove() {
                 var selectedRows = this.gridApi.getSelectedNodes();
@@ -158,6 +161,9 @@
                 this.gridApi.setFocusedCell(dataIndex, this.colHeaders[0].headerName, null);
                 let node = this.gridApi.getRowNode(dataIndex.toString());
                 node.setSelected(true);
+                if (this.gridApi.getInfiniteRowCount() < dataIndex)
+                    this.gridApi.setInfiniteRowCount(dataIndex + 1, false);
+                this.gridApi.ensureIndexVisible(dataIndex);
                 // this.gridApi.startEditingCell({
                 //     rowIndex: 0,
                 //     colKey: "lastName",
@@ -165,6 +171,19 @@
                 //     keyPress: key,
                 //     charPress: char
                 // });
+            },
+            onCellValueChanged(params) {
+                this.updateScatterGraphicPointByIndex(params.rowIndex);
+                // var colId = params.column.getId();
+                // if (colId === "country") {
+                //     var selectedCountry = params.data.country;
+                //     var selectedCity = params.data.city;
+                //     var allowedCities = countyToCityMap(selectedCountry);
+                //     var cityMismatch = allowedCities.indexOf(selectedCity) < 0;
+                //     if (cityMismatch) {
+                //         params.node.setDataValue("city", null);
+                //     }
+                // }
             }
         },
         watch: {

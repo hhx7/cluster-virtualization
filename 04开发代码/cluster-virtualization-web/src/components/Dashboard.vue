@@ -38,6 +38,7 @@
             return {
                 echart_id1: "echart_id1",
                 echart_id2: "echart_id2",
+                scatter_graphic_points: [],
                 heatmap_options: {
                     tooltip: {
                         position: 'top'
@@ -89,7 +90,13 @@
             }
         },
         computed: {
-            ...mapGetters({getCsv: 'getCsv', getOptions: 'getOptions'}),
+            ...mapGetters({
+                getCsv: 'getCsv',
+                getOptions: 'getOptions',
+                getScatterGraphicPoints: 'getScatterGraphicPoints',
+                getScatterDataStartPosInSeries: 'getScatterDataStartPosInSeries'
+            }),
+
             ...mapState({
                 zz: state => {
                     return state.file.zz
@@ -122,9 +129,10 @@
             //     }.bind(this))
             // });
             this.$refs.scatter.myChart.on('dblclick', this.onScatterPointDblclick);
+            this.scatter_graphic_points = this.getScatterGraphicPoints;
         },
         methods: {
-            ...mapMutations(['updateCsv', 'updateEchartsOptions', 'updateScatterData']),
+            ...mapMutations(['updateCsv', 'updateEchartsOptions', 'updateScatterData', 'addScatterLinePointByData']),
             onScatterPointDragging: function (context) {
                 return function (dataIndex, dx, dy) {
                     let series = context.getOptions.series;
@@ -149,13 +157,45 @@
             },
             onScatterPointDblclick: function (params) {
                 let dataIndex = 0;
-                for (let i = 0; i < params.seriesIndex; ++i) {
+                for (let i = this.getScatterDataStartPosInSeries; i < params.seriesIndex; ++i) {
                     dataIndex += this.getOptions.series[i].length;
                 }
                 dataIndex += params.dataIndex;
                 this.$refs.table.onStartEditing(dataIndex);
+                // this.updateEchartsOptions({
+                //     graphic: {
+                //         type: 'circle',
+                //         position: this.$refs.scatter.myChart.convertToPixel('grid', this.getOptions.series[params.seriesIndex].data[params.dataIndex]),
+                //         shape: {
+                //             cx: 0,
+                //             cy: 0,
+                //             r: 10
+                //         },
+                //         invisible: false,
+                //         z: 100
+                //     }
+                // });
             }
         },
+        // watch: {
+        //     getScatterGraphicPoints: function () {
+        //         this.updateEchartsOptions({
+        //             graphic: echarts.util.map(this.scatter_graphic_points, function (item, dataIndex) {
+        //                 return{
+        //                     type: 'circle',
+        //                     position: this.$refs.scatter.myChart.convertToPixel('grid', item),
+        //                     shape: {
+        //                         cx: 0,
+        //                         cy: 0,
+        //                         r: 10
+        //                     },
+        //                     invisible: false,
+        //                     z: 100
+        //                 };
+        //             }.bind(this))
+        //         });
+        //     }
+        // },
         components: {Menu, Excel, Echarts, Table}
     }
 </script>

@@ -2,6 +2,7 @@
     <div class="dashboard columns">
         <Menu class="has-background-grey-light column is-2"/>
         <div class="column">
+            <!--<UITest />-->
             <Table ref="table" id="table" v-bind:data="getCsv.data" v-bind:col-headers="getCsv.colHeaders"/>
             <!--<Excel id="excel" v-bind:data="getCsv.data" v-bind:col-headers="getCsv.colHeaders"/>-->
             <div class="columns chart">
@@ -19,6 +20,7 @@
     import {mapGetters, mapMutations, mapState} from 'vuex'
     import Table from './Table'
     import echarts from 'echarts'
+    import UITest from './UITest'
 
     export default {
         name: "Dashboard",
@@ -196,7 +198,7 @@
         //         });
         //     }
         // },
-        components: {Menu, Excel, Echarts, Table}
+        components: {Menu, Excel, Echarts, Table, UITest}
     }
 </script>
 

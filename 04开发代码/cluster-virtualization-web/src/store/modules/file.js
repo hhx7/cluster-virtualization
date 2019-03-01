@@ -268,12 +268,14 @@ const mutations = {
     updateScatterData(state, dataIndex) {
         Vue.set(state.scatter_options.series[0].data, dataIndex, state.scatter_options.series[0].data[dataIndex]);
     },
-    addScatterLinePointByData(state, sdata) {
-        let data = JSON.parse(JSON.stringify(sdata));
+    addScatterLinePointByData(state, data) {
         if (state.scatter_options.series[0].data.length >= 2) {
             Vue.set(state.scatter_options.series[0].data, 1, data);
         } else
             state.scatter_options.series[0].data.push(data);
+    },
+    addScatterLinePointsByArray(state, array) {
+        state.scatter_options.series[0].data = array;
     },
     clearScatterLinePointByData(state) {
         state.scatter_options.series[0].data.splice(0);

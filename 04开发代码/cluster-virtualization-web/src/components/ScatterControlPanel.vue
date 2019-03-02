@@ -1,5 +1,5 @@
 <template>
-    <div class="test">
+    <div class="control-panel">
         <div class="level">
             <div class="select is-rounded is-small">
                 <label>
@@ -50,13 +50,11 @@
 
 
     </div>
-
-
 </template>
 
 <script>
     export default {
-        name: "UITest",
+        name: "ControlPanel",
         data() {
             return {
                 raw_data: 0,
@@ -85,8 +83,7 @@
 </script>
 
 <style scoped>
-    .test {
-        width: 350px;
+    .control-panel {
         height: 50px;
     }
 </style>

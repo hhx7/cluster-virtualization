@@ -6,7 +6,11 @@
             <Table ref="table" id="table" v-bind:data="getCsv.data" v-bind:col-headers="getCsv.colHeaders"/>
             <!--<Excel id="excel" v-bind:data="getCsv.data" v-bind:col-headers="getCsv.colHeaders"/>-->
             <div class="columns chart">
-                <Echarts ref="scatter" class="column" v-bind:id="echart_id1" v-bind:options="getOptions"/>
+                <div class="column">
+                    <ScatterControlPanel/>
+                    <Echarts ref="scatter" v-bind:id="echart_id1" v-bind:options="getOptions"/>
+                </div>
+
                 <Echarts class="column" v-bind:id="echart_id2" v-bind:options="heatmap_options"/>
             </div>
         </div>
@@ -20,6 +24,7 @@
     import {mapGetters, mapMutations, mapState} from 'vuex'
     import Table from './Table'
     import echarts from 'echarts'
+    import ScatterControlPanel from './ScatterControlPanel'
     import UITest from './UITest'
 
     export default {
@@ -198,7 +203,7 @@
         //         });
         //     }
         // },
-        components: {Menu, Excel, Echarts, Table, UITest}
+        components: {Menu, Excel, Echarts, Table, ScatterControlPanel, UITest}
     }
 </script>
 

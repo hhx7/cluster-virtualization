@@ -14,9 +14,8 @@
                 <div class="level-left">
                     <div class="select is-rounded is-small">
                         <label>
-                            <select>
-                                <option>A</option>
-                                <option>B</option>
+                            <select v-model="raw_data_header_first_selected">
+                                <option v-for="header in headers"> {{ header.headerName }}</option>
                             </select>
                         </label>
                     </div>
@@ -25,8 +24,10 @@
                     <div class="select is-rounded is-small">
                         <label>
                             <select>
-                                <option>A</option>
-                                <option>B</option>
+                                <option v-for="header in headers"
+                                        v-show="header.headerName !== 'raw_data_header_first_selected'"> {{
+                                    header.headerName }}
+                                </option>
                             </select>
                         </label>
                     </div>
@@ -47,25 +48,25 @@
                 </div>
             </div>
         </div>
-
-
     </div>
 </template>
 
 <script>
     export default {
         name: "ControlPanel",
+        props: ['headers'],
         data() {
             return {
                 raw_data: 0,
                 pca: 1,
                 mda: 2,
-                selected: 0
+                selected: 0,
+                raw_data_header_first_selected: this.headers.length > 0 ? this.headers[0].headerName : ''
             }
         },
         computed: {
             is_raw_data_selected() {
-                return this.selected === this.raw_data;
+                return this.selected === this.raw_data && this.headers.length > 0;
             },
             is_pca_selected() {
                 return this.selected === this.pca;

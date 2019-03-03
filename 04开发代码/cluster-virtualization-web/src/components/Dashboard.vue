@@ -7,11 +7,14 @@
             <!--<Excel id="excel" v-bind:data="getCsv.data" v-bind:col-headers="getCsv.colHeaders"/>-->
             <div class="columns chart">
                 <div class="column">
-                    <ScatterControlPanel/>
+                    <ScatterControlPanel v-bind:headers="getCsv.colHeaders"/>
                     <Echarts ref="scatter" v-bind:id="echart_id1" v-bind:options="getOptions"/>
                 </div>
+                <div class="column">
+                    <HotmapControlPanel/>
+                    <Echarts v-bind:id="echart_id2" v-bind:options="heatmap_options"/>
+                </div>
 
-                <Echarts class="column" v-bind:id="echart_id2" v-bind:options="heatmap_options"/>
             </div>
         </div>
     </div>
@@ -25,6 +28,7 @@
     import Table from './Table'
     import echarts from 'echarts'
     import ScatterControlPanel from './ScatterControlPanel'
+    import HotmapControlPanel from './HotmapControlPanel'
     import UITest from './UITest'
 
     export default {
@@ -203,7 +207,7 @@
         //         });
         //     }
         // },
-        components: {Menu, Excel, Echarts, Table, ScatterControlPanel, UITest}
+        components: {Menu, Excel, Echarts, Table, ScatterControlPanel, HotmapControlPanel, UITest}
     }
 </script>
 

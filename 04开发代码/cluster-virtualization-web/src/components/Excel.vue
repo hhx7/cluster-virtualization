@@ -89,7 +89,7 @@
             // }
         },
         methods: {
-            ...mapMutations(['updateCsv', 'removeRow', 'createRow']),
+            ...mapMutations('table', {updateCsv: 'updateCsv', removeRow: 'removeRow', createRow: 'createRow'}),
             loadData: function () {
 
                 // this.hot.selectCell(this.pos, 0);

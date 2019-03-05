@@ -51,7 +51,7 @@
 
 <script>
     import {AgGridVue} from "ag-grid-vue";
-    import {mapGetters, mapMutations} from 'vuex'
+    import {mapMutations} from 'vuex'
     import MyCellEditor from './MyCellEditor'
 
     export default {
@@ -74,7 +74,6 @@
             }
         },
         computed: {
-            ...mapGetters({getOptions: 'getOptions'}),
             getData: function () {
                 return Object.freeze(
                     this.data.map(row => {
@@ -95,8 +94,19 @@
             this.gridApi = this.gridOptions.api;
         },
         methods: {
-            ...mapMutations(['updateTableData', 'removeRow', 'createRow', 'updateTableHeader', 'removeTableFeature', 'addTableFeature',
-                'saveAsCSV', 'saveAsExcel', 'saveAsPDF', 'updateScatterGraphicPointByIndex', 'addScatterLinePointByData']),
+            ...mapMutations('table', {
+                updateTableData: 'updateTableData',
+                removeRow: 'removeRow',
+                createRow: 'createRow',
+                updateTableHeader: 'updateTableHeader',
+                removeTableFeature: 'removeTableFeature',
+                addTableFeature: 'addTableFeature',
+                saveAsCSV: 'saveAsCSV',
+                saveAsExcel: 'saveAsExcel',
+                saveAsPDF: 'saveAsPDF',
+                updateScatterGraphicPointByIndex: 'updateScatterGraphicPointByIndex',
+                addScatterLinePointByData: 'addScatterLinePointByData'
+            }),
             updateData(data) {
                 var dataSource = {
                     rowCount: null,

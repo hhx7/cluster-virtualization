@@ -120,9 +120,14 @@
         },
 
         methods: {
-            ...mapMutations(['updateScatterGraphicPointByData', 'updateScatterGraphicPointByIndex',
-                'addScatterLinePointByData', 'clearScatterLinePointByData',
-                'addScatterLinePointByData', 'addScatterLinePointsByArray']),
+            ...mapMutations('scatter', {
+                updateScatterGraphicPointByData: 'updateScatterGraphicPointByData',
+                updateScatterGraphicPointByIndex: 'updateScatterGraphicPointByIndex',
+                addScatterLinePointByData: 'addScatterLinePointByData',
+                clearScatterLinePointByData: 'clearScatterLinePointByData',
+                addScatterLinePointByData: 'addScatterLinePointByData',
+                addScatterLinePointsByArray: 'addScatterLinePointsByArray'
+            }),
             getValue() {
                 this.clearScatterLinePointByData();
                 return this.changed ? this.value : this.params.value;

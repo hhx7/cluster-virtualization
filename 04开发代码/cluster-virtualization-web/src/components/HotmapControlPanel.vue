@@ -13,7 +13,7 @@
                         </div>
                     </div>
                     <div class="level-right">
-                        <button class="button is-rounded is-small" @click="printValue">OK</button>
+                        <button class="button is-rounded is-small">OK</button>
                     </div>
                 </div>
             </div>
@@ -29,7 +29,7 @@
                         </div>
                     </div>
                     <div class="level-right">
-                        <button class="button is-rounded is-small" @click="printValue">OK</button>
+                        <button class="button is-rounded is-small">OK</button>
                     </div>
                 </div>
             </div>

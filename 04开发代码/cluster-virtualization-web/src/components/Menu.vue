@@ -17,9 +17,9 @@
     export default {
         name: "Menu",
         methods: {
-            ...mapActions([
-                'addCsvFile'
-            ]),
+            ...mapActions('table', {
+                addCsvFile: 'addCsvFile'
+            }),
             openCsv: function (evt) {
                 var files = evt.target.files;
                 var reader = new FileReader();

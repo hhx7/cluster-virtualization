@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+
+	<!-- 组件扫描，扫描含有注解的类。这里是指Spring Bean的注解 -->
+	<context:component-scan
+		base-package="com.hhx7.cvserver.service.impl">
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Service" />
+
+	</context:component-scan>
+
+	<!-- 读取外部属性文件 -->
+	<context:property-placeholder
+		location="classpath:jdbc.properties" />
+	<!-- 数据库连接池 -->
+	<bean id="dataSource"
+		class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="${jdbc.driver}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<!-- 设置连接池初始值 -->
+		<property name="initialPoolSize" value="5" />
+		<property name="minPoolSize" value="1"></property>
+		<property name="maxPoolSize" value="40"></property>
+		<property name="maxIdleTime" value="20"></property>
+	</bean>
+
+	<!-- Mybatiss配置 sqlSessionFactory -->
+	<!--<bean id="sqlSessionFactory"-->
+		<!--class="org.mybatis.spring.SqlSessionFactoryBean">-->
+		<!--<property name="dataSource" ref="dataSource" />-->
+		<!--&lt;!&ndash; 自动扫描mapping.xml文件，**表示迭代查找 &ndash;&gt;-->
+		<!--<property name="typeAliasesPackage" value="com.imu.imu_ntas.entity"></property>-->
+		<!--<property name="mapperLocations"-->
+			<!--value="classpath:com/hhx7/cvserver/mapper/*.xml" />-->
+		<!--&lt;!&ndash; 配置分页插件 &ndash;&gt;-->
+		<!--<property name="plugins">-->
+			<!--<array>-->
+			<!--&lt;!&ndash; 分页插件拦截器  &ndash;&gt;-->
+				<!--<bean class="com.github.pagehelper.PageInterceptor">-->
+					<!--<property name="properties">-->
+					 <!--&lt;!&ndash;使用下面的方式配置参数，一行配置一个 helperDialect：分页插件会自动检测当前的数据库链接，自动选择合适的分页方式 &ndash;&gt;-->
+						<!--<value>-->
+							<!--helperDialect=mysql-->
+						<!--</value>-->
+					<!--</property>-->
+				<!--</bean>-->
+			<!--</array>-->
+		<!--</property>-->
+		<!--<property name="configLocation" value="classpath:mybatis-config.xml"></property>-->
+	<!--</bean>-->
+	<!-- Mapper接口所在包名，Spring会自动查找其下的类 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.imu.imu_ntas.dao" />
+		<property name="sqlSessionFactoryBeanName"
+			value="sqlSessionFactory" />
+	</bean>
+
+	<!-- 配置事务管理器 -->
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+    <!-- 这里采用xml方式配置服务层的事务管理   也可以使用注解的方式使用事务（先写切面，然后是@aspect注解。。）-->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<!--
+			    <tx:method    name="save" propagation="REQUIRED" isolation="DEFAULT"/>
+				<tx:method  name="update" propagation="REQUIRED" isolation="DEFAULT"/>
+				<tx:method  name="delete" propagation="REQUIRED" isolation="DEFAULT"/> -->
+			<tx:method name="*" propagation="REQUIRED" isolation="DEFAULT" />
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config>
+		<!-- 切入点表达式 -->
+		<aop:pointcut id="txPointcut"	expression="execution(* com.hhx7..service.impl.*.*(..))" />
+		<aop:advisor advice-ref="txAdvice"
+			pointcut-ref="txPointcut" />
+	</aop:config>
+
+	<tx:annotation-driven
+		transaction-manager="txManager" />
+</beans>

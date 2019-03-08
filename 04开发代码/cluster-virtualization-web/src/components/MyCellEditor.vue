@@ -125,7 +125,6 @@
                 updateScatterGraphicPointByIndex: 'updateScatterGraphicPointByIndex',
                 addScatterLinePointByData: 'addScatterLinePointByData',
                 clearScatterLinePointByData: 'clearScatterLinePointByData',
-                addScatterLinePointByData: 'addScatterLinePointByData',
                 addScatterLinePointsByArray: 'addScatterLinePointsByArray'
             }),
             getValue() {

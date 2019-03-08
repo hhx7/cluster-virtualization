@@ -103,7 +103,9 @@
                 addTableFeature: 'addTableFeature',
                 saveAsCSV: 'saveAsCSV',
                 saveAsExcel: 'saveAsExcel',
-                saveAsPDF: 'saveAsPDF',
+                saveAsPDF: 'saveAsPDF'
+            }),
+            ...mapMutations('scatter', {
                 updateScatterGraphicPointByIndex: 'updateScatterGraphicPointByIndex',
                 addScatterLinePointByData: 'addScatterLinePointByData'
             }),

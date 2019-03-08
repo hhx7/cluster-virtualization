@@ -12,7 +12,7 @@
                 </div>
                 <div class="column">
                     <HotmapControlPanel/>
-                    <Echarts v-bind:id="echart_id2" v-bind:options="getHeatmapOptions"/>
+                    <Echarts ref="heatmap" v-bind:id="echart_id2" v-bind:options="getHeatmapOptions"/>
                 </div>
 
             </div>
@@ -37,6 +37,7 @@
             return {
                 echart_id1: "echart_id1",
                 echart_id2: "echart_id2",
+                heatmap_click_blocks: [],
                 scatter_graphic_points: []
             }
         },
@@ -71,6 +72,7 @@
             //     }.bind(this))
             // });
             this.$refs.scatter.myChart.on('dblclick', this.onScatterPointDblclick);
+            this.$refs.heatmap.myChart.on('click', this.onHeatmapBlockClick);
             this.scatter_graphic_points = this.getScatterGraphicPoints;
         },
         methods: {
@@ -98,6 +100,32 @@
                         }
                     );
                 };
+            },
+            onHeatmapBlockClick: function (params) {
+                //添加最新点击的块
+                this.heatmap_click_blocks.push(params.dataIndex);
+                console.log(this.heatmap_click_blocks);
+                //移除最前边的点
+                if (this.heatmap_click_blocks.length >= 3) {
+                    let dataIndex = this.heatmap_click_blocks.shift();
+                    if (dataIndex !== undefined) {
+                        console.log(dataIndex);
+                        this.$refs.heatmap.myChart.dispatchAction({
+                            type: 'downplay',
+
+                            // 使用 dataIndex 来定位节点。
+                            dataIndex: dataIndex
+                        });
+                    }
+                }
+
+                //点亮最新块
+                this.$refs.heatmap.myChart.dispatchAction({
+                    type: 'highlight',
+                    // 使用 dataIndex 来定位节点。
+                    dataIndex: params.dataIndex
+                });
+
             },
             onScatterPointClick: function (context) {
                 return function (dataIndex, dx, dy) {

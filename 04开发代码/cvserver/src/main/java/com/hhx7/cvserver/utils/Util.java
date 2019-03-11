@@ -1,5 +1,6 @@
 package com.hhx7.cvserver.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Util {
@@ -16,5 +17,12 @@ public class Util {
                 res.append(deli);
         }
         return res.toString();
+    }
+
+    public static List<List<Double>> strToList(String s){
+
+        List<List<Double>> res = new ArrayList<>();
+
+        return res;
     }
 }

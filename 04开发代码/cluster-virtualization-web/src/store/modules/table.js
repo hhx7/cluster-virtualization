@@ -189,18 +189,6 @@ export default {
     },
     getters: {
         getCsv: function (state) {
-
-            var headers = [];
-            var rows = [];
-
-            try {
-                headers = state.csv_file.content.meta.fields;
-
-                rows = state.csv_file.content.data;
-
-            } catch (e) {
-
-            }
             return {
                 colHeaders: state.csv_file.headers,
                 data: state.csv_file.data

@@ -3,20 +3,23 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 
 Vue.use(VueAxios, axios);
-
+axios.defaults.withCredentials = true;
 export default {
-    state: {},
+    namespace: true,
+    state: {
+        URL_ROOT: 'http://localhost:9000/cvserver/home'
+    },
     mutations: {},
     actions: {
         uploadCsv: {
             root: true,
-            handler(state, {headers, data}) {
+            handler({state}, {headers, data}) {
                 console.log(headers);
                 let csv = {
                     headers: headers.map(header => header.headerName),
                     data: data.map(row => Object.keys(row).map(key => row[key]))
                 };
-                axios.post('http://localhost:9000/cvserver/home/uploadCsv',
+                axios.post(state.URL_ROOT + '/uploadCsv',
                     csv)
                     .then(function (response) {
                         console.log(response);
@@ -24,6 +27,18 @@ export default {
                     .catch(function (error) {
                         console.log(error);
                     });
+            }
+        },
+        pca: {
+            root: true,
+            handler({state, dispatch}) {
+                axios.post(state.URL_ROOT + '/pca').then(
+                    function (response) {
+                        dispatch('scatter/redisplayPCAData', {data: response.data.res});
+                    }
+                ).catch(function (error) {
+                    console.log(error);
+                });
             }
         }
     },

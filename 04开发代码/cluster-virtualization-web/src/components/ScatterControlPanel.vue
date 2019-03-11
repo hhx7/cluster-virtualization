@@ -1,20 +1,22 @@
 <template>
     <div class="control-panel">
         <div class="level">
-            <div class="select is-rounded is-small">
-                <label>
-                    <select v-model="selected">
-                        <option :value="raw_data">Raw Data</option>
-                        <option :value="pca">PCA</option>
-                        <option :value="mda">MDA</option>
-                    </select>
-                </label>
+            <div class="level-left">
+                <div class="select is-rounded is-small">
+                    <label>
+                        <select v-model="selected">
+                            <option :value="raw_data">Raw Data</option>
+                            <option :value="pca">PCA</option>
+                            <option :value="mda">MDA</option>
+                        </select>
+                    </label>
+                </div>
             </div>
             <div class="level-item" v-if="is_raw_data_selected">
                 <div class="level-left">
                     <div class="select is-rounded is-small">
                         <label>
-                            <select v-model="raw_data_header_first_selected">
+                            <select v-model="x_option">
                                 <option v-for="header in headers"> {{ header.headerName }}</option>
                             </select>
                         </label>
@@ -23,9 +25,8 @@
                 <div class="level-item">
                     <div class="select is-rounded is-small">
                         <label>
-                            <select>
-                                <option v-for="header in headers"
-                                        v-show="header.headerName !== 'raw_data_header_first_selected'"> {{
+                            <select v-model="y_option">
+                                <option v-for="header in headers"> {{
                                     header.headerName }}
                                 </option>
                             </select>
@@ -33,25 +34,18 @@
                     </div>
                 </div>
 
-                <div class="level-item">
-                    <button class="button is-rounded is-small" @click="printValue">OK</button>
-                </div>
+
             </div>
-            <div class="level-item" v-if="is_pca_selected">
-                <div class="select is-rounded is-small">
-                    <label>
-                        <select>
-                            <option>C</option>
-                            <option>D</option>
-                        </select>
-                    </label>
-                </div>
+            <div class="level-item">
+                <button class="button is-rounded is-small" @click="displayData">OK</button>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+    import {mapActions, mapMutations} from "vuex";
+
     export default {
         name: "ControlPanel",
         props: ['headers'],
@@ -61,7 +55,8 @@
                 pca: 1,
                 mda: 2,
                 selected: 0,
-                raw_data_header_first_selected: this.headers.length > 0 ? this.headers[0].headerName : ''
+                x_option: null,
+                y_option: null
             }
         },
         computed: {
@@ -76,8 +71,44 @@
             }
         },
         methods: {
-            printValue() {
-                console.log(this.selected);
+            ...mapActions({
+                pca_handle: 'pca'
+            }),
+            ...mapActions('scatter', {
+                displayRawData: 'displayRawData'
+            }),
+            ...mapMutations('scatter', {
+                displayPCAData: 'displayPCAData'
+            }),
+            displayData() {
+                switch (this.selected) {
+                    case this.raw_data:
+                        this.displayRawData({headers: [this.x_option, this.y_option]});
+                        break;
+                    case this.pca:
+                        this.pca_handle();
+                        break;
+                    case this.mda:
+                        break;
+                }
+            }
+        },
+        watch: {
+            selected: function (nval, oval) {
+                switch (nval) {
+                    case this.raw_data:
+                        this.displayRawData({headers: [this.x_option, this.y_option]});
+                        break;
+                    case this.pca:
+                        this.displayPCAData();
+                        break;
+                }
+            },
+            headers: function (nval, oval) {
+                if (nval.length > 0) {
+                    this.x_option = nval[0].headerName;
+                    this.y_option = nval[0].headerName;
+                }
             }
         }
     }

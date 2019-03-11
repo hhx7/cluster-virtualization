@@ -1,5 +1,4 @@
 import Vue from "vue";
-import api from "../../api";
 
 export default {
     namespaced: true,
@@ -74,6 +73,10 @@ export default {
                 type: 'value',
                 axisLine: {onZero: false}
             },
+            dataset: {
+                dimensions: null,
+                source: [[15, 0], [-50, 10], [-56.5, 20], [-46.5, 30], [-22.1, 40]]
+            },
             series: [{
                 id: "line",
                 type: 'line',
@@ -82,8 +85,7 @@ export default {
                 symbolSize: 15,
                 data: []
             }, {
-                id: 'a',
-                data: [[15, 0], [-50, 10], [-56.5, 20], [-46.5, 30], [-22.1, 40]], //,[43294,81.7,35939927,'Canada',2015],[13334,76.9,1376048943,'China',2015],[21291,78.5,11389562,'Cuba',2015],[38923,80.8,5503457,'Finland',2015],[37599,81.9,64395345,'France',2015],[44053,81.1,80688545,'Germany',2015],[42182,82.8,329425,'Iceland',2015],[5903,66.8,1311050527,'India',2015],[36162,83.5,126573481,'Japan',2015],[1390,71.4,25155317,'North Korea',2015],[34644,80.7,50293439,'South Korea',2015],[34186,80.6,4528526,'New Zealand',2015],[64304,81.6,5210967,'Norway',2015],[24787,77.3,38611794,'Poland',2015],[23038,73.13,143456918,'Russia',2015],[19360,76.5,78665830,'Turkey',2015],[38225,81.4,64715810,'United Kingdom',2015],[53354,79.1,321773631,'United States',2015]
+                id: 'a', //,[43294,81.7,35939927,'Canada',2015],[13334,76.9,1376048943,'China',2015],[21291,78.5,11389562,'Cuba',2015],[38923,80.8,5503457,'Finland',2015],[37599,81.9,64395345,'France',2015],[44053,81.1,80688545,'Germany',2015],[42182,82.8,329425,'Iceland',2015],[5903,66.8,1311050527,'India',2015],[36162,83.5,126573481,'Japan',2015],[1390,71.4,25155317,'North Korea',2015],[34644,80.7,50293439,'South Korea',2015],[34186,80.6,4528526,'New Zealand',2015],[64304,81.6,5210967,'Norway',2015],[24787,77.3,38611794,'Poland',2015],[23038,73.13,143456918,'Russia',2015],[19360,76.5,78665830,'Turkey',2015],[38225,81.4,64715810,'United Kingdom',2015],[53354,79.1,321773631,'United States',2015]
                 type: 'scatter',
                 symbolSize: 10,
                 // label: {
@@ -125,9 +127,15 @@ export default {
                 // }
             }]
         },
-        scatter_graphic_points: []
+        scatter_graphic_points: [],
+        pca: []
     },
     mutations: {
+        displayPCAData(state) {
+            if (state.pca.length > 0) {
+                state.scatter_options.dataset.source = state.pca;
+            }
+        },
         updateEchartsOptions(state, obj) {
             state.scatter_options = {...state.scatter_options, ...obj};
             // if (state.scatter_options.hasOwnProperty(key)){
@@ -166,27 +174,31 @@ export default {
             state.scatter_graphic_points.push(data);
         },
     },
+    actions: {
+        displayRawData({state, rootState, rootGetters}, {headers}) {
+
+
+            if (rootState.table.csv_file.data.length > 0) {
+                state.scatter_options.dataset.source = rootState.table.csv_file.data;
+                state.scatter_options.dataset.dimensions = headers;
+                //     //let colors = api.getRandomColor(state.scatter_options.series.length);
+                //     // state.scatter_options.series.forEach((v, i) => {
+                //     //     v.itemStyle = {
+                //     //         normal: {
+                //     //             color: colors[i]
+                //     //         }
+                //     //     };
+                //     // });
+            }
+        },
+        redisplayPCAData({state, commit}, {data}) {
+            state.pca = data;
+            commit('displayPCAData');
+        },
+    },
     getters: {
         getOptions: (state, getters, rootState, rootGetters) => {
-            if (rootState.table.csv_file.data.length > 0) {
-                var scatter_data = rootState.table.csv_file.data.map(function (item) {
-                    var row = [];
-                    for (var key in item) {
-                        row.push(item[key]);
-                    }
-                    return row;
-                });
-                state.scatter_options.series[1].data = scatter_data;
-                state.scatter_options.title.text = rootState.table.csv_file.name;
-                let colors = api.getRandomColor(state.scatter_options.series.length);
-                state.scatter_options.series.forEach((v, i) => {
-                    v.itemStyle = {
-                        normal: {
-                            color: colors[i]
-                        }
-                    };
-                });
-            }
+
             return state.scatter_options
         },
         getScatterGraphicPoints: state => {

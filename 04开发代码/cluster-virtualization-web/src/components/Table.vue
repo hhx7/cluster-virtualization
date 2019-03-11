@@ -170,12 +170,12 @@
                 this.createRow(selectedRow.rowIndex);
             },
             onStartEditing(dataIndex) {
-                this.gridApi.setFocusedCell(dataIndex, this.colHeaders[0].headerName, null);
-                let node = this.gridApi.getRowNode(dataIndex.toString());
-                node.setSelected(true);
                 if (this.gridApi.getInfiniteRowCount() < dataIndex)
                     this.gridApi.setInfiniteRowCount(dataIndex + 1, false);
                 this.gridApi.ensureIndexVisible(dataIndex);
+                this.gridApi.setFocusedCell(dataIndex, this.colHeaders[0].headerName, null);
+                let node = this.gridApi.getRowNode(dataIndex.toString());
+                node.setSelected(true);
                 // this.gridApi.startEditingCell({
                 //     rowIndex: 0,
                 //     colKey: "lastName",

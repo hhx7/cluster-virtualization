@@ -61,7 +61,7 @@
             return {
                 raw_data: 0,
                 pca: 1,
-                mda: 2,
+                mds: 2,
                 selected: 0
             }
         },
@@ -73,7 +73,7 @@
                 return this.selected === this.pca;
             },
             is_mda_selected() {
-                return this.selected === this.mda;
+                return this.selected === this.mds;
             }
         },
         methods: {

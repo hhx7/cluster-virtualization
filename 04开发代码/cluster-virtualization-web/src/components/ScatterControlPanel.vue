@@ -7,7 +7,7 @@
                         <select v-model="selected">
                             <option :value="raw_data">Raw Data</option>
                             <option :value="pca">PCA</option>
-                            <option :value="mda">MDA</option>
+                            <option :value="mds">MDS</option>
                         </select>
                     </label>
                 </div>
@@ -53,7 +53,7 @@
             return {
                 raw_data: 0,
                 pca: 1,
-                mda: 2,
+                mds: 2,
                 selected: 0,
                 x_option: null,
                 y_option: null
@@ -67,18 +67,20 @@
                 return this.selected === this.pca;
             },
             is_mda_selected() {
-                return this.selected === this.mda;
+                return this.selected === this.mds;
             }
         },
         methods: {
             ...mapActions({
-                pca_handle: 'pca'
+                pca_handle: 'pca',
+                mds_handle: 'mds'
             }),
             ...mapActions('scatter', {
                 displayRawData: 'displayRawData'
             }),
             ...mapMutations('scatter', {
-                displayPCAData: 'displayPCAData'
+                displayPCAData: 'displayPCAData',
+                displayMDSData: 'displayMDSData'
             }),
             displayData() {
                 switch (this.selected) {
@@ -88,7 +90,8 @@
                     case this.pca:
                         this.pca_handle();
                         break;
-                    case this.mda:
+                    case this.mds:
+                        this.mds_handle();
                         break;
                 }
             }
@@ -101,6 +104,9 @@
                         break;
                     case this.pca:
                         this.displayPCAData();
+                        break;
+                    case this.mds:
+                        this.displayMDSData();
                         break;
                 }
             },

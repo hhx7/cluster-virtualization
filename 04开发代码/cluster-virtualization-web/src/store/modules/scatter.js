@@ -128,12 +128,18 @@ export default {
             }]
         },
         scatter_graphic_points: [],
-        pca: []
+        pca: [],
+        mds: []
     },
     mutations: {
         displayPCAData(state) {
             if (state.pca.length > 0) {
                 state.scatter_options.dataset.source = state.pca;
+            }
+        },
+        displayMDSData(state) {
+            if (state.mds.length > 0) {
+                state.scatter_options.dataset.source = state.mds;
             }
         },
         updateEchartsOptions(state, obj) {
@@ -195,6 +201,10 @@ export default {
             state.pca = data;
             commit('displayPCAData');
         },
+        redisplayMDSData({state, commit}, {data}) {
+            state.mds = data;
+            commit('displayMDSData');
+        }
     },
     getters: {
         getOptions: (state, getters, rootState, rootGetters) => {

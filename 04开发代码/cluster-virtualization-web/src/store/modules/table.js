@@ -21,11 +21,9 @@ export default {
     },
     mutations: {
         addCsvFile(state, {name, headers, data}) {
-            console.log('copy start');
             state.csv_file.name = name;
             state.csv_file.headers = headers;
             state.csv_file.data = data;
-            console.log('copy complete');
         },
         updateCsv(state, {row, prop, newValue}) {
             // state.scatter_options.series = [ { data: nval, type: 'scatter'  } ]
@@ -110,7 +108,6 @@ export default {
         createRow(state, i) {
             var nrow = {};
             state.csv_file.headers.forEach(function (item) {
-                console.log(item);
                 nrow[item.field] = undefined;
             });
             state.csv_file.data.splice(i, 0, nrow);
@@ -161,7 +158,6 @@ export default {
                 //
                 // }.bind(this)
                 complete: function (results) {
-                    console.log('read file complete');
                     if (state.csv_file.containHeaders) {
                         commit('addCsvFile', {name: name, headers: results.meta.fields, data: results.data});
                     } else {

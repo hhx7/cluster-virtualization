@@ -14,7 +14,6 @@ export default {
         uploadCsv: {
             root: true,
             handler({state}, {headers, data}) {
-                console.log(headers);
                 let csv = {
                     headers: headers.map(header => header.headerName),
                     data: data.map(row => Object.keys(row).map(key => row[key]))
@@ -22,7 +21,7 @@ export default {
                 axios.post(state.URL_ROOT + '/uploadCsv',
                     csv)
                     .then(function (response) {
-                        console.log(response);
+
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -40,6 +39,19 @@ export default {
                     console.log(error);
                 });
             }
+        },
+        mds: {
+            root: true,
+            handler({state, dispatch}) {
+                axios.post(state.URL_ROOT + '/mds').then(
+                    function (response) {
+                        dispatch('scatter/redisplayMDSData', {data: response.data.res});
+                    }
+                ).catch(function (error) {
+                    console.log(error);
+                });
+            }
+
         }
     },
     getters: {}

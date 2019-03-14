@@ -52,6 +52,18 @@ export default {
                 });
             }
 
+        },
+        kmeans: {
+            root: true,
+            handler({state, dispatch}, max_cluster) {
+                axios.post(state.URL_ROOT + '/kmeans', {maxCluster: max_cluster}).then(
+                    function (response) {
+                        dispatch('heatmap/redisplayKMeansData', {data: response.data.res});
+                    }
+                ).catch(function (error) {
+                    console.log(error);
+                });
+            }
         }
     },
     getters: {}

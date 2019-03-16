@@ -51,7 +51,7 @@
 
 <script>
     import {AgGridVue} from "ag-grid-vue";
-    import {mapMutations} from 'vuex'
+    import {mapActions, mapMutations} from 'vuex'
     import MyCellEditor from './MyCellEditor'
 
     export default {
@@ -96,14 +96,18 @@
         methods: {
             ...mapMutations('table', {
                 updateTableData: 'updateTableData',
-                removeRow: 'removeRow',
-                createRow: 'createRow',
                 updateTableHeader: 'updateTableHeader',
-                removeTableFeature: 'removeTableFeature',
-                addTableFeature: 'addTableFeature',
                 saveAsCSV: 'saveAsCSV',
                 saveAsExcel: 'saveAsExcel',
                 saveAsPDF: 'saveAsPDF'
+            }),
+            ...mapActions('table', {
+                removeRow: 'removeRow',
+                createRow: 'createRow',
+                cellValueChanged: 'cellValueChanged',
+                addTableFeature: 'addTableFeature',
+                removeTableFeature: 'removeTableFeature',
+                showOrHideColumn: 'showOrHideColumn'
             }),
             ...mapMutations('scatter', {
                 updateScatterGraphicPointByIndex: 'updateScatterGraphicPointByIndex',
@@ -126,7 +130,7 @@
                 this.gridApi.setDatasource(dataSource);
             },
             updateFeature(headerName, e) {
-                this.updateTableHeader({headerName: headerName, checked: e.target.checked});
+                this.showOrHideColumn({headerName: headerName, show: e.target.checked});
             },
             removeFeature(headerName) {
                 this.removeTableFeature(headerName);
@@ -186,16 +190,7 @@
             },
             onCellValueChanged(params) {
                 this.updateScatterGraphicPointByIndex(params.rowIndex);
-                // var colId = params.column.getId();
-                // if (colId === "country") {
-                //     var selectedCountry = params.data.country;
-                //     var selectedCity = params.data.city;
-                //     var allowedCities = countyToCityMap(selectedCountry);
-                //     var cityMismatch = allowedCities.indexOf(selectedCity) < 0;
-                //     if (cityMismatch) {
-                //         params.node.setDataValue("city", null);
-                //     }
-                // }
+                this.cellValueChanged({rowIndex: params.rowIndex, colId: params.column.colId, value: params.value});
             }
         },
         watch: {

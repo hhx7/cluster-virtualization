@@ -25,5 +25,9 @@ export default {
         }
 
         return res;
+    },
+
+    getObjectValue(obj) {
+        return Object.keys(obj).map(key => obj[key]);
     }
 }

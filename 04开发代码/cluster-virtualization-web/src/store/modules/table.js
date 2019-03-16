@@ -33,10 +33,10 @@ export default {
         updateTableData(state, rowData) {
             state.csv_file.data = rowData;
         },
-        updateTableHeader(state, {headerName, checked}) {
+        updateTableHeader(state, {headerName, show}) {
             for (var i in state.csv_file.headers) {
                 if (state.csv_file.headers[i].headerName === headerName) {
-                    state.csv_file.headers[i].show = checked;
+                    state.csv_file.headers[i].show = show;
                     Vue.set(state.csv_file.headers, i, state.csv_file.headers[i]);
                     break;
                 }
@@ -54,6 +54,7 @@ export default {
             state.csv_file.data.forEach((value, i) => {
                 Vue.delete(value, headerName);
             });
+
         },
         addTableFeature(state, headerName) {
             state.csv_file.headers.push({
@@ -63,6 +64,7 @@ export default {
                 filter: true,
                 show: true
             });
+            state.csv_file.data.forEach((v, i) => Vue.set(v, headerName, 0.0));
         },
         saveAsCSV(state, path) {
             var items = state.csv_file.data;
@@ -100,17 +102,6 @@ export default {
                 }
             });
             doc.save(filename);
-
-        },
-        removeRow(state, {start, amount}) {
-            state.csv_file.data.splice(start, amount);
-        },
-        createRow(state, i) {
-            var nrow = {};
-            state.csv_file.headers.forEach(function (item) {
-                nrow[item.field] = undefined;
-            });
-            state.csv_file.data.splice(i, 0, nrow);
 
         }
     },
@@ -181,7 +172,37 @@ export default {
                     }
                 }
             })
+        },
+        createRow({commit, state, dispatch}, i) {
+            let nrow = {};
+            state.csv_file.headers.forEach(function (item) {
+                nrow[item.field] = 0;
+            });
+            state.csv_file.data.splice(i, 0, nrow);
+            dispatch('createRow', {index: i, row: nrow}, {root: true});
+        },
+        removeRow({commit, state, dispatch}, {start, amount}) {
+            state.csv_file.data.splice(start, amount);
+            dispatch('removeRow', {start: start, amount: amount}, {root: true});
+        },
+        cellValueChanged({commit, state, dispatch}, {rowIndex, colId, value}) {
+
+            dispatch('cellValueChanged', {rowIndex: rowIndex, colId: colId, value: value}, {root: true})
+        },
+        removeTableFeature({commit, state, dispatch}, headerName) {
+
+            commit('removeTableFeature', headerName);
+            dispatch('removeColumn', {colId: headerName}, {root: true});
+        },
+        addTableFeature({commit, state, dispatch}, headerName) {
+            commit('addTableFeature', headerName);
+            dispatch('addColumn', headerName, {root: true});
+        },
+        showOrHideColumn({commit, state, dispatch}, {headerName, show}) {
+            commit('updateTableHeader', {headerName: headerName, show: show});
+            dispatch('showOrHideColumn', {colId: headerName, show: show}, {root: true});
         }
+
     },
     getters: {
         getCsv: function (state) {

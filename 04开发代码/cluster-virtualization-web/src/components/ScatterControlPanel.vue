@@ -17,7 +17,7 @@
                     <div class="select is-rounded is-small">
                         <label>
                             <select v-model="x_option">
-                                <option v-for="header in headers"> {{ header.headerName }}</option>
+                                <option v-for="header in myHeaders"> {{ header.headerName }}</option>
                             </select>
                         </label>
                     </div>
@@ -26,7 +26,7 @@
                     <div class="select is-rounded is-small">
                         <label>
                             <select v-model="y_option">
-                                <option v-for="header in headers"> {{
+                                <option v-for="header in myHeaders"> {{
                                     header.headerName }}
                                 </option>
                             </select>
@@ -68,6 +68,9 @@
             },
             is_mda_selected() {
                 return this.selected === this.mds;
+            },
+            myHeaders() {
+                return this.headers.filter(item => item.show === true);
             }
         },
         methods: {

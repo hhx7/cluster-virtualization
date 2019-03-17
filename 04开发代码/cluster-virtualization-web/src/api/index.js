@@ -29,5 +29,11 @@ export default {
 
     getObjectValue(obj) {
         return Object.keys(obj).map(key => obj[key]);
+    },
+
+    countNumberLength(num) {
+        // x = Number(String(num).replace(/[^0-9]/g, ''));
+        // return (Math.log10((x ^ (x >> 31)) - (x >> 31)) | 0) + 1;
+        return num.toString().length;
     }
 }

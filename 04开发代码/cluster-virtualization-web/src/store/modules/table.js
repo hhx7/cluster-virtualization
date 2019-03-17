@@ -4,6 +4,7 @@ import {saveAs} from 'file-saver';
 import api from '../../api'
 import {json2excel} from 'js2excel'
 import jsPDF from 'jspdf'
+import 'jspdf-autotable'
 
 Papa.SCRIPT_PATH = '../../../static/js/papaparse.js';
 
@@ -16,7 +17,8 @@ export default {
             name: '',
             containHeaders: false,
             headers: [],
-            data: []
+            data: [],
+            col_width: {}
         }
     },
     mutations: {
@@ -89,17 +91,15 @@ export default {
             }
         },
         saveAsPDF(state, filename) {
-            var doc = new jsPDF();
-            state.csv_file.headers.forEach((value, i) => {
-                doc.text(20 + (i * 20), 10, value.headerName);
-            });
-            state.csv_file.data.forEach((item, i) => {
-                let j = 0;
-                for (let key in item) {
-                    let data = item[key] == null ? "" : item[key];
-                    doc.text(20 + j * 30, 30 + i * 20, data.toString());
-                    ++j;
-                }
+            let doc = new jsPDF();
+            doc.autoTable({
+                columns: [
+                    {header: 'A', dataKey: 'A'},
+                    {header: 'B', dataKey: 'B'},
+                    {header: 'C', dataKey: 'C'},
+                    {header: 'D', dataKey: 'D'}
+                ],
+                body: state.csv_file.data
             });
             doc.save(filename);
 

@@ -189,6 +189,7 @@
                 // });
             },
             onCellValueChanged(params) {
+                console.log(params);
                 this.updateScatterGraphicPointByIndex(params.rowIndex);
                 this.cellValueChanged({rowIndex: params.rowIndex, colId: params.column.colId, value: params.value});
             }

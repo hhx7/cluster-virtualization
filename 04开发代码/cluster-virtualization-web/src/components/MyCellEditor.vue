@@ -87,7 +87,8 @@
                 k_value: 1,
                 c_value: 1,
                 std_deviation: 1,
-                slider_value: 0
+                slider_value: 0,
+                current_data_variety: {current_index: 0, data: []}
             }
         },
         computed: {
@@ -113,22 +114,20 @@
                     this.$refs.input.focus();
                 }
             });
-            this.clearScatterLinePointByData();
-            let dataObj = JSON.parse(JSON.stringify(this.params.node.data));
-            let dataArray = Object.keys(dataObj).map(key => dataObj[key]);
-            this.addScatterLinePointByData(dataArray);
+            this.current_data_variety.current_index = this.params.rowIndex;
+            this.addScatterLinePoints(this.current_data_variety);
         },
 
         methods: {
             ...mapMutations('scatter', {
                 updateScatterGraphicPointByData: 'updateScatterGraphicPointByData',
-                updateScatterGraphicPointByIndex: 'updateScatterGraphicPointByIndex',
+                addScatterLinePointByIndex: 'addScatterLinePointByIndex',
                 addScatterLinePointByData: 'addScatterLinePointByData',
-                clearScatterLinePointByData: 'clearScatterLinePointByData',
-                addScatterLinePointsByArray: 'addScatterLinePointsByArray'
+                clearScatterLinePoint: 'clearScatterLinePoint',
+                addScatterLinePoints: 'addScatterLinePoints'
             }),
             getValue() {
-                this.clearScatterLinePointByData();
+                this.clearScatterLinePoint();
                 return this.changed ? this.value : this.params.value;
             },
             isPopup() {
@@ -166,13 +165,15 @@
             },
             onChange(event) {
                 event.stopImmediatePropagation();
+                this.current_data_variety.data = [];
                 let dataObj = JSON.parse(JSON.stringify(this.params.node.data));
                 dataObj[this.params.column.colId] = this.value;
-                let dataArray = Object.keys(dataObj).map(key => dataObj[key]);
-                this.addScatterLinePointByData(dataArray);
-
+                //let dataArray = Object.keys(dataObj).map(key => dataObj[key]);
+                //this.addScatterLinePointByData(dataArray);
+                this.current_data_variety.data.push(dataObj);
+                this.addScatterLinePoints(this.current_data_variety);
                 // console.log(this.params.rowIndex);
-                // this.updateScatterGraphicPointByIndex(this.params.rowIndex);
+                //this.addScatterLinePointByIndex(this.params.rowIndex);
             },
             changeData() {
                 this.changed = true;
@@ -185,24 +186,23 @@
                 event.stopImmediatePropagation();
             },
             generatePointsInInterval() {
-                this.clearScatterLinePointByData();
-                console.log(this.params);
+                this.clearScatterLinePoint();
+                this.current_data_variety.data = [];
                 let colIndex = Object.keys(this.params.node.data).indexOf(this.params.column.colId);
-                let points = [];
                 // left interval
                 for (let i = this.params.value; i >= this.getMin; i -= this.c_value) {
                     let dataArray = Object.keys(this.params.node.data).map(key => this.params.node.data[key]);
                     dataArray[colIndex] = i;
-                    points.push(dataArray);
+                    this.current_data_variety.data.push(dataArray);
                 }
-                points.reverse();
+                this.current_data_variety.reverse();
                 //right interval
                 for (let i = this.params.value + this.c_value; i <= this.getMax; i += this.c_value) {
                     let dataArray = Object.keys(this.params.node.data).map(key => this.params.node.data[key]);
                     dataArray[colIndex] = i;
-                    points.push(dataArray);
+                    this.current_data_variety.data.push(dataArray);
                 }
-                this.addScatterLinePointsByArray(points);
+                this.addScatterLinePoints(this.current_data_variety);
 
             }
         }

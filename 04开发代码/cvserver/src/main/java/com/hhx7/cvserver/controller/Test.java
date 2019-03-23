@@ -6,6 +6,7 @@ package com.hhx7.cvserver.controller;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -62,43 +63,46 @@ public class Test {
     }
 
 
-    @RequestMapping(value = "/pca", produces = "application/json")
-    public @ResponseBody Map<String,Object> pca(HttpSession session) {
-        Map<String, Object> map=new HashMap<String, Object>();
+    @RequestMapping(value = "/pca", produces = "text/plain")
+    public @ResponseBody String pca(HttpSession session) {
         Csv csv = (Csv) session.getAttribute("csv");
         if (csv != null){
             String[] args = new String[] { "/home/pi/PycharmProjects/ml/venv/bin/python3", "/home/pi/PycharmProjects/ml/pca.py", csv.toCsvWithoutHeader()};
-
-            String res = runPython(args);
-            map.put("res",JSON.parseArray(res));
+            return runPython(args);
         }
-        return map;
+        return "{ \"res\": \"failed\"}";
     }
 
-    @RequestMapping(value = "/mds", produces = "application/json")
-    public @ResponseBody Map<String,Object> mds(HttpSession session) {
-        Map<String, Object> map=new HashMap<String, Object>();
+    @RequestMapping(value = "/mds", produces = "text/plain")
+    public @ResponseBody String mds(HttpSession session) {
+
         Csv csv = (Csv) session.getAttribute("csv");
         if (csv != null){
             String[] args = new String[] { "/home/pi/PycharmProjects/ml/venv/bin/python3", "/home/pi/PycharmProjects/ml/mds.py", csv.toCsvWithoutHeader()};
 
-            String res = runPython(args);
-            map.put("res",JSON.parseArray(res));
+            return runPython(args);
+
         }
 
-        return map;
+        return "{ \"res\": \"failed\"}";
     }
-    @RequestMapping(value = "/kmeans", produces = "application/json")
-    public @ResponseBody Map<String,Object> kmeans(@RequestBody JSONObject json, HttpSession session) {
+    @RequestMapping(value = "/kmeans", produces = "text/plain")
+    public @ResponseBody String kmeans(@RequestBody JSONObject json, HttpSession session) {
         Integer maxCluster = json.getInteger("maxCluster");
-        Map<String, Object> map=new HashMap<String, Object>();
         Csv csv = (Csv) session.getAttribute("csv");
         if (csv != null){
             String[] args = new String[] { "/home/pi/PycharmProjects/ml/venv/bin/python3", "/home/pi/PycharmProjects/ml/kmeans.py", maxCluster.toString(), csv.toCsvWithoutHeader()};
-            String res = runPython(args);
-            map.put("res",JSON.parseArray(res));
+
+            return runPython(args);
         }
-        return map;
+        return "{ \"res\": \"failed\"}";
+    }
+
+    @RequestMapping(value = "/anova", produces = "text/plain")
+    public @ResponseBody String anova(@RequestBody JSONObject json, HttpSession session) {
+
+        String[] args = new String[] { "/home/pi/PycharmProjects/ml/venv/bin/python3", "/home/pi/PycharmProjects/ml/anova.py",  json.toJSONString()};
+        return runPython(args);
     }
 
     private String runPython(String[] args) {

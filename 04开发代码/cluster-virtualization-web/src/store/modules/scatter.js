@@ -1,4 +1,5 @@
 import Vue from "vue";
+import api from '../../api'
 
 export default {
     namespaced: true,
@@ -52,13 +53,8 @@ export default {
             grid: {},
             xAxis: {
                 show: false,
-                // splitLine: {
-                //     lineStyle: {
-                //         type: 'dashed'
-                //     }
-                // }
-
                 type: 'value',
+                scale: true,
                 axisLine: {onZero: false}
             },
             yAxis: {
@@ -68,26 +64,28 @@ export default {
                 //         type: 'dashed'
                 //     }
                 // },
-                // scale: true
+                scale: true,
 
                 type: 'value',
                 axisLine: {onZero: false}
             },
-            dataset: {
+            dataset: [{
+                source: []
+            }, {
                 dimensions: null,
-                source: [[15, 0], [-50, 10], [-56.5, 20], [-46.5, 30], [-22.1, 40]]
-            },
+                source: [[15, 0.12], [15, 0.1234], [15, 0.123456], [15, 0.11111], [15, 0.121212]]
+            }],
             series: [{
                 id: "line",
                 type: 'line',
                 smooth: true,
                 animation: true,
                 symbolSize: 15,
-                data: []
+                datasetIndex: 0
             }, {
-                id: 'a', //,[43294,81.7,35939927,'Canada',2015],[13334,76.9,1376048943,'China',2015],[21291,78.5,11389562,'Cuba',2015],[38923,80.8,5503457,'Finland',2015],[37599,81.9,64395345,'France',2015],[44053,81.1,80688545,'Germany',2015],[42182,82.8,329425,'Iceland',2015],[5903,66.8,1311050527,'India',2015],[36162,83.5,126573481,'Japan',2015],[1390,71.4,25155317,'North Korea',2015],[34644,80.7,50293439,'South Korea',2015],[34186,80.6,4528526,'New Zealand',2015],[64304,81.6,5210967,'Norway',2015],[24787,77.3,38611794,'Poland',2015],[23038,73.13,143456918,'Russia',2015],[19360,76.5,78665830,'Turkey',2015],[38225,81.4,64715810,'United Kingdom',2015],[53354,79.1,321773631,'United States',2015]
                 type: 'scatter',
                 symbolSize: 10,
+                datasetIndex: 1,
                 // label: {
                 //     emphasis: {
                 //         show: true,
@@ -128,18 +126,72 @@ export default {
             }]
         },
         scatter_graphic_points: [],
-        pca: [],
-        mds: []
+        pca: {dataset: [], series: []},
+        mds: {dataset: [], series: []},
+        rawData: {dataset: [], series: []},
+        idx: [],
+        dimensions: [],
+        currentData: []
     },
     mutations: {
+        displayData(state) {
+            let idx = state.idx;
+            let data = state.currentData;
+            let dimensions = state.dimensions;
+            let dataset = [];
+            let series = [];
+            if (data.length > 0) {
+                if (idx.length > 0) {
+                    idx.forEach((v, i) => {
+                        if (dataset[v] === undefined) {
+                            dataset[v] = {dimensions: dimensions, source: []};
+                            series.push({
+                                type: 'scatter',
+                                symbolSize: 10,
+                                datasetIndex: series.length + 1,//series和dataset从下标1开始
+                                itemStyle: {
+                                    normal: {
+                                        color: api.getRandomColor(1)
+                                    }
+                                }
+                            });
+                        }
+                        dataset[v].source.push(data[i]);
+                    });
+                } else {
+                    dataset.push({dimensions: dimensions, source: data});
+                    series.push({
+                        type: 'scatter',
+                        symbolSize: 10,
+                        datasetIndex: 1,
+                        itemStyle: {
+                            normal: {
+                                color: api.getRandomColor(1)
+                            }
+                        }
+                    });
+                }
+                state.scatter_options.dataset = state.scatter_options.dataset.concat(dataset);
+                state.scatter_options.series = state.scatter_options.series.concat(series);
+            }
+
+        },
+        displayRawData(state) {
+            if (state.rawData.dataset.length > 0 && state.rawData.series.length > 0) {
+                state.scatter_options.dataset = state.rawData.dataset;
+                state.scatter_options.series = state.rawData.series;
+            }
+        },
         displayPCAData(state) {
-            if (state.pca.length > 0) {
-                state.scatter_options.dataset.source = state.pca;
+            if (state.pca.dataset.length > 0 && state.pca.series.length > 0) {
+                state.scatter_options.dataset = state.pca.dataset;
+                state.scatter_options.series = state.pca.series;
             }
         },
         displayMDSData(state) {
-            if (state.mds.length > 0) {
-                state.scatter_options.dataset.source = state.mds;
+            if (state.mds.dataset.length > 0 && state.mds.series.length > 0) {
+                state.scatter_options.dataset = state.mds.dataset;
+                state.scatter_options.series = state.mds.series;
             }
         },
         updateEchartsOptions(state, obj) {
@@ -151,59 +203,82 @@ export default {
 
         },
         updateScatterData(state, dataIndex) {
-            Vue.set(state.scatter_options.series[0].data, dataIndex, state.scatter_options.series[0].data[dataIndex]);
+            Vue.set(state.scatter_options.dataset[0].source, dataIndex, state.scatter_options.dataset[0].source[dataIndex]);
         },
         addScatterLinePointByData(state, data) {
-            if (state.scatter_options.series[0].data.length >= 2) {
-                Vue.set(state.scatter_options.series[0].data, 1, data);
+            if (state.scatter_options.dataset[0].source.length >= 2) {
+                Vue.set(state.scatter_options.dataset[0].source, 1, data);
             } else
-                state.scatter_options.series[0].data.push(data);
+                state.scatter_options.dataset[0].source.push(data);
         },
-        addScatterLinePointsByArray(state, array) {
-            state.scatter_options.series[0].data = array;
-        },
-        clearScatterLinePointByData(state) {
-            state.scatter_options.series[0].data.splice(0);
-        },
-        updateScatterGraphicPointByIndex(state, totalLength) {
-            let seriesIndex = 0, dataIndex = 0, currentLength = 0,
-                nextPartLength = state.scatter_options.series[seriesIndex].length;
-            while (currentLength + nextPartLength <= totalLength) {
+        addScatterLinePoints(state, {current_index, data}) {
+            let seriesIndex = 1, dataIndex = 0, currentLength = 0,
+                nextPartLength = state.scatter_options.dataset[seriesIndex].source.length;
+            while (currentLength + nextPartLength < current_index) {
+                ++seriesIndex;
                 currentLength += nextPartLength;
-                nextPartLength = state.scatter_options.series[++seriesIndex].length;
+                nextPartLength = state.scatter_options.dataset[seriesIndex].source.length;
             }
+            dataIndex = current_index - currentLength;
 
-            dataIndex = totalLength - currentLength;
-            state.scatter_graphic_points.push(state.scatter_options.series[seriesIndex].data[dataIndex]);
+            state.scatter_options.dataset[0].dimensions = state.dimensions;
+            data.unshift(state.scatter_options.dataset[seriesIndex].source[current_index]);
+            state.scatter_options.dataset[0].source = data;
+        },
+        clearScatterLinePoint(state) {
+            state.scatter_options.dataset[0].source.splice(0);
+        },
+        addScatterLinePointByIndex(state, totalLength) {
+            // let seriesIndex = 0, dataIndex = 0, currentLength = 0,
+            //     nextPartLength = state.scatter_options.series[seriesIndex].length;
+            // while (currentLength + nextPartLength <= totalLength) {
+            //     currentLength += nextPartLength;
+            //     nextPartLength = state.scatter_options.series[++seriesIndex].length;
+            // }
+            //
+            // dataIndex = totalLength - currentLength;
+            state.scatter_options.dataset[0].source.push(state.scatter_options.dataset[1].source[totalLength]);
         },
         updateScatterGraphicPointByData(state, data) {
             state.scatter_graphic_points.push(data);
         },
+        clearScatter(state) {
+            state.scatter_options.dataset[0].source = [];
+            state.scatter_options.dataset[0].dimensions = [];
+            state.scatter_options.dataset.splice(1);
+            state.scatter_options.series.splice(1);
+        }
     },
     actions: {
-        displayRawData({state, rootState, rootGetters}, {headers}) {
-
-
+        displayRawData({state, rootState, rootGetters, commit}, {headers}) {
             if (rootState.table.csv_file.data.length > 0) {
-                state.scatter_options.dataset.source = rootState.table.csv_file.data;
-                state.scatter_options.dataset.dimensions = headers;
-                //     //let colors = api.getRandomColor(state.scatter_options.series.length);
-                //     // state.scatter_options.series.forEach((v, i) => {
-                //     //     v.itemStyle = {
-                //     //         normal: {
-                //     //             color: colors[i]
-                //     //         }
-                //     //     };
-                //     // });
+                commit('clearScatter');
+                state.dimensions = headers;
+                state.rawData = rootState.table.csv_file.data;
+                state.currentData = state.rawData;
+                commit('displayData');
+                state.rawData.dataset = state.scatter_options.dataset;
+                state.rawData.series = state.scatter_options.series;
             }
         },
         redisplayPCAData({state, commit}, {data}) {
-            state.pca = data;
-            commit('displayPCAData');
+            commit('clearScatter');
+            state.currentData = data;
+            commit('displayData');
+            state.pca.dataset = state.scatter_options.dataset;
+            state.pca.series = state.scatter_options.series;
         },
         redisplayMDSData({state, commit}, {data}) {
-            state.mds = data;
-            commit('displayMDSData');
+            commit('clearScatter');
+            state.currentData = data;
+            commit('displayData');
+            state.mds.dataset = state.scatter_options.dataset;
+            state.mds.series = state.scatter_options.series;
+        },
+        cluster({state, commit, rootState}) {
+            state.idx = rootState.table.csv_file.idx;
+            commit('clearScatter');
+            commit('displayData');
         }
     },
     getters: {
@@ -216,6 +291,9 @@ export default {
         },
         getScatterDataStartPosInSeries: state => {
             return state.scatter_data_start_pos_in_series;
+        },
+        getDataset: state => {
+            return state.scatter_options.dataset.source;
         }
     }
 

@@ -110,11 +110,11 @@
                 showOrHideColumn: 'showOrHideColumn'
             }),
             ...mapMutations('scatter', {
-                updateScatterGraphicPointByIndex: 'updateScatterGraphicPointByIndex',
+                addScatterLinePointByIndex: 'addScatterLinePointByIndex',
                 addScatterLinePointByData: 'addScatterLinePointByData'
             }),
             updateData(data) {
-                var dataSource = {
+                let dataSource = {
                     rowCount: null,
                     getRows: function (params) {
                         setTimeout(function () {
@@ -189,8 +189,7 @@
                 // });
             },
             onCellValueChanged(params) {
-                console.log(params);
-                this.updateScatterGraphicPointByIndex(params.rowIndex);
+                //this.addScatterLinePointByIndex(params.rowIndex);
                 this.cellValueChanged({rowIndex: params.rowIndex, colId: params.column.colId, value: params.value});
             }
         },

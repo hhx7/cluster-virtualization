@@ -112,7 +112,7 @@ export default {
             handler({state, dispatch}) {
                 axios.post(state.URL_ROOT + '/home/pca').then(
                     function (response) {
-                        dispatch('scatter/redisplayPCAData', {data: response.data.res});
+                        dispatch('scatter/redisplayPCAData', {data: response.data.pca});
                     }
                 ).catch(function (error) {
                     console.log(error);
@@ -124,20 +124,36 @@ export default {
             handler({state, dispatch}) {
                 axios.post(state.URL_ROOT + '/home/mds').then(
                     function (response) {
-                        dispatch('scatter/redisplayMDSData', {data: response.data.res});
+                        dispatch('scatter/redisplayMDSData', {data: response.data.mds});
                     }
                 ).catch(function (error) {
                     console.log(error);
                 });
             }
-
         },
         kmeans: {
             root: true,
-            handler({state, dispatch}, max_cluster) {
+            handler({state, dispatch, commit}, max_cluster) {
                 axios.post(state.URL_ROOT + '/home/kmeans', {maxCluster: max_cluster}).then(
                     function (response) {
-                        dispatch('heatmap/redisplayKMeansData', {data: response.data.res});
+                        dispatch('heatmap/redisplayKMeansData', {data: response.data.centroids});
+                        commit('table/setIdx', {idx: response.data.idx});
+                        dispatch('scatter/cluster');
+                    }
+                ).catch(function (error) {
+                    console.log(error);
+                });
+            }
+        },
+        anova: {
+            root: true,
+            handler({state, dispatch}, data) {
+                console.log(data);
+                axios.post(state.URL_ROOT + '/home/anova', data).then(
+                    function (response) {
+                        console.log(response);
+                        // dispatch('heatmap/redisplayKMeansData', {data: response.data.centroids});
+                        // dispatch('scatter/cluster', {idx: response.data.idx});
                     }
                 ).catch(function (error) {
                     console.log(error);

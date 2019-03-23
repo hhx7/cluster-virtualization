@@ -18,6 +18,7 @@ export default {
             containHeaders: false,
             headers: [],
             data: [],
+            idx: [],
             col_width: {}
         }
     },
@@ -103,6 +104,9 @@ export default {
             });
             doc.save(filename);
 
+        },
+        setIdx(state, {idx}) {
+            state.csv_file.idx = idx;
         }
     },
     actions: {
@@ -210,6 +214,6 @@ export default {
                 colHeaders: state.csv_file.headers,
                 data: state.csv_file.data
             }
-        },
+        }
     }
 };

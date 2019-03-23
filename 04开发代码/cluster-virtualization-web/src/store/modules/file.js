@@ -344,13 +344,13 @@ const mutations = {
         } else
             state.scatter_options.series[0].data.push(data);
     },
-    addScatterLinePointsByArray(state, array) {
+    addScatterLinePoints(state, array) {
         state.scatter_options.series[0].data = array;
     },
-    clearScatterLinePointByData(state) {
+    clearScatterLinePoint(state) {
         state.scatter_options.series[0].data.splice(0);
     },
-    updateScatterGraphicPointByIndex(state, totalLength) {
+    addScatterLinePointByIndex(state, totalLength) {
         let seriesIndex = 0, dataIndex = 0, currentLength = 0,
             nextPartLength = state.scatter_options.series[seriesIndex].length;
         while (currentLength + nextPartLength <= totalLength) {

@@ -44,13 +44,17 @@ export default {
                 }
             }]
         },
-        kmeans: []
+        kmeans: [],
+        heatmap_click_blocks: []
     },
     mutations: {
         displayKMeansData(state) {
             if (state.kmeans.length > 0) {
                 state.heatmap_options.series[0].data = state.kmeans;
             }
+        },
+        setClusterNum(state, clusterNum) {
+            state.heatmap_options.visualMap.max = clusterNum;
         }
     },
     actions: {
@@ -60,16 +64,41 @@ export default {
             for (let i = 0; i < data.length; ++i) {
                 state.heatmap_options.xAxis.data.push(i);
                 for (let j = 0; j < data[i].length; ++j) {
-                    state.kmeans.push([i, j, data[i][j]]);
+                    state.kmeans.push([i, j, data[i][j] * 100]);
                 }
             }
             state.heatmap_options.yAxis.data = rootState.table.csv_file.headers.map(header => header.headerName);
             commit('displayKMeansData');
+        },
+        getDataAndAnova({state, commit, rootState, dispatch}) {
+            let blocks = state.heatmap_click_blocks;
+            let block1 = state.heatmap_options.series[0].data[blocks[0]];
+            let block2 = state.heatmap_options.series[0].data[blocks[1]];
+            let classIndex1 = block1[0];
+            let classIndex2 = block2[0];
+            let column = state.heatmap_options.yAxis.data[block1[1]];
+            let data = rootState.table.csv_file.data;
+            let idx = rootState.table.csv_file.idx;
+            let x1 = [], x2 = [];
+            idx.forEach((v, i) => {
+                if (v[0] === classIndex1) {
+                    x1.push(data[i][column])
+                }
+
+                if (v[0] === classIndex2) {
+                    x2.push(data[i][column])
+                }
+            });
+            dispatch('anova', {x1: x1, x2: x2}, {root: true});
+
         }
     },
     getters: {
         getHeatmapOptions: state => {
             return state.heatmap_options;
+        },
+        getHeatmapClickBlocks: state => {
+            return state.heatmap_click_blocks;
         }
     }
 };

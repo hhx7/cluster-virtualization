@@ -47,7 +47,8 @@
                 getOptions: 'scatter/getOptions',
                 getScatterGraphicPoints: 'scatter/getScatterGraphicPoints',
                 getScatterDataStartPosInSeries: 'scatter/getScatterDataStartPosInSeries',
-                getHeatmapOptions: 'heatmap/getHeatmapOptions'
+                getHeatmapOptions: 'heatmap/getHeatmapOptions',
+                getHeatmapClickBlocks: 'heatmap/getHeatmapClickBlocks'
             })
         },
         mounted() {
@@ -73,6 +74,7 @@
             // });
             this.$refs.scatter.myChart.on('dblclick', this.onScatterPointDblclick);
             this.$refs.heatmap.myChart.on('click', this.onHeatmapBlockClick);
+            this.heatmap_click_blocks = this.getHeatmapClickBlocks;
             this.scatter_graphic_points = this.getScatterGraphicPoints;
         },
         methods: {
@@ -104,12 +106,10 @@
             onHeatmapBlockClick: function (params) {
                 //添加最新点击的块
                 this.heatmap_click_blocks.push(params.dataIndex);
-                console.log(this.heatmap_click_blocks);
                 //移除最前边的点
                 if (this.heatmap_click_blocks.length >= 3) {
                     let dataIndex = this.heatmap_click_blocks.shift();
                     if (dataIndex !== undefined) {
-                        console.log(dataIndex);
                         this.$refs.heatmap.myChart.dispatchAction({
                             type: 'downplay',
 
@@ -133,11 +133,14 @@
                 }
             },
             onScatterPointDblclick: function (params) {
+                console.log(params);
                 let dataIndex = 0;
                 for (let i = this.getScatterDataStartPosInSeries; i < params.seriesIndex; ++i) {
-                    dataIndex += this.getOptions.series[i].length;
+                    dataIndex += this.getOptions.dataset[i].source.length;
                 }
+
                 dataIndex += params.dataIndex;
+
                 this.$refs.table.onStartEditing(dataIndex);
                 // this.updateEchartsOptions({
                 //     graphic: {

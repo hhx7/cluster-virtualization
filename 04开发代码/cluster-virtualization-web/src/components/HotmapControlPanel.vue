@@ -32,7 +32,7 @@
                         </div>
                     </div>
                     <div class="level-right">
-                        <button class="button is-rounded is-small">OK</button>
+                        <button class="button is-rounded is-small" @click="startStats">OK</button>
                     </div>
                 </div>
             </div>
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-    import {mapActions} from 'vuex'
+    import {mapActions, mapMutations} from 'vuex'
 
     export default {
         name: "HotmapControlPanel",
@@ -57,12 +57,25 @@
         methods: {
             ...mapActions({
                 kmeans_handle: 'kmeans'
-
+            }),
+            ...mapActions('heatmap', {
+                getDataAndAnova: 'getDataAndAnova'
+            }),
+            ...mapMutations('heatmap', {
+                setClusterNum: 'setClusterNum'
             }),
             startClustering() {
                 switch (this.cluster_selected) {
                     case this.k_means:
                         this.kmeans_handle(this.max_clusters);
+                        this.setClusterNum(this.max_clusters);
+                        break;
+                }
+            },
+            startStats() {
+                switch (this.stats_selected) {
+                    case this.anova:
+                        this.getDataAndAnova();
                         break;
                 }
             }

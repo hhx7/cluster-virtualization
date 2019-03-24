@@ -14,7 +14,13 @@
                     <HotmapControlPanel/>
                     <Echarts ref="heatmap" v-bind:id="echart_id2" v-bind:options="getHeatmapOptions"/>
                 </div>
-
+                <div class="column">
+                    <StatsControlPanel v-bind:mode="stats_view_mode" @displayStatsView="displayStatsView"/>
+                    <transition name="fade">
+                        <StatsAnova ref="anova" v-if="current_stats_view === stats_view_mode.anova"/>
+                        <StatsCorrcoef ref="corrcoef" v-if="current_stats_view === stats_view_mode.corrcoef"/>
+                    </transition>
+                </div>
             </div>
         </div>
     </div>
@@ -30,6 +36,9 @@
     import ScatterControlPanel from './ScatterControlPanel'
     import HotmapControlPanel from './HotmapControlPanel'
     import UITest from './UITest'
+    import StatsControlPanel from "./StatsControlPanel";
+    import StatsAnova from "./StatsAnova";
+    import StatsCorrcoef from "./StatsCorrcoef";
 
     export default {
         name: "Dashboard",
@@ -37,8 +46,14 @@
             return {
                 echart_id1: "echart_id1",
                 echart_id2: "echart_id2",
+                echart_id3: 'echart_id3',
                 heatmap_click_blocks: [],
-                scatter_graphic_points: []
+                scatter_graphic_points: [],
+                stats_view_mode: {
+                    anova: 0,
+                    corrcoef: 1
+                },
+                current_stats_view: 0
             }
         },
         computed: {
@@ -155,6 +170,10 @@
                 //         z: 100
                 //     }
                 // });
+            },
+            displayStatsView(mode) {
+                this.current_stats_view = mode;
+                console.log(this.current_stats_view);
             }
         },
         // watch: {
@@ -176,7 +195,11 @@
         //         });
         //     }
         // },
-        components: {Menu, Excel, Echarts, Table, ScatterControlPanel, HotmapControlPanel, UITest}
+        components: {
+            StatsCorrcoef,
+            StatsAnova,
+            StatsControlPanel, Menu, Excel, Echarts, Table, ScatterControlPanel, HotmapControlPanel, UITest
+        }
     }
 </script>
 

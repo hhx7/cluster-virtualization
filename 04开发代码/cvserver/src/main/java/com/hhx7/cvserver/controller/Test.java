@@ -15,8 +15,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.hhx7.cvserver.entity.Csv;
 import com.hhx7.cvserver.entity.Row;
+import com.hhx7.cvserver.utils.Util;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import static com.hhx7.cvserver.utils.Util.runPython;
 
 
 @Controller
@@ -39,7 +42,6 @@ public class Test {
         try{
             Integer i = json.getInteger("index");
             Row row  = new Row(json.getJSONArray("row").toJavaList(Double.class));
-            System.out.println(row.getRow());
             map.put("res", "ok");
         }catch (Exception e){
             e.printStackTrace();
@@ -67,7 +69,7 @@ public class Test {
     public @ResponseBody String pca(HttpSession session) {
         Csv csv = (Csv) session.getAttribute("csv");
         if (csv != null){
-            String[] args = new String[] { "/home/pi/PycharmProjects/ml/venv/bin/python3", "/home/pi/PycharmProjects/ml/pca.py", csv.toCsvWithoutHeader()};
+            String[] args = new String[] { Util.PYTHON_EXEC, Util.PYTHON_ROOT +"/pca.py", csv.toCsvWithoutHeader()};
             return runPython(args);
         }
         return "{ \"res\": \"failed\"}";
@@ -78,7 +80,7 @@ public class Test {
 
         Csv csv = (Csv) session.getAttribute("csv");
         if (csv != null){
-            String[] args = new String[] { "/home/pi/PycharmProjects/ml/venv/bin/python3", "/home/pi/PycharmProjects/ml/mds.py", csv.toCsvWithoutHeader()};
+            String[] args = new String[] { Util.PYTHON_EXEC, Util.PYTHON_ROOT +"/mds.py", csv.toCsvWithoutHeader()};
 
             return runPython(args);
 
@@ -91,7 +93,7 @@ public class Test {
         Integer maxCluster = json.getInteger("maxCluster");
         Csv csv = (Csv) session.getAttribute("csv");
         if (csv != null){
-            String[] args = new String[] { "/home/pi/PycharmProjects/ml/venv/bin/python3", "/home/pi/PycharmProjects/ml/kmeans.py", maxCluster.toString(), csv.toCsvWithoutHeader()};
+            String[] args = new String[] { Util.PYTHON_EXEC, Util.PYTHON_ROOT +"/kmeans.py", maxCluster.toString(), csv.toCsvWithoutHeader()};
 
             return runPython(args);
         }
@@ -101,27 +103,9 @@ public class Test {
     @RequestMapping(value = "/anova", produces = "text/plain")
     public @ResponseBody String anova(@RequestBody JSONObject json, HttpSession session) {
 
-        String[] args = new String[] { "/home/pi/PycharmProjects/ml/venv/bin/python3", "/home/pi/PycharmProjects/ml/anova.py",  json.toJSONString()};
+        String[] args = new String[] { Util.PYTHON_EXEC, Util.PYTHON_ROOT +"/anova.py",  json.toJSONString()};
         return runPython(args);
     }
 
-    private String runPython(String[] args) {
-        StringBuilder res = new StringBuilder();
-        try{
-            Process pr=Runtime.getRuntime().exec(args);
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                    pr.getInputStream()));
-            String line = null;
-            while ((line = in.readLine()) != null) {
-                res.append(line);
-            }
-            in.close();
-            //pr.waitFor();
-        }catch (Exception e){
-            e.printStackTrace();
-            res.append("failed");
-        }
-        return res.toString();
-    }
     
 }

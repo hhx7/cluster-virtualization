@@ -1,7 +1,7 @@
 <template>
     <div class="control-panel">
         <div class="level">
-            <div class="level-left">
+            <div class="level-right">
                 <div class="level">
                     <div class="level-left">
                         <div class="select is-rounded is-small">
@@ -17,22 +17,6 @@
                     </div>
                     <div class="level-right">
                         <button class="button is-rounded is-small" @click="startClustering">OK</button>
-                    </div>
-                </div>
-            </div>
-            <div class="level-right">
-                <div class="level">
-                    <div class="level-left">
-                        <div class="select is-rounded is-small">
-                            <label>
-                                <select v-model="stats_selected">
-                                    <option :value="anova">ANOVA</option>
-                                </select>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="level-right">
-                        <button class="button is-rounded is-small" @click="startStats">OK</button>
                     </div>
                 </div>
             </div>

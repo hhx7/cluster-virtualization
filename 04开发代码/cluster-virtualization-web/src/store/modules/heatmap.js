@@ -25,8 +25,8 @@ export default {
                 }
             },
             visualMap: {
-                min: 0,
-                max: 10,
+                //min: 0,
+                //max: 10,
                 calculable: true,
                 orient: 'horizontal',
                 left: 'center',
@@ -54,19 +54,24 @@ export default {
             }
         },
         setClusterNum(state, clusterNum) {
-            state.heatmap_options.visualMap.max = clusterNum;
+            //state.heatmap_options.visualMap.max = clusterNum;
         }
     },
     actions: {
         redisplayKMeansData({state, commit, rootState}, {data}) {
             state.kmeans.data = [];
             state.heatmap_options.xAxis.data = [];
+            let min = data[0][0] * 100, max = data[0][0] * 100;
             for (let i = 0; i < data.length; ++i) {
                 state.heatmap_options.xAxis.data.push(i);
                 for (let j = 0; j < data[i].length; ++j) {
+                    min = Math.min(min, data[i][j] * 100);
+                    max = Math.max(max, data[i][j] * 100);
                     state.kmeans.push([i, j, data[i][j] * 100]);
                 }
             }
+            state.heatmap_options.visualMap.min = min;
+            state.heatmap_options.visualMap.max = max;
             state.heatmap_options.yAxis.data = rootState.table.csv_file.headers.map(header => header.headerName);
             commit('displayKMeansData');
         },

@@ -22,7 +22,6 @@
     draw: function () {
       // 基于准备好的dom，初始化echarts实例
       this.myChart = echarts.init(document.getElementById(this.id));
-
       // 绘制图表
       this.myChart.setOption(this.options, true);
     }

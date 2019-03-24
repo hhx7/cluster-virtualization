@@ -147,12 +147,26 @@ export default {
         },
         anova: {
             root: true,
-            handler({state, dispatch}, data) {
+            handler({state, commit}, data) {
                 console.log(data);
                 axios.post(state.URL_ROOT + '/home/anova', data).then(
                     function (response) {
                         console.log(response);
+                        commit('anova/setAnovaResult', response.data)
                         // dispatch('heatmap/redisplayKMeansData', {data: response.data.centroids});
+                        // dispatch('scatter/cluster', {idx: response.data.idx});
+                    }
+                ).catch(function (error) {
+                    console.log(error);
+                });
+            }
+        },
+        corrcoef: {
+            root: true,
+            handler({state, dispatch}) {
+                axios.get(state.URL_ROOT + '/table/corrcoef').then(
+                    function (response) {
+                        dispatch('corrcoef/displayCorrcoef', {corrcoef: response.data.corrcoef});
                         // dispatch('scatter/cluster', {idx: response.data.idx});
                     }
                 ).catch(function (error) {

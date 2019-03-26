@@ -7,37 +7,46 @@ import java.util.List;
 import java.util.Set;
 
 public class Row {
-    private List<Double> row;
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    private String id;
+    private List<Double> data;
 
     public Row() {}
     public Row(List<Double> r) {
-        this.row = r;
+        this.data = r;
     }
-    public List<Double> getRow() {
-        return row;
+    public List<Double> getData() {
+        return data;
     }
 
     public List<Double> getRowWithMask(Set<Integer> mask) {
         if (mask.isEmpty()){
-            return row;
+            return data;
         }else {
             List<Double> r = new ArrayList<>();
-            for (int i=0; i<row.size(); ++i){
+            for (int i = 0; i< data.size(); ++i){
                 if (!mask.contains(i)){
-                    r.add(row.get(i));
+                    r.add(data.get(i));
                 }
             }
             return r;
         }
     }
 
-    public void setRow(List<Double> row) {
-        this.row = row;
+    public void setData(List<Double> data) {
+        this.data = data;
     }
 
-    public boolean removeColumn(Integer colIndex) {
-        if (colIndex < row.size()){
-            row.remove(colIndex);
+    public boolean removeColumn(int colIndex) {
+        if (colIndex < data.size()){
+            data.remove(colIndex);
             return true;
         }
         return false;
@@ -45,23 +54,24 @@ public class Row {
     }
 
     public boolean editValue(Integer colIndex, Double value){
-        if (colIndex < row.size()){
-            row.set(colIndex, value);
+        if (colIndex < data.size()){
+            data.set(colIndex, value);
             return true;
         }
         return false;
     }
 
+
     public void push(Double value){
-        row.add(value);
+        data.add(value);
     }
 
     public Integer size(){
-        return row.size();
+        return data.size();
     }
     @Override
     public String toString() {
-        return Util.join(row, ",");
+        return Util.join(data, ",");
     }
 
 

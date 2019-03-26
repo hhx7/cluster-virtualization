@@ -15,10 +15,15 @@ export default {
         uploadCsv: {
             root: true,
             handler({state}, {headers, data}) {
+                let nheaders = headers.map(header => header.headerName);
                 let csv = {
-                    headers: headers.map(header => header.headerName),
-                    data: data.map(row => {
-                        return {row: Object.keys(row).map(key => row[key])}
+                    headers: nheaders,
+                    rows: data.map(row => {
+                        let data = [];
+                        nheaders.forEach((v, i) => {
+                            data[i] = row[v];
+                        });
+                        return {id: row.id, data: data};
                     })
                 };
                 axios.post(state.URL_ROOT + '/home/uploadCsv',
@@ -33,8 +38,12 @@ export default {
         },
         createRow: {
             root: true,
-            handler({state}, {index, row}) {
-                axios.post(state.URL_ROOT + '/table/createRow', {index: index, row: api.getObjectValue(row)}).then(
+            handler({state}, {index, row, headers}) {
+                let data = [];
+                headers.forEach((v, i) => {
+                    data[i] = row[v];
+                });
+                axios.post(state.URL_ROOT + '/table/createRow', {id: row.id, data: data}).then(
                     function (response) {
 
                     }
@@ -45,8 +54,8 @@ export default {
         },
         removeRow: {
             root: true,
-            handler({state}, {start, amount}) {
-                axios.post(state.URL_ROOT + '/table/removeRow', {start: start, amount: amount}).then(
+            handler({state}, {id}) {
+                axios.post(state.URL_ROOT + '/table/removeRow', {id: id}).then(
                     function (response) {
 
                     }
@@ -57,9 +66,9 @@ export default {
         },
         cellValueChanged: {
             root: true,
-            handler({state}, {rowIndex, colId, value}) {
+            handler({state}, {id, colId, value}) {
                 axios.post(state.URL_ROOT + '/table/cellValueChanged', {
-                    rowIndex: rowIndex,
+                    id: id,
                     colId: colId,
                     value: value
                 }).then(
@@ -85,7 +94,7 @@ export default {
         },
         addColumn: {
             root: true,
-            handler({state}, colId) {
+            handler({state}, {colId}) {
                 axios.post(state.URL_ROOT + '/table/addColumn', {colId: colId}).then(
                     function (response) {
 
@@ -97,8 +106,8 @@ export default {
         },
         showOrHideColumn: {
             root: true,
-            handler({state}, {headerName, show}) {
-                axios.post(state.URL_ROOT + '/table/showOrHideColumn', {colId: headerName, show: show}).then(
+            handler({state}, {colId, show}) {
+                axios.post(state.URL_ROOT + '/table/showOrHideColumn', {colId: colId, show: show}).then(
                     function (response) {
 
                     }
@@ -112,7 +121,9 @@ export default {
             handler({state, dispatch}) {
                 axios.post(state.URL_ROOT + '/home/pca').then(
                     function (response) {
-                        dispatch('scatter/redisplayPCAData', {data: response.data.pca});
+                        let data = api.serverDataToClientData(response.data.pca);
+
+                        dispatch('scatter/redisplayPCAData', data);
                     }
                 ).catch(function (error) {
                     console.log(error);
@@ -124,7 +135,8 @@ export default {
             handler({state, dispatch}) {
                 axios.post(state.URL_ROOT + '/home/mds').then(
                     function (response) {
-                        dispatch('scatter/redisplayMDSData', {data: response.data.mds});
+                        let data = api.serverDataToClientData(response.data.mds);
+                        dispatch('scatter/redisplayMDSData', data);
                     }
                 ).catch(function (error) {
                     console.log(error);
@@ -136,7 +148,10 @@ export default {
             handler({state, dispatch, commit}, max_cluster) {
                 axios.post(state.URL_ROOT + '/home/kmeans', {maxCluster: max_cluster}).then(
                     function (response) {
-                        dispatch('heatmap/redisplayKMeansData', {data: response.data.centroids});
+                        dispatch('heatmap/redisplayKMeansData', {
+                            centroids: response.data.centroids,
+                            headers: response.data.headers
+                        });
                         commit('table/setIdx', {idx: response.data.idx});
                         dispatch('scatter/cluster');
                     }
@@ -147,11 +162,9 @@ export default {
         },
         anova: {
             root: true,
-            handler({state, commit}, data) {
-                console.log(data);
-                axios.post(state.URL_ROOT + '/home/anova', data).then(
+            handler({state, commit}, {x1id, x2id, colId}) {
+                axios.post(state.URL_ROOT + '/home/anova', {x1id: x1id, x2id: x2id, colId: colId}).then(
                     function (response) {
-                        console.log(response);
                         commit('anova/setAnovaResult', response.data)
                         // dispatch('heatmap/redisplayKMeansData', {data: response.data.centroids});
                         // dispatch('scatter/cluster', {idx: response.data.idx});

@@ -18,7 +18,7 @@ export default {
             containHeaders: false,
             headers: [],
             data: [],
-            idx: [],
+            idx: {},
             col_width: {}
         }
     },
@@ -152,6 +152,7 @@ export default {
                 //     }
                 //
                 // }.bind(this)
+                skipEmptyLines: true,
                 complete: function (results) {
                     if (state.csv_file.containHeaders) {
                         commit('addCsvFile', {name: name, headers: results.meta.fields, data: results.data});
@@ -159,10 +160,12 @@ export default {
                         var len = results.data[0].length === 0 ? 5 : results.data[0].length;
                         var data = [];
                         var headers = api.generateHeaders(len);
+                        console.log(results.data.length);
                         if (results.data.length > 0) {
                             data = results.data.map(function (item) {
                                 var row = {};
-                                for (var i in headers) {
+                                row['id'] = api.guid();
+                                for (let i in headers) {
                                     row[headers[i]] = item[i];
                                 }
                                 return row;
@@ -178,20 +181,24 @@ export default {
             })
         },
         createRow({commit, state, dispatch}, i) {
-            let nrow = {};
+            let nrow = {id: api.guid()};
             state.csv_file.headers.forEach(function (item) {
                 nrow[item.field] = 0;
             });
             state.csv_file.data.splice(i, 0, nrow);
-            dispatch('createRow', {index: i, row: nrow}, {root: true});
+            dispatch('createRow', {
+                index: i,
+                row: nrow,
+                headers: state.csv_file.headers.map(item => item.field)
+            }, {root: true});
         },
-        removeRow({commit, state, dispatch}, {start, amount}) {
-            state.csv_file.data.splice(start, amount);
-            dispatch('removeRow', {start: start, amount: amount}, {root: true});
+        removeRow({commit, state, dispatch}, {start, id}) {
+            state.csv_file.data.splice(start, 1);
+            dispatch('removeRow', {id: id}, {root: true});
         },
-        cellValueChanged({commit, state, dispatch}, {rowIndex, colId, value}) {
+        cellValueChanged({commit, state, dispatch}, {id, colId, value}) {
 
-            dispatch('cellValueChanged', {rowIndex: rowIndex, colId: colId, value: value}, {root: true})
+            dispatch('cellValueChanged', {id: id, colId: colId, value: value}, {root: true})
         },
         removeTableFeature({commit, state, dispatch}, headerName) {
 
@@ -200,7 +207,7 @@ export default {
         },
         addTableFeature({commit, state, dispatch}, headerName) {
             commit('addTableFeature', headerName);
-            dispatch('addColumn', headerName, {root: true});
+            dispatch('addColumn', {colId: headerName}, {root: true});
         },
         showOrHideColumn({commit, state, dispatch}, {headerName, show}) {
             commit('updateTableHeader', {headerName: headerName, show: show});

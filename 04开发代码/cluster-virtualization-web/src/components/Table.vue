@@ -67,7 +67,8 @@
                     defaultColDef: {
                         editable: true,
                         cellEditorFramework: 'MyCellEditor'
-                    }
+                    },
+                    getRowNodeId: data => data.id
                 },
                 infiniteInitialRowCount: 500,
                 rowModelType: 'infinite'
@@ -82,7 +83,9 @@
                 )
             },
             getHeaders: function () {
-                return this.colHeaders.filter(header => header.show === true);
+                let a = this.colHeaders.filter(header => header.show === true);
+                console.log(a);
+                return a;
             }
         },
         components: {
@@ -156,12 +159,12 @@
                 params.api.sizeColumnsToFit();
             },
             onBtRemove() {
-                var selectedRows = this.gridApi.getSelectedNodes();
+                let selectedRows = this.gridApi.getSelectedNodes();
                 if (!selectedRows || selectedRows.length === 0) {
                     return;
                 }
                 var selectedRow = selectedRows[0];
-                this.removeRow({start: selectedRow.rowIndex, amount: 1});
+                this.removeRow({id: selectedRow.data.id});
             },
             onBtAdd() {
                 var selectedRows = this.gridApi.getSelectedNodes();
@@ -173,13 +176,15 @@
                 var selectedRow = selectedRows[0];
                 this.createRow(selectedRow.rowIndex);
             },
-            onStartEditing(dataIndex) {
+            onStartEditing(id) {
+                let node = this.gridApi.getRowNode(id);
+                node.setSelected(true);
+                let dataIndex = node.rowIndex;
                 if (this.gridApi.getInfiniteRowCount() < dataIndex)
                     this.gridApi.setInfiniteRowCount(dataIndex + 1, false);
                 this.gridApi.ensureIndexVisible(dataIndex);
                 this.gridApi.setFocusedCell(dataIndex, this.colHeaders[0].headerName, null);
-                let node = this.gridApi.getRowNode(dataIndex.toString());
-                node.setSelected(true);
+
                 // this.gridApi.startEditingCell({
                 //     rowIndex: 0,
                 //     colKey: "lastName",
@@ -190,7 +195,7 @@
             },
             onCellValueChanged(params) {
                 //this.addScatterLinePointByIndex(params.rowIndex);
-                this.cellValueChanged({rowIndex: params.rowIndex, colId: params.column.colId, value: params.value});
+                this.cellValueChanged({id: params.data.id, colId: params.column.colId, value: params.value});
             }
         },
         watch: {

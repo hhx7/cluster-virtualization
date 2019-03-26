@@ -30,12 +30,12 @@ def mds(X, k=2):
 
 
 if __name__ == '__main__':
-    data = np.loadtxt(io.StringIO(sys.argv[1]), dtype='f', delimiter=',')
-    #data = np.loadtxt('/home/pi/PycharmProjects/ml/test.csv', dtype='f', delimiter=',')
-    X = torch.from_numpy(data)
-    #X = torch.tensor([[1, 2],
-    #    [3, 4]])
-    res = mds(X, 2)
-    #res = MDS(pairwise_distance_pow2(X).numpy(), 2)
-    print(json.dumps({'mds': res.tolist()}))
+    data = json.loads(sys.argv[1])
+    ids, x = data['id'], data['data']
+    X = torch.tensor(x, dtype=torch.float)
+    lowDimensionsRows = mds(X, 2)
+    rows = list(map(lambda id, row: ({'id': id, 'data': row}), ids, lowDimensionsRows.tolist()))
+    print(json.dumps({"mds": rows}))
+
+
 

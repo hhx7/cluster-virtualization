@@ -148,15 +148,14 @@
                 }
             },
             onScatterPointDblclick: function (params) {
-                console.log(params);
-                let dataIndex = 0;
-                for (let i = this.getScatterDataStartPosInSeries; i < params.seriesIndex; ++i) {
-                    dataIndex += this.getOptions.dataset[i].source.length;
-                }
+                // let dataIndex = 0;
+                // for (let i = this.getScatterDataStartPosInSeries; i < params.seriesIndex; ++i) {
+                //     dataIndex += this.getOptions.dataset[i].source.length;
+                // }
+                //
+                // dataIndex += params.dataIndex;
 
-                dataIndex += params.dataIndex;
-
-                this.$refs.table.onStartEditing(dataIndex);
+                this.$refs.table.onStartEditing(params.data.id);
                 // this.updateEchartsOptions({
                 //     graphic: {
                 //         type: 'circle',

@@ -58,21 +58,21 @@ export default {
         }
     },
     actions: {
-        redisplayKMeansData({state, commit, rootState}, {data}) {
+        redisplayKMeansData({state, commit, rootState}, {centroids, headers}) {
             state.kmeans.data = [];
             state.heatmap_options.xAxis.data = [];
-            let min = data[0][0] * 100, max = data[0][0] * 100;
-            for (let i = 0; i < data.length; ++i) {
+            let min = centroids[0][0] * 100, max = centroids[0][0] * 100;
+            for (let i = 0; i < centroids.length; ++i) {
                 state.heatmap_options.xAxis.data.push(i);
-                for (let j = 0; j < data[i].length; ++j) {
-                    min = Math.min(min, data[i][j] * 100);
-                    max = Math.max(max, data[i][j] * 100);
-                    state.kmeans.push([i, j, data[i][j] * 100]);
+                for (let j = 0; j < centroids[i].length; ++j) {
+                    min = Math.min(min, centroids[i][j] * 100);
+                    max = Math.max(max, centroids[i][j] * 100);
+                    state.kmeans.push([i, j, centroids[i][j] * 100]);
                 }
             }
             state.heatmap_options.visualMap.min = min;
             state.heatmap_options.visualMap.max = max;
-            state.heatmap_options.yAxis.data = rootState.table.csv_file.headers.map(header => header.headerName);
+            state.heatmap_options.yAxis.data = headers.reverse();
             commit('displayKMeansData');
         },
         getDataAndAnova({state, commit, rootState, dispatch}) {
@@ -82,19 +82,18 @@ export default {
             let classIndex1 = block1[0];
             let classIndex2 = block2[0];
             let column = state.heatmap_options.yAxis.data[block1[1]];
-            let data = rootState.table.csv_file.data;
             let idx = rootState.table.csv_file.idx;
-            let x1 = [], x2 = [];
-            idx.forEach((v, i) => {
-                if (v[0] === classIndex1) {
-                    x1.push(data[i][column])
+            let x1id = [], x2id = [];
+            for (let key in idx) {
+                if (idx[key] === classIndex1) {
+                    x1id.push(key);
                 }
 
-                if (v[0] === classIndex2) {
-                    x2.push(data[i][column])
+                if (idx[key] === classIndex2) {
+                    x2id.push(key);
                 }
-            });
-            dispatch('anova', {x1: x1, x2: x2}, {root: true});
+            }
+            dispatch('anova', {x1id: x1id, x2id: x2id, colId: column}, {root: true});
 
         }
     },

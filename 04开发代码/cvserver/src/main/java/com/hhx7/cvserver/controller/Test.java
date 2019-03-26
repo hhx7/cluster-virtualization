@@ -3,15 +3,12 @@ package com.hhx7.cvserver.controller;
 
 
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.hhx7.cvserver.entity.Csv;
 import com.hhx7.cvserver.entity.Row;
@@ -69,7 +66,7 @@ public class Test {
     public @ResponseBody String pca(HttpSession session) {
         Csv csv = (Csv) session.getAttribute("csv");
         if (csv != null){
-            String[] args = new String[] { Util.PYTHON_EXEC, Util.PYTHON_ROOT +"/pca.py", csv.toCsvWithoutHeader()};
+            String[] args = new String[] { Util.PYTHON_EXEC, Util.PYTHON_ROOT +"/pca.py", csv.getIdAndDataJsonWithoutHeaders()};
             return runPython(args);
         }
         return "{ \"res\": \"failed\"}";
@@ -80,7 +77,7 @@ public class Test {
 
         Csv csv = (Csv) session.getAttribute("csv");
         if (csv != null){
-            String[] args = new String[] { Util.PYTHON_EXEC, Util.PYTHON_ROOT +"/mds.py", csv.toCsvWithoutHeader()};
+            String[] args = new String[] { Util.PYTHON_EXEC, Util.PYTHON_ROOT +"/mds.py", csv.getIdAndDataJsonWithoutHeaders()};
 
             return runPython(args);
 
@@ -93,18 +90,32 @@ public class Test {
         Integer maxCluster = json.getInteger("maxCluster");
         Csv csv = (Csv) session.getAttribute("csv");
         if (csv != null){
-            String[] args = new String[] { Util.PYTHON_EXEC, Util.PYTHON_ROOT +"/kmeans.py", maxCluster.toString(), csv.toCsvWithoutHeader()};
+            String[] args = new String[] { Util.PYTHON_EXEC, Util.PYTHON_ROOT +"/kmeans.py", maxCluster.toString(), csv.getIdAndDataJsonWithHeaders()};
 
-            return runPython(args);
+            String res = runPython(args);
+            System.out.println(res);
+            return res;
         }
         return "{ \"res\": \"failed\"}";
     }
 
     @RequestMapping(value = "/anova", produces = "text/plain")
     public @ResponseBody String anova(@RequestBody JSONObject json, HttpSession session) {
+        Csv csv = (Csv) session.getAttribute("csv");
+        if (csv != null){
+            List<String> x1id = json.getJSONArray("x1id").toJavaList(String.class);
+            List<String> x2id = json.getJSONArray("x2id").toJavaList(String.class);
+            String colId = json.getString("colId");
+            List<Double> x1 = csv.getColumnById(x1id, colId);
+            List<Double> x2 = csv.getColumnById(x2id, colId);
+            JSONObject j = new JSONObject();
+            j.put("x1", x1);
+            j.put("x2", x2);
 
-        String[] args = new String[] { Util.PYTHON_EXEC, Util.PYTHON_ROOT +"/anova.py",  json.toJSONString()};
-        return runPython(args);
+            String[] args = new String[] { Util.PYTHON_EXEC, Util.PYTHON_ROOT +"/anova.py",  j.toJSONString()};
+            return runPython(args);
+        }
+        return "{ \"res\": \"failed\"}";
     }
 
     

@@ -1,6 +1,7 @@
 import Vue from "vue";
 import api from '../../api'
 
+
 export default {
     namespaced: true,
     state: {
@@ -129,7 +130,7 @@ export default {
         pca: {dataset: [], series: []},
         mds: {dataset: [], series: []},
         rawData: {dataset: [], series: []},
-        idx: [],
+        idx: {},
         dimensions: [],
         currentData: []
     },
@@ -141,10 +142,12 @@ export default {
             let dataset = [];
             let series = [];
             if (data.length > 0) {
-                if (idx.length > 0) {
-                    idx.forEach((v, i) => {
-                        if (dataset[v] === undefined) {
-                            dataset[v] = {dimensions: dimensions, source: []};
+                if (Object.keys(idx).length > 0) {
+                    data.forEach((v, i) => {
+                        let cluster = idx[v.id];
+                        console.log(cluster);
+                        if (dataset[cluster] === undefined) {
+                            dataset[cluster] = {dimensions: dimensions, source: []};
                             series.push({
                                 type: 'scatter',
                                 symbolSize: 10,
@@ -156,7 +159,7 @@ export default {
                                 }
                             });
                         }
-                        dataset[v].source.push(data[i]);
+                        dataset[cluster].source.push(v);
                     });
                 } else {
                     dataset.push({dimensions: dimensions, source: data});
@@ -211,19 +214,21 @@ export default {
             } else
                 state.scatter_options.dataset[0].source.push(data);
         },
-        addScatterLinePoints(state, {current_index, data}) {
-            let seriesIndex = 1, dataIndex = 0, currentLength = 0,
-                nextPartLength = state.scatter_options.dataset[seriesIndex].source.length;
-            while (currentLength + nextPartLength < current_index) {
-                ++seriesIndex;
-                currentLength += nextPartLength;
-                nextPartLength = state.scatter_options.dataset[seriesIndex].source.length;
+        addScatterLinePoints(state, {current_node_id, data}) {
+            let seriesIndex = 1, current_index = 0;
+            for (; seriesIndex < state.scatter_options.dataset.length; ++seriesIndex) {
+                for (; current_index < state.scatter_options.dataset[seriesIndex].source.length; ++current_index) {
+                    let currentData = state.scatter_options.dataset[seriesIndex].source[current_index];
+                    if (currentData.id === current_node_id) {
+                        state.scatter_options.dataset[0].dimensions = state.dimensions;
+                        data.unshift(currentData);
+                        state.scatter_options.dataset[0].source = data;
+                        return;
+                    }
+                }
             }
-            dataIndex = current_index - currentLength;
 
-            state.scatter_options.dataset[0].dimensions = state.dimensions;
-            data.unshift(state.scatter_options.dataset[seriesIndex].source[current_index]);
-            state.scatter_options.dataset[0].source = data;
+
         },
         clearScatterLinePoint(state) {
             state.scatter_options.dataset[0].source.splice(0);
@@ -261,16 +266,18 @@ export default {
                 state.rawData.series = state.scatter_options.series;
             }
         },
-        redisplayPCAData({state, commit}, {data}) {
+        redisplayPCAData({state, commit}, {headers, rows}) {
             commit('clearScatter');
-            state.currentData = data;
+            state.dimensions = headers;
+            state.currentData = rows;
             commit('displayData');
             state.pca.dataset = state.scatter_options.dataset;
             state.pca.series = state.scatter_options.series;
         },
-        redisplayMDSData({state, commit}, {data}) {
+        redisplayMDSData({state, commit}, {headers, rows}) {
             commit('clearScatter');
-            state.currentData = data;
+            state.dimensions = headers;
+            state.currentData = rows;
             commit('displayData');
             state.mds.dataset = state.scatter_options.dataset;
             state.mds.series = state.scatter_options.series;

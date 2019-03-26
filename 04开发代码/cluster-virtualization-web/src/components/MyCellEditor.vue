@@ -88,7 +88,7 @@
                 c_value: 1,
                 std_deviation: 1,
                 slider_value: 0,
-                current_data_variety: {current_index: 0, data: []}
+                current_data_variety: {current_node_id: 0, data: []}
             }
         },
         computed: {
@@ -114,7 +114,7 @@
                     this.$refs.input.focus();
                 }
             });
-            this.current_data_variety.current_index = this.params.rowIndex;
+            this.current_data_variety.current_node_id = this.params.node.data.id;
             this.addScatterLinePoints(this.current_data_variety);
         },
 
@@ -188,22 +188,22 @@
             generatePointsInInterval() {
                 this.clearScatterLinePoint();
                 this.current_data_variety.data = [];
-                let colIndex = Object.keys(this.params.node.data).indexOf(this.params.column.colId);
+
                 // left interval
                 for (let i = this.params.value; i >= this.getMin; i -= this.c_value) {
-                    let dataArray = Object.keys(this.params.node.data).map(key => this.params.node.data[key]);
-                    dataArray[colIndex] = i;
-                    this.current_data_variety.data.push(dataArray);
+                    let dataObj = JSON.parse(JSON.stringify(this.params.node.data));
+                    dataObj[this.params.column.colId] = i;
+                    console.log(dataObj);
+                    this.current_data_variety.data.push(dataObj);
                 }
-                this.current_data_variety.reverse();
+                this.current_data_variety.data.reverse();
                 //right interval
                 for (let i = this.params.value + this.c_value; i <= this.getMax; i += this.c_value) {
-                    let dataArray = Object.keys(this.params.node.data).map(key => this.params.node.data[key]);
-                    dataArray[colIndex] = i;
-                    this.current_data_variety.data.push(dataArray);
+                    let dataObj = JSON.parse(JSON.stringify(this.params.node.data));
+                    dataObj[this.params.column.colId] = i;
+                    this.current_data_variety.data.push(dataObj);
                 }
                 this.addScatterLinePoints(this.current_data_variety);
-
             }
         }
     }

@@ -45,13 +45,14 @@ def feature_scaling(X):
     return (X - X.mean(0))/(X.std(0)+1)
 
 
-
 if __name__ == '__main__':
     max_cluster = int(sys.argv[1])
-    data = np.loadtxt(io.StringIO(sys.argv[2]), dtype='f', delimiter=',')
-    X = torch.from_numpy(data).to(dev)
-    #X = torch.tensor([[144552912,9.3498486,56.7408757,17.0527715677876], [144552912,9.3501884,56.7406785,17.614840244389]]).to(dev)
+    data = json.loads(sys.argv[2])
+    ids, x, headers = data['id'], data['data'], data['headers']
+    X = torch.tensor(x, dtype=torch.float)
     X = feature_scaling(X)
     centroids, idx = k_means(X, max_cluster)
-
-    print(json.dumps({'centroids': centroids.tolist(), 'idx': idx.tolist()}))
+    idxWithId = {}
+    for id, index in map(lambda x, y: (x, y), ids, idx.tolist()):
+        idxWithId[id] = index[0]
+    print(json.dumps({'centroids': centroids.tolist(), 'headers': headers, 'idx': idxWithId}))

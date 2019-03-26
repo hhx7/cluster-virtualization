@@ -122,7 +122,6 @@ export default {
                 axios.post(state.URL_ROOT + '/home/pca').then(
                     function (response) {
                         let data = api.serverDataToClientData(response.data.pca);
-
                         dispatch('scatter/redisplayPCAData', data);
                     }
                 ).catch(function (error) {
@@ -185,6 +184,27 @@ export default {
                 ).catch(function (error) {
                     console.log(error);
                 });
+            }
+        },
+        fppca: {
+            root: true,
+            handler({state, dispatch}, {x, headers, id}) {
+                axios.post(state.URL_ROOT + '/home/fppca', {x: x.map(obj => api.getObjectValueExcept(obj, ['id']))}).then(
+                    function (response) {
+                        let data = response.data.fppca;
+                        let ndata = data.map(item => {
+                            let nx = {id: id};
+                            headers.forEach((v, i) => {
+                                nx[v] = item[i];
+                            });
+                            return nx;
+                        });
+                        console.log(response.data.fppca);
+                        dispatch('scatter/fppcaAddScatterLinePoints', {data: ndata})
+                    }
+                ).catch(function (error) {
+
+                })
             }
         }
     },

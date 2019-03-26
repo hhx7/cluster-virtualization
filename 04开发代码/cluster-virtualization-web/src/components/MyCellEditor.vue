@@ -15,7 +15,7 @@
                 <div class="level">
                     <div class="control level-item">
                         <input class="input is-primary" type="text" ref="input" @keydown.enter="onChange($event)"
-                               v-model="value"/>
+                               v-model.number="value"/>
                     </div>
                     <div class="control level-item">
                         <button class="button level-item" @click="changeData">OK</button>
@@ -75,7 +75,7 @@
 
 <script>
     import Vue from 'vue'
-    import {mapMutations} from "vuex";
+    import {mapActions, mapMutations} from "vuex";
 
     export default {
         name: "MyCellEditor",
@@ -123,7 +123,9 @@
                 updateScatterGraphicPointByData: 'updateScatterGraphicPointByData',
                 addScatterLinePointByIndex: 'addScatterLinePointByIndex',
                 addScatterLinePointByData: 'addScatterLinePointByData',
-                clearScatterLinePoint: 'clearScatterLinePoint',
+                clearScatterLinePoint: 'clearScatterLinePoint'
+            }),
+            ...mapActions('scatter', {
                 addScatterLinePoints: 'addScatterLinePoints'
             }),
             getValue() {
@@ -193,7 +195,6 @@
                 for (let i = this.params.value; i >= this.getMin; i -= this.c_value) {
                     let dataObj = JSON.parse(JSON.stringify(this.params.node.data));
                     dataObj[this.params.column.colId] = i;
-                    console.log(dataObj);
                     this.current_data_variety.data.push(dataObj);
                 }
                 this.current_data_variety.data.reverse();

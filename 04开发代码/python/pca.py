@@ -17,18 +17,19 @@ def pca(x, k=2):
 def feature_scaling(X):
     return (X - X.mean(0))/(X.std(0)+1)
 
+
 if __name__ == '__main__':
     # { id: [], data: [[], []]}
     data = json.loads(sys.argv[1])
     ids, x = data['id'], data['data']
     # data = np.loadtxt(io.StringIO(sys.argv[1]), dtype='f', delimiter=',')
     X = torch.tensor(x, dtype=torch.float)
-    X = feature_scaling(X)
+    #X = feature_scaling(X)
     U = pca(X)
     lowDimensionsRows = torch.mm(X, U)
     rows = list(map(lambda id, row: ({'id': id, 'data': row}), ids, lowDimensionsRows.tolist()))
 
-    print(json.dumps({"pca": rows}))
+    print(json.dumps({"pca": rows, "u": U.tolist()}))
     # # x1 = torch.tensor([[1, 2, 3], [4, 5, 6], [7, 8, 9]], dtype=torch.float)
     # # x2 = torch.tensor([[1, 2, 3], [4, 5, 6], [7, 8, 10]], dtype=torch.float)
     # # print(torch.mm(x1, pca(x1)))

@@ -132,7 +132,13 @@ export default {
         rawData: {dataset: [], series: []},
         idx: {},
         dimensions: [],
-        currentData: []
+        currentData: [],
+        mode: {
+            rawData: 0,
+            pca: 1,
+            mds: 2
+        },
+        currentMode: 0
     },
     mutations: {
         displayData(state) {
@@ -145,7 +151,6 @@ export default {
                 if (Object.keys(idx).length > 0) {
                     data.forEach((v, i) => {
                         let cluster = idx[v.id];
-                        console.log(cluster);
                         if (dataset[cluster] === undefined) {
                             dataset[cluster] = {dimensions: dimensions, source: []};
                             series.push({
@@ -183,18 +188,21 @@ export default {
             if (state.rawData.dataset.length > 0 && state.rawData.series.length > 0) {
                 state.scatter_options.dataset = state.rawData.dataset;
                 state.scatter_options.series = state.rawData.series;
+                state.currentMode = state.mode.rawData;
             }
         },
         displayPCAData(state) {
             if (state.pca.dataset.length > 0 && state.pca.series.length > 0) {
                 state.scatter_options.dataset = state.pca.dataset;
                 state.scatter_options.series = state.pca.series;
+                state.currentMode = state.mode.pca;
             }
         },
         displayMDSData(state) {
             if (state.mds.dataset.length > 0 && state.mds.series.length > 0) {
                 state.scatter_options.dataset = state.mds.dataset;
                 state.scatter_options.series = state.mds.series;
+                state.currentMode = state.mode.mds;
             }
         },
         updateEchartsOptions(state, obj) {
@@ -214,22 +222,7 @@ export default {
             } else
                 state.scatter_options.dataset[0].source.push(data);
         },
-        addScatterLinePoints(state, {current_node_id, data}) {
-            let seriesIndex = 1, current_index = 0;
-            for (; seriesIndex < state.scatter_options.dataset.length; ++seriesIndex) {
-                for (; current_index < state.scatter_options.dataset[seriesIndex].source.length; ++current_index) {
-                    let currentData = state.scatter_options.dataset[seriesIndex].source[current_index];
-                    if (currentData.id === current_node_id) {
-                        state.scatter_options.dataset[0].dimensions = state.dimensions;
-                        data.unshift(currentData);
-                        state.scatter_options.dataset[0].source = data;
-                        return;
-                    }
-                }
-            }
 
-
-        },
         clearScatterLinePoint(state) {
             state.scatter_options.dataset[0].source.splice(0);
         },
@@ -259,11 +252,11 @@ export default {
             if (rootState.table.csv_file.data.length > 0) {
                 commit('clearScatter');
                 state.dimensions = headers;
-                state.rawData = rootState.table.csv_file.data;
-                state.currentData = state.rawData;
+                state.currentData = rootState.table.csv_file.data;
                 commit('displayData');
                 state.rawData.dataset = state.scatter_options.dataset;
                 state.rawData.series = state.scatter_options.series;
+                state.currentMode = state.mode.rawData;
             }
         },
         redisplayPCAData({state, commit}, {headers, rows}) {
@@ -273,6 +266,7 @@ export default {
             commit('displayData');
             state.pca.dataset = state.scatter_options.dataset;
             state.pca.series = state.scatter_options.series;
+            state.currentMode = state.mode.pca;
         },
         redisplayMDSData({state, commit}, {headers, rows}) {
             commit('clearScatter');
@@ -281,11 +275,30 @@ export default {
             commit('displayData');
             state.mds.dataset = state.scatter_options.dataset;
             state.mds.series = state.scatter_options.series;
+            state.currentMode = state.mode.mds;
         },
         cluster({state, commit, rootState}) {
             state.idx = rootState.table.csv_file.idx;
             commit('clearScatter');
             commit('displayData');
+        },
+        fppcaAddScatterLinePoints({state}, {data}) {
+            state.scatter_options.dataset[0].source = data;
+        },
+        addScatterLinePoints({state, rootState, dispatch}, {current_node_id, data}) {
+            let currentData = rootState.table.csv_file.data.filter(v => v.id === current_node_id);
+            state.scatter_options.dataset[0].dimensions = state.dimensions;
+            data.unshift(currentData[0]);
+            switch (state.currentMode) {
+                case state.mode.rawData:
+                    state.scatter_options.dataset[0].source = data;
+                    break;
+                case state.mode.pca:
+                    dispatch('fppca', {x: data, headers: state.dimensions, id: current_node_id}, {root: true});
+                    break;
+                case state.mode.mds:
+                    break;
+            }
         }
     },
     getters: {

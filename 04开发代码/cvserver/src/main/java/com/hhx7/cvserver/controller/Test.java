@@ -3,12 +3,15 @@ package com.hhx7.cvserver.controller;
 
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hhx7.cvserver.entity.Csv;
 import com.hhx7.cvserver.entity.Row;
@@ -67,7 +70,17 @@ public class Test {
         Csv csv = (Csv) session.getAttribute("csv");
         if (csv != null){
             String[] args = new String[] { Util.PYTHON_EXEC, Util.PYTHON_ROOT +"/pca.py", csv.getIdAndDataJsonWithoutHeaders()};
-            return runPython(args);
+            String res =  runPython(args);
+            JSONObject j = JSON.parseObject(res);
+            JSONArray array = j.getJSONArray("u");
+
+            List<List<Double>> u = new ArrayList<>();
+            for (int i=0;i<array.size(); ++i){
+                u.add(array.getJSONArray(i).toJavaList(Double.class));
+            }
+            session.setAttribute("u", u);
+            j.remove("u");
+            return j.toJSONString();
         }
         return "{ \"res\": \"failed\"}";
     }
@@ -118,5 +131,22 @@ public class Test {
         return "{ \"res\": \"failed\"}";
     }
 
-    
+    @RequestMapping(value = "/fppca", produces = "text/plain")
+    public @ResponseBody String forwardProjectionPCA(@RequestBody JSONObject json, HttpSession session) {
+        List<List<Double>> u =  (List<List<Double>>) session.getAttribute("u");
+        System.out.println(u);
+        System.out.println(json.toJSONString());
+        if (u != null){
+            JSONObject j = new JSONObject();
+            j.put("u", u);
+            String[] args = new String[] { Util.PYTHON_EXEC, Util.PYTHON_ROOT +"/fppca.py",  j.toJSONString(), json.toJSONString()};
+            String res =  runPython(args);
+            System.out.println(res);
+            return res;
+        }
+        return "{ \"res\": \"failed\"}";
+    }
+
+
+
 }

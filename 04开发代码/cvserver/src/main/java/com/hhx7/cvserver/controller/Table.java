@@ -23,13 +23,14 @@ public class Table {
 
     @RequestMapping(value = "/createRow", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
-    Map<String,Object> createRow(@RequestBody JSONObject json, HttpSession session) {
+    Map<String,Object> createRow(@RequestBody Row row, HttpSession session) {
 
         Map<String, Object> map=new HashMap<String, Object>();
         Csv csv = (Csv) session.getAttribute("csv");
         if (csv != null){
-            Integer index = json.getInteger("index");
-            Row row  = new Row(json.getJSONArray("row").toJavaList(Double.class));
+//            Integer index = json.getInteger("index");
+//            Row row  = new Row(json.getJSONArray("row").toJavaList(Double.class));
+            csv.addRow(row);
             map.put("res", "ok");
         }else {
             map.put("res", "failed");
@@ -44,10 +45,13 @@ public class Table {
         Map<String, Object> map=new HashMap<String, Object>();
         Csv csv = (Csv) session.getAttribute("csv");
         if (csv != null){
-            Integer start = json.getInteger("start");
-            Integer amount = json.getInteger("amount");
-            csv.removeRow(start);
-            map.put("res", "ok");
+            String id = json.getString("id");
+
+            if (csv.removeRowById(id)){
+                map.put("res", "ok");
+            }else {
+                map.put("res", "failed");
+            }
         }else {
             map.put("res", "failed");
         }
@@ -62,12 +66,12 @@ public class Table {
         map.put("res", "failed");
         Csv csv = (Csv) session.getAttribute("csv");
         if (csv != null){
-            Integer rowIndex = json.getInteger("rowIndex");
+            String id = json.getString("id");
             String colId = json.getString("colId");
             Double value = json.getDoubleValue("value");
             Integer colIndex = csv.getColIndexFromColId(colId);
 
-            if (csv.editCell(rowIndex, colIndex, value)){
+            if (csv.editCell(id, colIndex, value)){
                 map.put("res", "ok");
             }
         }
@@ -76,28 +80,29 @@ public class Table {
 
     @RequestMapping(value = "/removeColumn", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
-    Map<String,Object> cellValueChanged(@RequestBody Wrapper<String> colId, HttpSession session) {
+    Map<String,Object> removeColumn(@RequestBody JSONObject json, HttpSession session) {
 
         Map<String, Object> map=new HashMap<String, Object>();
         map.put("res", "failed");
         Csv csv = (Csv) session.getAttribute("csv");
         if (csv != null){
-            Integer colIndex = csv.getColIndexFromColId(colId.getValue());
-            csv.removeColumn(colIndex);
+
+            csv.removeColumn(json.getString("colId"));
             map.put("res", "ok");
         }
+
         return map;
     }
 
     @RequestMapping(value = "/addColumn", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
-    Map<String,Object> addColumn(@RequestBody Wrapper<String> colId, HttpSession session) {
+    Map<String,Object> addColumn(@RequestBody JSONObject json, HttpSession session) {
 
         Map<String, Object> map=new HashMap<String, Object>();
         map.put("res", "failed");
         Csv csv = (Csv) session.getAttribute("csv");
         if (csv != null){
-            csv.addColumn(colId.getValue());
+            csv.addColumn(json.getString("colId"));
             map.put("res", "ok");
         }
         return map;
@@ -114,9 +119,10 @@ public class Table {
         if (csv != null){
             String colId = json.getString("colId");
             Boolean show = json.getBoolean("show");
-            csv.showOrHideColumn(csv.getColIndexFromColId(colId), show);
+            csv.showOrHideColumn(colId, show);
             map.put("res", "ok");
         }
+
         return map;
     }
 

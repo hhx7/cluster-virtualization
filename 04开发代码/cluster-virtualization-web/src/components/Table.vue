@@ -84,7 +84,6 @@
             },
             getHeaders: function () {
                 let a = this.colHeaders.filter(header => header.show === true);
-                console.log(a);
                 return a;
             }
         },

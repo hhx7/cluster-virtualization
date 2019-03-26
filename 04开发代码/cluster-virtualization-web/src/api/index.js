@@ -31,6 +31,19 @@ export default {
         return Object.keys(obj).map(key => obj[key]);
     },
 
+    getObjectValueExcept(obj, xset) {
+        if (xset === null || xset === undefined) {
+            return Object.keys(obj).map(key => obj[key]);
+        }
+        let keys = Object.keys(obj);
+        let value = [];
+        keys.forEach((v, i) => {
+            if (xset.indexOf(v) < 0) {
+                value.push(obj[v]);
+            }
+        });
+        return value;
+    },
     countNumberLength(num) {
         // x = Number(String(num).replace(/[^0-9]/g, ''));
         // return (Math.log10((x ^ (x >> 31)) - (x >> 31)) | 0) + 1;

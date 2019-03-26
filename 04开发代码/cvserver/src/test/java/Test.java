@@ -5,7 +5,9 @@ import com.hhx7.cvserver.utils.Util;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Test {
     public static <Type> String join(List<Type> list, String deli){
@@ -20,10 +22,11 @@ public class Test {
 
     @org.junit.Test
     public void test(){
-        String json = "{\"x1\":[56.7048577,56.7049627,56.7060783,56.7061408,56.7060927,56.7059663],\"x2\":[57.0106364,57.0099725,57.2248671,57.2247336,57.2245245,57.2242805,57.2241121,57.2241005,57.2241179,57.2240772,57.2240555,57.224054,57.2240192,57.2239154,57.223686]}";
-        String[] args = new String[] { "/home/pi/PycharmProjects/ml/venv/bin/python3", "/home/pi/PycharmProjects/ml/anova.py",  json};
-        String res = runPython(args);
-        System.out.println(res);
+        Set<Integer> set = new HashSet<>();
+        set.add(1);
+        set.add(2);
+        int i = 1;
+        System.out.println(set.contains(i));
     }
 
     private String runPython(String[] args) {

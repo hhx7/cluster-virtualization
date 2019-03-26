@@ -2,25 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="272b684c-e22a-4261-93f4-b38d347583d2" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../cluster-virtualization-web/src/api/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../cluster-virtualization-web/src/api/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cluster-virtualization-web/src/store/modules/scatter.js" beforeDir="false" afterPath="$PROJECT_DIR$/../cluster-virtualization-web/src/store/modules/scatter.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cluster-virtualization-web/src/store/modules/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/../cluster-virtualization-web/src/store/modules/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cluster-virtualization-web/src/store/modules/table.js" beforeDir="false" afterPath="$PROJECT_DIR$/../cluster-virtualization-web/src/store/modules/table.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fppca.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../cvserver/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../cvserver/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cvserver/log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../cvserver/log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../cvserver/src/main/java/com/hhx7/cvserver/controller/Table.java" beforeDir="false" afterPath="$PROJECT_DIR$/../cvserver/src/main/java/com/hhx7/cvserver/controller/Table.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../cvserver/src/main/java/com/hhx7/cvserver/controller/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/../cvserver/src/main/java/com/hhx7/cvserver/controller/Test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cvserver/src/main/java/com/hhx7/cvserver/entity/Csv.java" beforeDir="false" afterPath="$PROJECT_DIR$/../cvserver/src/main/java/com/hhx7/cvserver/entity/Csv.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cvserver/src/main/java/com/hhx7/cvserver/entity/Row.java" beforeDir="false" afterPath="$PROJECT_DIR$/../cvserver/src/main/java/com/hhx7/cvserver/entity/Row.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cvserver/target/classes/com/hhx7/cvserver/controller/Test.class" beforeDir="false" afterPath="$PROJECT_DIR$/../cvserver/target/classes/com/hhx7/cvserver/controller/Test.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cvserver/target/classes/com/hhx7/cvserver/entity/Csv.class" beforeDir="false" afterPath="$PROJECT_DIR$/../cvserver/target/classes/com/hhx7/cvserver/entity/Csv.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cvserver/target/classes/com/hhx7/cvserver/entity/Row.class" beforeDir="false" afterPath="$PROJECT_DIR$/../cvserver/target/classes/com/hhx7/cvserver/entity/Row.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cvserver/target/cvserver-1.0-SNAPSHOT.war" beforeDir="false" afterPath="$PROJECT_DIR$/../cvserver/target/cvserver-1.0-SNAPSHOT.war" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cvserver/target/cvserver-1.0-SNAPSHOT/WEB-INF/classes/com/hhx7/cvserver/controller/Test.class" beforeDir="false" afterPath="$PROJECT_DIR$/../cvserver/target/cvserver-1.0-SNAPSHOT/WEB-INF/classes/com/hhx7/cvserver/controller/Test.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cvserver/target/cvserver-1.0-SNAPSHOT/WEB-INF/classes/com/hhx7/cvserver/entity/Csv.class" beforeDir="false" afterPath="$PROJECT_DIR$/../cvserver/target/cvserver-1.0-SNAPSHOT/WEB-INF/classes/com/hhx7/cvserver/entity/Csv.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cvserver/target/cvserver-1.0-SNAPSHOT/WEB-INF/classes/com/hhx7/cvserver/entity/Row.class" beforeDir="false" afterPath="$PROJECT_DIR$/../cvserver/target/cvserver-1.0-SNAPSHOT/WEB-INF/classes/com/hhx7/cvserver/entity/Row.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../cvserver/src/test/java/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/../cvserver/src/test/java/Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../cvserver/target/test-classes/Test.class" beforeDir="false" afterPath="$PROJECT_DIR$/../cvserver/target/test-classes/Test.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kmeans.py" beforeDir="false" afterPath="$PROJECT_DIR$/kmeans.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mds.py" beforeDir="false" afterPath="$PROJECT_DIR$/mds.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pca.py" beforeDir="false" afterPath="$PROJECT_DIR$/pca.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -31,11 +19,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/anova.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-53">
-              <caret line="13" column="28" selection-start-line="13" selection-start-column="28" selection-end-line="13" selection-end-column="28" />
+            <state relative-caret-position="163">
+              <caret line="25" column="43" lean-forward="true" selection-start-line="25" selection-start-column="43" selection-end-line="25" selection-end-column="43" />
             </state>
           </provider>
         </entry>
@@ -43,10 +31,22 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pca.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="181">
-              <caret line="24" column="13" lean-forward="true" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
+            <state relative-caret-position="302">
+              <caret line="26" column="5" selection-start-line="26" selection-start-column="5" selection-end-line="26" selection-end-column="5" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/fppca.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="235">
+              <caret line="18" column="42" selection-start-line="18" selection-start-column="42" selection-end-line="18" selection-end-column="42" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -89,15 +89,23 @@
       </file>
     </leaf>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/pca.py" />
         <option value="$PROJECT_DIR$/mds.py" />
         <option value="$PROJECT_DIR$/kmeans.py" />
+        <option value="$PROJECT_DIR$/pca.py" />
+        <option value="$PROJECT_DIR$/fppca.py" />
       </list>
     </option>
   </component>
@@ -142,7 +150,28 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.fppca">
+    <configuration name="fppca" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="python" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/fppca.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="pca" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="python" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -166,6 +195,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.fppca" />
         <item itemvalue="Python.pca" />
       </list>
     </recent_temporary>
@@ -216,16 +246,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pca.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="181">
-          <caret line="24" column="13" lean-forward="true" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/mds.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="109">
@@ -248,8 +268,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/anova.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-53">
-          <caret line="13" column="28" selection-start-line="13" selection-start-column="28" selection-end-line="13" selection-end-column="28" />
+        <state relative-caret-position="163">
+          <caret line="25" column="43" lean-forward="true" selection-start-line="25" selection-start-column="43" selection-end-line="25" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pca.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="302">
+          <caret line="26" column="5" selection-start-line="26" selection-start-column="5" selection-end-line="26" selection-end-column="5" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fppca.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="235">
+          <caret line="18" column="42" selection-start-line="18" selection-start-column="42" selection-end-line="18" selection-end-column="42" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

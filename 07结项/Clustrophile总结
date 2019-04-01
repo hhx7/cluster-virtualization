@@ -1,0 +1,30 @@
+Clustrophile: A Tool for Visual Clustering Analysis总结
+概要
+关键字
+1. 引言
+	聚类用途，为了快速聚类获得更好的效果，且不存在可以交互式的聚类工具，所以制作了Clustropile，涵盖了原生数据的显示，散点图和聚类热图，有着丰富的交互体验和视觉编码，前向投影和后向投影
+2. 相关工作
+2.1 可视化聚类
+	谈了下The Hierarchical Clustering Explorer
+	Matchmaker、ClusterSculptor
+	clustrophile
+2.2 维度缩减
+	介绍一下维度缩减
+3. Clustrophile的设计
+3.1 Views
+	Table、 Clustering、Projection、Statistics
+3.3 交互
+	Brushing and linking、过滤
+3.4 维度缩减的交互
+	用到了PCA
+3.5 前向投影
+	使用Out of example，Pca使用线性方法
+3.6 Prolines
+3.7 后向投影
+3.8 系统细节
+4 用户反馈
+5 采样
+
+
+	
+	

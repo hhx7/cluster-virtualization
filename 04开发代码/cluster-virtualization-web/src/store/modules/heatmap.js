@@ -1,3 +1,5 @@
+import api from '../../api'
+
 export default {
     namespaced: true,
     state: {
@@ -30,7 +32,8 @@ export default {
                 calculable: true,
                 orient: 'horizontal',
                 left: 'center',
-                bottom: '15%'
+                bottom: '15%',
+                color: ['orangered', 'yellow', 'lightskyblue']
             },
             series: [{
                 name: 'Punch Card',
@@ -58,12 +61,12 @@ export default {
         }
     },
     actions: {
-        redisplayKMeansData({state, commit, rootState}, {centroids, headers}) {
-            state.kmeans.data = [];
-            state.heatmap_options.xAxis.data = [];
+        redisplayKMeansData({state, commit, rootState}, {centroids, headers, count}) {
+            state.kmeans = [];
+            state.heatmap_options.xAxis.data = count;
             let min = centroids[0][0] * 100, max = centroids[0][0] * 100;
             for (let i = 0; i < centroids.length; ++i) {
-                state.heatmap_options.xAxis.data.push(i);
+                //state.heatmap_options.xAxis.data.push(i);
                 for (let j = 0; j < centroids[i].length; ++j) {
                     min = Math.min(min, centroids[i][j] * 100);
                     max = Math.max(max, centroids[i][j] * 100);
@@ -73,6 +76,7 @@ export default {
             state.heatmap_options.visualMap.min = min;
             state.heatmap_options.visualMap.max = max;
             state.heatmap_options.yAxis.data = headers.reverse();
+            state.heatmap_options.visualMap.color = api.getRandomColor(count.length);
             commit('displayKMeansData');
         },
         getDataAndAnova({state, commit, rootState, dispatch}) {

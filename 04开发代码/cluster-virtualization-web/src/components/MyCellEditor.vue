@@ -29,7 +29,8 @@
             <div class="control">
                 <div class="level">
                     <div class="control level-item">
-                        <input class="slider" :step="c_value" :min=getMin :max=getMax v-model.number="value"
+                        <input class="slider is-success is-circle" :step="c_value" :min=getMin :max=getMax
+                               v-model.number="value"
                                type="range">
                     </div>
                     <div class="control level-item">
@@ -115,6 +116,7 @@
                 }
             });
             this.current_data_variety.current_node_id = this.params.node.data.id;
+            this.current_data_variety.data.push(this.params.node.data);
             this.addScatterLinePoints(this.current_data_variety);
         },
 
@@ -168,6 +170,8 @@
             onChange(event) {
                 event.stopImmediatePropagation();
                 this.current_data_variety.data = [];
+                this.current_data_variety.current_node_id = this.params.node.data.id;
+                this.current_data_variety.data.push(this.params.node.data);
                 let dataObj = JSON.parse(JSON.stringify(this.params.node.data));
                 dataObj[this.params.column.colId] = this.value;
                 //let dataArray = Object.keys(dataObj).map(key => dataObj[key]);
@@ -211,4 +215,5 @@
 </script>
 
 <style scoped>
+    @import "../../node_modules/bulma-extensions/bulma-slider/dist/css/bulma-slider.min.css";
 </style>

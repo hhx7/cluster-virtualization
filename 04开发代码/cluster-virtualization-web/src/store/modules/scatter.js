@@ -37,19 +37,19 @@ export default {
                 data: ['1990', '2015']
             },
             dataZoom: [
-                {
-                    type: 'slider',
-                    show: true,
-                },
-                {
-                    type: 'inside',
-                },
-                {
-                    type: 'slider',
-                    show: true,
-                    yAxisIndex: 0,
-                    filterMode: 'empty'
-                }
+                // {
+                //     type: 'slider',
+                //     show: true,
+                // },
+                // {
+                //     type: 'inside',
+                // },
+                // {
+                //     type: 'slider',
+                //     show: true,
+                //     yAxisIndex: 0,
+                //     filterMode: 'empty'
+                // }
             ],
             grid: {},
             xAxis: {
@@ -71,6 +71,7 @@ export default {
                 axisLine: {onZero: false}
             },
             dataset: [{
+                dimensions: null,
                 source: []
             }, {
                 dimensions: null,
@@ -153,13 +154,14 @@ export default {
                         let cluster = idx[v.id];
                         if (dataset[cluster] === undefined) {
                             dataset[cluster] = {dimensions: dimensions, source: []};
+                            let color = api.getRandomColor(1);
                             series.push({
                                 type: 'scatter',
                                 symbolSize: 10,
                                 datasetIndex: series.length + 1,//series和dataset从下标1开始
                                 itemStyle: {
                                     normal: {
-                                        color: api.getRandomColor(1)
+                                        color: color[0]
                                     }
                                 }
                             });
@@ -181,7 +183,9 @@ export default {
                 }
                 state.scatter_options.dataset = state.scatter_options.dataset.concat(dataset);
                 state.scatter_options.series = state.scatter_options.series.concat(series);
+
             }
+
 
         },
         displayRawData(state) {
@@ -244,7 +248,7 @@ export default {
             state.scatter_options.dataset[0].source = [];
             state.scatter_options.dataset[0].dimensions = [];
             state.scatter_options.dataset.splice(1);
-            state.scatter_options.series.splice(1);
+            //state.scatter_options.series.splice(1);
         }
     },
     actions: {
@@ -286,9 +290,7 @@ export default {
             state.scatter_options.dataset[0].source = data;
         },
         addScatterLinePoints({state, rootState, dispatch}, {current_node_id, data}) {
-            let currentData = rootState.table.csv_file.data.filter(v => v.id === current_node_id);
             state.scatter_options.dataset[0].dimensions = state.dimensions;
-            data.unshift(currentData[0]);
             switch (state.currentMode) {
                 case state.mode.rawData:
                     state.scatter_options.dataset[0].source = data;

@@ -24,12 +24,15 @@
       this.myChart = echarts.init(document.getElementById(this.id));
       // 绘制图表
       this.myChart.setOption(this.options, true);
+      window.addEventListener("resize", () => {
+        this.myChart.resize();
+      });
     }
   },
     watch: {
       options: {
         handler(nval, oval) {
-          this.myChart.setOption(nval);
+          this.myChart.setOption(nval, true);
         },
         deep: true
     }
@@ -40,6 +43,7 @@
 <style scoped>
   .echart {
     height: 100%;
+    width: 100%;
   }
 
 </style>

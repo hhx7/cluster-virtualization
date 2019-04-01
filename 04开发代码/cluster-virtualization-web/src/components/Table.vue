@@ -1,6 +1,9 @@
 <template>
     <div>
         <div>
+            <button class="button" @click="$refs.file.click()">导入csv</button>
+            <input class="input is-hidden" type="file" ref="file"
+                   id="open_csv" @change="openCsv" accept="text/csv">
             <button class="button" v-on:click="onBtAdd()">Add Row</button>
             <button class="button" v-on:click="onBtRemove()">Remove Row</button>
             <div class="dropdown is-hoverable">
@@ -111,10 +114,31 @@
                 removeTableFeature: 'removeTableFeature',
                 showOrHideColumn: 'showOrHideColumn'
             }),
+            ...mapActions('table', {
+                addCsvFile: 'addCsvFile'
+            }),
             ...mapMutations('scatter', {
                 addScatterLinePointByIndex: 'addScatterLinePointByIndex',
                 addScatterLinePointByData: 'addScatterLinePointByData'
             }),
+            openCsv: function (evt) {
+                var files = evt.target.files;
+                var reader = new FileReader();
+                for (var i = 0, f; f = files[i]; i++) {
+                    if (!f.type.match('csv')) {
+                        continue;
+                    }
+                    reader.onload = function (f) {
+                        return function (e) {
+                            this.addCsvFile({name: f.name.substring(0, f.name.indexOf('.')), content: e.target.result})
+                        }.bind(this)
+
+                    }.bind(this)(f);
+                    reader.readAsText(f);
+                }
+
+
+            },
             updateData(data) {
                 let dataSource = {
                     rowCount: null,
@@ -208,8 +232,6 @@
 <style lang="scss">
     @import "../../node_modules/ag-grid-community/dist/styles/ag-grid.css";
     @import "../../node_modules/ag-grid-community/dist/styles/ag-theme-balham.css";
-
-
 </style>
 
 <style>

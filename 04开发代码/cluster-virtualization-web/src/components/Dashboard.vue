@@ -1,33 +1,30 @@
 <template>
-    <div class="dashboard columns">
-        <Menu class="has-background-grey-light column is-2"/>
-        <div class="column">
-            <!--<UITest />-->
-            <Table ref="table" id="table" v-bind:data="getCsv.data" v-bind:col-headers="getCsv.colHeaders"/>
-            <!--<Excel id="excel" v-bind:data="getCsv.data" v-bind:col-headers="getCsv.colHeaders"/>-->
-            <div class="columns chart">
-                <div class="column">
-                    <ScatterControlPanel v-bind:headers="getCsv.colHeaders"/>
-                    <Echarts ref="scatter" v-bind:id="echart_id1" v-bind:options="getOptions"/>
-                </div>
-                <div class="column">
-                    <HotmapControlPanel/>
-                    <Echarts ref="heatmap" v-bind:id="echart_id2" v-bind:options="getHeatmapOptions"/>
-                </div>
-                <div class="column">
-                    <StatsControlPanel v-bind:mode="stats_view_mode" @displayStatsView="displayStatsView"/>
-                    <transition name="fade">
-                        <StatsAnova ref="anova" v-if="current_stats_view === stats_view_mode.anova"/>
-                        <StatsCorrcoef ref="corrcoef" v-if="current_stats_view === stats_view_mode.corrcoef"/>
-                    </transition>
-                </div>
+    <div class="dashboard">
+
+        <!--<UITest />-->
+        <Table ref="table" id="table" v-bind:data="getCsv.data" v-bind:col-headers="getCsv.colHeaders"/>
+        <!--<Excel id="excel" v-bind:data="getCsv.data" v-bind:col-headers="getCsv.colHeaders"/>-->
+        <div class="columns chart">
+            <div class="column">
+                <ScatterControlPanel v-bind:headers="getCsv.colHeaders"/>
+                <Echarts ref="scatter" v-bind:id="echart_id1" v-bind:options="getOptions"/>
+            </div>
+            <div class="column">
+                <HotmapControlPanel/>
+                <Echarts ref="heatmap" v-bind:id="echart_id2" v-bind:options="getHeatmapOptions"/>
+            </div>
+            <div class="column">
+                <StatsControlPanel v-bind:mode="stats_view_mode" @displayStatsView="displayStatsView"/>
+                <transition name="fade">
+                    <StatsAnova ref="anova" v-if="current_stats_view === stats_view_mode.anova"/>
+                    <StatsCorrcoef ref="corrcoef" v-if="current_stats_view === stats_view_mode.corrcoef"/>
+                </transition>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import Excel from "./Excel"
     import Echarts from "./Echarts"
     import Menu from "./Menu"
     import {mapGetters, mapMutations} from 'vuex'
@@ -197,13 +194,15 @@
         components: {
             StatsCorrcoef,
             StatsAnova,
-            StatsControlPanel, Menu, Excel, Echarts, Table, ScatterControlPanel, HotmapControlPanel, UITest
+            StatsControlPanel, Menu, Echarts, Table, ScatterControlPanel, HotmapControlPanel, UITest
         }
     }
 </script>
-
-<style scoped>
+<style>
     @import "../../static/css/bulma.min.css";
+</style>
+<style scoped>
+
 
     .dashboard {
         height: 100%;

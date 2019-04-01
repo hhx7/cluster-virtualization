@@ -1,6 +1,5 @@
 import Papa from 'papaparse'
 import Vue from 'vue'
-import {saveAs} from 'file-saver';
 import api from '../../api'
 import {json2excel} from 'js2excel'
 import jsPDF from 'jspdf'
@@ -160,7 +159,6 @@ export default {
                         var len = results.data[0].length === 0 ? 5 : results.data[0].length;
                         var data = [];
                         var headers = api.generateHeaders(len);
-                        console.log(results.data.length);
                         if (results.data.length > 0) {
                             data = results.data.map(function (item) {
                                 var row = {};

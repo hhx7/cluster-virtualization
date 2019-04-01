@@ -149,7 +149,8 @@ export default {
                     function (response) {
                         dispatch('heatmap/redisplayKMeansData', {
                             centroids: response.data.centroids,
-                            headers: response.data.headers
+                            headers: response.data.headers,
+                            count: response.data.count
                         });
                         commit('table/setIdx', {idx: response.data.idx});
                         dispatch('scatter/cluster');

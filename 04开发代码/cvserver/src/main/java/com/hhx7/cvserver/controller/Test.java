@@ -105,9 +105,7 @@ public class Test {
         if (csv != null){
             String[] args = new String[] { Util.PYTHON_EXEC, Util.PYTHON_ROOT +"/kmeans.py", maxCluster.toString(), csv.getIdAndDataJsonWithHeaders()};
 
-            String res = runPython(args);
-            System.out.println(res);
-            return res;
+            return runPython(args);
         }
         return "{ \"res\": \"failed\"}";
     }
@@ -134,15 +132,11 @@ public class Test {
     @RequestMapping(value = "/fppca", produces = "text/plain")
     public @ResponseBody String forwardProjectionPCA(@RequestBody JSONObject json, HttpSession session) {
         List<List<Double>> u =  (List<List<Double>>) session.getAttribute("u");
-        System.out.println(u);
-        System.out.println(json.toJSONString());
         if (u != null){
             JSONObject j = new JSONObject();
             j.put("u", u);
             String[] args = new String[] { Util.PYTHON_EXEC, Util.PYTHON_ROOT +"/fppca.py",  j.toJSONString(), json.toJSONString()};
-            String res =  runPython(args);
-            System.out.println(res);
-            return res;
+            return runPython(args);
         }
         return "{ \"res\": \"failed\"}";
     }

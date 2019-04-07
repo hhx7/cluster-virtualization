@@ -24,7 +24,7 @@ if __name__ == '__main__':
     ids, x = data['id'], data['data']
     # data = np.loadtxt(io.StringIO(sys.argv[1]), dtype='f', delimiter=',')
     X = torch.tensor(x, dtype=torch.float)
-    #X = feature_scaling(X)
+    X = feature_scaling(X)
     U = pca(X)
     lowDimensionsRows = torch.mm(X, U)
     rows = list(map(lambda id, row: ({'id': id, 'data': row}), ids, lowDimensionsRows.tolist()))

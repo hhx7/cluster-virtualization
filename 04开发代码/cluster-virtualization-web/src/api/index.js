@@ -14,14 +14,49 @@ export default {
         }
         return res;
     },
+
+    hsv_to_rgb(h, s, v) {
+        let h_i = parseInt(h * 6);
+        let f = h * 6 - h_i;
+        let p = v * (1 - s);
+        let q = v * (1 - f * s);
+        let t = v * (1 - (1 - f) * s);
+        let r = 0, g = 0, b = 0;
+        if (h_i === 0) {
+            r = v;
+            g = t;
+            b = p;
+        } else if (h_i === 1) {
+            r = q;
+            g = v;
+            b = p;
+        } else if (h_i === 2) {
+            r = p;
+            g = v;
+            b = t;
+        } else if (h_i === 3) {
+            r = p;
+            g = q;
+            b = v;
+        } else if (h_i === 4) {
+            r = t;
+            g = p;
+            b = v;
+        } else if (h_i === 5) {
+            r = v;
+            g = p;
+            b = q;
+        }
+        return 'rgb(' + parseInt(r * 256) + ',' + parseInt(g * 256) + ',' + parseInt(b * 256) + ')';
+
+    },
     //颜色对象
     getRandomColor(colorNum) {
+        let golden_ratio_conjugate = 0.618033988749895;
         let res = [];
         for (let i = 0; i < colorNum; ++i) {
-            let r = Math.floor(Math.random() * 255);
-            let g = Math.floor(Math.random() * 255);
-            let b = Math.floor(Math.random() * 255);
-            res.push('rgb(' + r + ',' + g + ',' + b + ')');
+            let h = (Math.random() + golden_ratio_conjugate) % 1;
+            res.push(this.hsv_to_rgb(h, 0.5, 0.95));
         }
 
         return res;

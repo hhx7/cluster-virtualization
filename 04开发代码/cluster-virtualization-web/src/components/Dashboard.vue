@@ -86,8 +86,19 @@
             // });
             this.$refs.scatter.myChart.on('dblclick', this.onScatterPointDblclick);
             this.$refs.heatmap.myChart.on('click', this.onHeatmapBlockClick);
+            //this.$refs.scatter.myChart.on('legendselectchanged', (params)=>{console.log(params)});
             this.heatmap_click_blocks = this.getHeatmapClickBlocks;
             this.scatter_graphic_points = this.getScatterGraphicPoints;
+            // let data = [];
+            // for (let i=0; i< 1000; ++i){
+            //     for (let j=0; j< 1000; ++j){
+            //         data.push({'A': Math.random()*10, 'B': Math.random()*100});
+            //     }
+            // };
+            // let option = Object.freeze(this.getOptions);
+            // option.dataset[0].dimensions = ['A', 'B'];
+            // option.dataset[0].source = data;
+            //this.$refs.scatter.myChart.setOption(option);
         },
         methods: {
             ...mapMutations('table', {

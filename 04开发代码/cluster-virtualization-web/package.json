@@ -22,7 +22,7 @@
     "bulma": "^0.7.2",
     "bulma-extensions": "^6.0.1",
     "bulma-start": "0.0.2",
-    "echarts": "^4.2.0-rc.2",
+    "echarts": "^4.2.1",
     "file-saver": "^2.0.1",
     "handsontable": "^6.2.2",
     "handsontable-pro": "^6.2.2",

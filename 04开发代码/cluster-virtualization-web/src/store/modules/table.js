@@ -173,7 +173,7 @@ export default {
                             return {headerName: item, field: item, sortable: true, filter: true, show: true};
                         });
                         commit('addCsvFile', {name: name, headers: headers, data: data});
-                        dispatch('uploadCsv', {headers: headers, data: data}, {root: true});
+                        //dispatch('uploadCsv', {headers: headers, data: data}, {root: true});
                     }
                 }
             })

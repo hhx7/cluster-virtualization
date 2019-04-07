@@ -2,24 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="272b684c-e22a-4261-93f4-b38d347583d2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../cvserver/.idea/cvserver.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cluster-virtualization-web/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../cluster-virtualization-web/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cluster-virtualization-web/src/components/Echarts.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../cluster-virtualization-web/src/components/Echarts.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cluster-virtualization-web/src/components/HotmapControlPanel.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../cluster-virtualization-web/src/components/HotmapControlPanel.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cluster-virtualization-web/src/components/MyCellEditor.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../cluster-virtualization-web/src/components/MyCellEditor.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cluster-virtualization-web/src/components/Table.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../cluster-virtualization-web/src/components/Table.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cluster-virtualization-web/src/store/modules/heatmap.js" beforeDir="false" afterPath="$PROJECT_DIR$/../cluster-virtualization-web/src/store/modules/heatmap.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cluster-virtualization-web/src/store/modules/scatter.js" beforeDir="false" afterPath="$PROJECT_DIR$/../cluster-virtualization-web/src/store/modules/scatter.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cluster-virtualization-web/src/store/modules/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/../cluster-virtualization-web/src/store/modules/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cluster-virtualization-web/src/store/modules/table.js" beforeDir="false" afterPath="$PROJECT_DIR$/../cluster-virtualization-web/src/store/modules/table.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cvserver/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../cvserver/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../cvserver/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../cvserver/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cvserver/src/main/java/com/hhx7/cvserver/controller/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/../cvserver/src/main/java/com/hhx7/cvserver/controller/Test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cvserver/target/classes/com/hhx7/cvserver/controller/Test.class" beforeDir="false" afterPath="$PROJECT_DIR$/../cvserver/target/classes/com/hhx7/cvserver/controller/Test.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cvserver/target/cvserver-1.0-SNAPSHOT.war" beforeDir="false" afterPath="$PROJECT_DIR$/../cvserver/target/cvserver-1.0-SNAPSHOT.war" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cvserver/target/cvserver-1.0-SNAPSHOT/WEB-INF/classes/com/hhx7/cvserver/controller/Test.class" beforeDir="false" afterPath="$PROJECT_DIR$/../cvserver/target/cvserver-1.0-SNAPSHOT/WEB-INF/classes/com/hhx7/cvserver/controller/Test.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kmeans.py" beforeDir="false" afterPath="$PROJECT_DIR$/kmeans.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pca.py" beforeDir="false" afterPath="$PROJECT_DIR$/pca.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -32,17 +17,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/anova.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="396">
-              <caret line="25" column="43" selection-start-line="25" selection-start-column="43" selection-end-line="25" selection-end-column="43" />
+            <state relative-caret-position="414">
+              <caret line="26" column="12" selection-start-line="26" selection-start-column="12" selection-end-line="26" selection-end-column="12" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pca.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="342">
-              <caret line="25" column="42" lean-forward="true" selection-start-line="25" selection-start-column="42" selection-end-line="25" selection-end-column="42" />
+            <state relative-caret-position="360">
+              <caret line="26" column="4" lean-forward="true" selection-start-line="26" selection-start-column="4" selection-end-line="26" selection-end-column="4" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -62,10 +47,10 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mds.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="284">
+            <state relative-caret-position="324">
               <caret line="30" lean-forward="true" selection-start-line="30" selection-end-line="30" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
@@ -89,7 +74,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/corrcoef.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
+            <state relative-caret-position="198">
+              <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -270,22 +256,6 @@
     </layout>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/anova.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="25" column="43" selection-start-line="25" selection-start-column="43" selection-end-line="25" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/corrcoef.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/kmeans.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="110">
@@ -306,22 +276,39 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pca.py">
+    <entry file="file://$PROJECT_DIR$/mds.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="25" column="42" lean-forward="true" selection-start-line="25" selection-start-column="42" selection-end-line="25" selection-end-column="42" />
+        <state relative-caret-position="324">
+          <caret line="30" lean-forward="true" selection-start-line="30" selection-end-line="30" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/anova.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="26" column="12" selection-start-line="26" selection-start-column="12" selection-end-line="26" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/corrcoef.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mds.py">
+    <entry file="file://$PROJECT_DIR$/pca.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="30" lean-forward="true" selection-start-line="30" selection-end-line="30" />
+        <state relative-caret-position="360">
+          <caret line="26" column="4" lean-forward="true" selection-start-line="26" selection-start-column="4" selection-end-line="26" selection-end-column="4" />
           <folding>
-            <element signature="e#0#10#0" expanded="true" />
+            <element signature="e#0#12#0" expanded="true" />
           </folding>
         </state>
       </provider>

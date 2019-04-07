@@ -2,6 +2,34 @@
     <div class="control-panel">
         <div class="level">
             <div class="level-left">
+                <div class="dropdown is-hoverable is-up">
+                    <div class="dropdown-trigger">
+                        <span class="icon is-small" aria-haspopup="true" aria-controls="dropdown-menu4">
+                            <i class="fas fa-cog" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <div class="dropdown-menu setting" id="dropdown-menu4" role="menu">
+                        <div class="dropdown-content">
+                            <div class="level">
+                                <div class="level-left">
+                                    <span class="tag is-info is-small">current sampling num: {{ getSamplingNum }}</span>
+                                </div>
+                                <div class="level-item">
+                                    <span class="tag is-info is-small">sampling rate:{{ samplingRate / getSamplingSliderMaxValue}}</span>
+                                </div>
+                            </div>
+                            <div class="level">
+                                <div class="level-item">
+                                    <input class="slider is-fullwidth is-circle" step="1" min="0"
+                                           :max="getSamplingSliderMaxValue"
+                                           v-model.number="samplingRate" @change="updateSamplingRate" type="range">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="level-item">
                 <div class="select is-rounded is-small">
                     <label>
                         <select v-model="selected">
@@ -33,8 +61,6 @@
                         </label>
                     </div>
                 </div>
-
-
             </div>
             <div class="level-item">
                 <button class="button is-rounded is-small" @click="displayData">OK</button>
@@ -44,7 +70,7 @@
 </template>
 
 <script>
-    import {mapActions, mapMutations} from "vuex";
+    import {mapActions, mapGetters, mapMutations} from "vuex";
 
     export default {
         name: "ControlPanel",
@@ -56,10 +82,16 @@
                 mds: 2,
                 selected: 0,
                 x_option: null,
-                y_option: null
+                y_option: null,
+                samplingRate: 30
             }
         },
         computed: {
+            ...mapGetters('scatter', {
+                getSamplingNum: 'getSamplingNum',
+                getSamplingRate: 'getSamplingRate',
+                getSamplingSliderMaxValue: 'getSamplingSliderMaxValue'
+            }),
             is_raw_data_selected() {
                 return this.selected === this.raw_data && this.headers.length > 0;
             },
@@ -73,13 +105,17 @@
                 return this.headers.filter(item => item.show === true);
             }
         },
+        mounted() {
+            this.changeSamplingRate(0.3);
+        },
         methods: {
             ...mapActions({
                 pca_handle: 'pca',
                 mds_handle: 'mds'
             }),
             ...mapActions('scatter', {
-                displayRawData: 'displayRawData'
+                displayRawData: 'displayRawData',
+                changeSamplingRate: 'changeSamplingRate'
             }),
             ...mapMutations('scatter', {
                 displayPCAData: 'displayPCAData',
@@ -97,6 +133,9 @@
                         this.mds_handle();
                         break;
                 }
+            },
+            updateSamplingRate() {
+                this.changeSamplingRate(this.samplingRate / this.getSamplingSliderMaxValue);
             }
         },
         watch: {
@@ -118,13 +157,21 @@
                     this.x_option = nval[0].headerName;
                     this.y_option = nval[0].headerName;
                 }
+            },
+            getSamplingSliderMaxValue: function (nval, oval) {
+                this.samplingRate = this.samplingRate / oval * nval;
             }
         }
     }
 </script>
 
 <style scoped>
+    @import "../../node_modules/bulma-extensions/bulma-slider/dist/css/bulma-slider.min.css";
     .control-panel {
         height: 50px;
+    }
+
+    .setting {
+        width: 500px;
     }
 </style>

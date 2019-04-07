@@ -16,7 +16,7 @@
     }
   },
   mounted () {
-    this.draw()
+    this.draw();
   },
   methods: {
     draw: function () {
@@ -29,9 +29,13 @@
       });
     }
   },
+    beforeDestroy() {
+      this.myChart.clear()
+    },
     watch: {
       options: {
         handler(nval, oval) {
+          this.myChart.clear();
           this.myChart.setOption(nval, true);
         },
         deep: true

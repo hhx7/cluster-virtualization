@@ -97,6 +97,7 @@
         },
         mounted() {
             this.gridApi = this.gridOptions.api;
+            this.gridApi.sizeColumnsToFit();
         },
         methods: {
             ...mapMutations('table', {

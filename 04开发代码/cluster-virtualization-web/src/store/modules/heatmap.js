@@ -33,7 +33,8 @@ export default {
                 orient: 'horizontal',
                 left: 'center',
                 bottom: '15%',
-                color: ['orangered', 'yellow', 'lightskyblue']
+                //color: ['orangered', 'yellow', 'lightskyblue']
+                color: ['#d94e5d', '#eac736', '#50a3ba']
             },
             series: [{
                 name: 'Punch Card',

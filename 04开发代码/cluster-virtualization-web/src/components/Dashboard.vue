@@ -1,12 +1,11 @@
 <template>
     <div class="dashboard">
-
         <!--<UITest />-->
-        <Table ref="table" id="table" v-bind:data="getCsv.data" v-bind:col-headers="getCsv.colHeaders"/>
+        <Table ref="table" id="table" v-bind:data="getCsvData" v-bind:col-headers="getCsvHeaders"/>
         <!--<Excel id="excel" v-bind:data="getCsv.data" v-bind:col-headers="getCsv.colHeaders"/>-->
         <div class="columns chart">
             <div class="column">
-                <ScatterControlPanel v-bind:headers="getCsv.colHeaders"/>
+                <ScatterControlPanel v-bind:headers="getCsvHeaders"/>
                 <Echarts ref="scatter" v-bind:id="echart_id1" v-bind:options="getOptions"/>
             </div>
             <div class="column">
@@ -56,6 +55,9 @@
         computed: {
             ...mapGetters({
                 getCsv: 'table/getCsv',
+                getTest: 'table/getTest',
+                getCsvData: 'table/getCsvData',
+                getCsvHeaders: 'table/getCsvHeaders',
                 getOptions: 'scatter/getOptions',
                 getScatterGraphicPoints: 'scatter/getScatterGraphicPoints',
                 getScatterDataStartPosInSeries: 'scatter/getScatterDataStartPosInSeries',
@@ -162,8 +164,8 @@
                 // }
                 //
                 // dataIndex += params.dataIndex;
-
                 this.$refs.table.onStartEditing(params.data.id);
+                //点亮最新块
                 // this.updateEchartsOptions({
                 //     graphic: {
                 //         type: 'circle',

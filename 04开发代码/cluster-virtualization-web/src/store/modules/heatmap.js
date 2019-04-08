@@ -1,5 +1,3 @@
-import api from '../../api'
-
 export default {
     namespaced: true,
     state: {
@@ -77,7 +75,7 @@ export default {
             state.heatmap_options.visualMap.min = min;
             state.heatmap_options.visualMap.max = max;
             state.heatmap_options.yAxis.data = headers.reverse();
-            state.heatmap_options.visualMap.color = api.getRandomColor(count.length);
+            //state.heatmap_options.visualMap.color = api.getRandomColor(count.length);
             commit('displayKMeansData');
         },
         getDataAndAnova({state, commit, rootState, dispatch}) {

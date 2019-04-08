@@ -35,7 +35,7 @@
     watch: {
       options: {
         handler(nval, oval) {
-          this.myChart.clear();
+          //this.myChart.clear();
           this.myChart.setOption(nval, true);
         },
         deep: true

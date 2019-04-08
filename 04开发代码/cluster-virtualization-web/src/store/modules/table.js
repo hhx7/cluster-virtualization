@@ -19,9 +19,14 @@ export default {
             data: [],
             idx: {},
             col_width: {}
-        }
+        },
+        test: 0
     },
     mutations: {
+        updateTest(state) {
+            console.log('update test');
+            ++state.test;
+        },
         addCsvFile(state, {name, headers, data}) {
             state.csv_file.name = name;
             state.csv_file.headers = headers;
@@ -109,71 +114,61 @@ export default {
         }
     },
     actions: {
-        addCsvFile({commit, state, dispatch}, {name, content}) {
+        addCsvFile({commit, state, dispatch}, {name, content, vm}) {
+            let parseData = (data, headers, totalDataLength) => {
+                vm.$worker.run((data, headers) => {
+                    let guid = function () {
+                        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                            return v.toString(16);
+                        });
+                    };
 
+                    return data.map((row) => {
+                        let nrow = {};
+                        nrow['id'] = guid();
+                        for (let j in headers) {
+                            nrow[headers[j]] = row[j];
+                        }
+                        return nrow;
+                    });
+                }, [data, headers]).then((res) => {
+                        state.csv_file.data = state.csv_file.data.concat(res);
+                        if (state.csv_file.data.length === totalDataLength) {
+                            dispatch('uploadCsv', {
+                                headers: state.csv_file.headers,
+                                data: state.csv_file.data
+                            }, {root: true});
+                        }
+                    }
+                );
+            };
+            state.csv_file.headers = [];
+            state.csv_file.data = [];
             Papa.parse(content, {
                 header: state.csv_file.containHeaders,
                 worker: true,
                 dynamicTyping: true,
-                // step: function (row) {
-                //     //console.log(row);
-                //     //commit('addRow', {data: row.data});
-                //     commit('addCsvRow', { row: row.data});
-                //     console.log(row);
-                // },
-                // complete: function () {
-                //     console.log('complete');
-                //     //commit('assignToData');
-                // }
-                // chunk: function (rows) {
-                //     commit('addCsvRows', {data: rows.data});
-                // }
-                // complete: function (results) {
-                //     console.log('read file complete');
-                //     //commit('initData');
-                //     if (state.csv_file.containHeaders) {
-                //         var len = results.data[0].length === 0 ? 5 : results.data[0].length;
-                //         var data = [];
-                //         if (results.data.length > 0) {
-                //             data = results.data.map(function (item) {
-                //                 var row = [];
-                //                 for (var key in item) {
-                //                     row.push(item[key]);
-                //                 }
-                //                 return row;
-                //             })
-                //         }
-                //         commit('addCsvFile', {name: name, headers: results.meta.fields, data: results.data});
-                //     } else {
-                //         var len = results.data[0].length === 0 ? 5 : results.data[0].length;
-                //         commit('addCsvFile', {name: name, headers: api.generateHeaders(len), data: data});
-                //
-                //     }
-                //
-                // }.bind(this)
                 skipEmptyLines: true,
                 complete: function (results) {
                     if (state.csv_file.containHeaders) {
-                        commit('addCsvFile', {name: name, headers: results.meta.fields, data: results.data});
-                    } else {
-                        var len = results.data[0].length === 0 ? 5 : results.data[0].length;
-                        var data = [];
-                        var headers = api.generateHeaders(len);
-                        if (results.data.length > 0) {
-                            data = results.data.map(function (item) {
-                                var row = {};
-                                row['id'] = api.guid();
-                                for (let i in headers) {
-                                    row[headers[i]] = item[i];
-                                }
-                                return row;
-                            })
-                        }
-                        headers = headers.map(function (item) {
+                        state.csv_file.headers = results.meta.fields.map(function (item) {
                             return {headerName: item, field: item, sortable: true, filter: true, show: true};
                         });
-                        commit('addCsvFile', {name: name, headers: headers, data: data});
-                        //dispatch('uploadCsv', {headers: headers, data: data}, {root: true});
+                        let data = results.data;
+                        let data1 = data.splice(0, 1000);
+                        parseData(data1, headers);
+                        parseData(data, headers);
+                    } else {
+                        let headers = api.generateHeaders(results.data[0].length);
+                        state.csv_file.headers = headers.map(function (item) {
+                            return {headerName: item, field: item, sortable: true, filter: true, show: true};
+                        });
+                        let totalDataLength = results.data.length;
+                        let data = results.data;
+                        let data1 = data.splice(0, 1000);
+                        parseData(data1, headers, totalDataLength);
+                        parseData(data, headers, totalDataLength);
                     }
                 }
             })
@@ -215,10 +210,21 @@ export default {
     },
     getters: {
         getCsv: function (state) {
+            console.log(2);
             return {
                 colHeaders: state.csv_file.headers,
                 data: state.csv_file.data
             }
+        },
+        getCsvData: state => {
+            return state.csv_file.data;
+        },
+        getCsvHeaders: state => {
+            return state.csv_file.headers;
+        },
+        getTest: state => {
+            console.log('test update');
+            return state.test;
         }
     }
 };

@@ -7,13 +7,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1e47dcf3-9499-46e7-8a38-bc7b9c6d2511" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../cluster-virtualization-web/src/api/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../cluster-virtualization-web/src/api/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cluster-virtualization-web/src/store/modules/corrcoef.js" beforeDir="false" afterPath="$PROJECT_DIR$/../cluster-virtualization-web/src/store/modules/corrcoef.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cluster-virtualization-web/src/worker/parseCsv.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../cluster-virtualization-web/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../cluster-virtualization-web/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../cluster-virtualization-web/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../cluster-virtualization-web/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../cluster-virtualization-web/src/components/Dashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../cluster-virtualization-web/src/components/Dashboard.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../cluster-virtualization-web/src/components/Echarts.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../cluster-virtualization-web/src/components/Echarts.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../cluster-virtualization-web/src/components/Table.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../cluster-virtualization-web/src/components/Table.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../cluster-virtualization-web/src/store/modules/scatter.js" beforeDir="false" afterPath="$PROJECT_DIR$/../cluster-virtualization-web/src/store/modules/scatter.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../cluster-virtualization-web/src/store/modules/table.js" beforeDir="false" afterPath="$PROJECT_DIR$/../cluster-virtualization-web/src/store/modules/table.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../python/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../python/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../python/pca.py" beforeDir="false" afterPath="$PROJECT_DIR$/../python/pca.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../07结项/数据聚类可视化分析工具.odt" beforeDir="false" afterPath="$PROJECT_DIR$/../../07结项/数据聚类可视化分析工具.odt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hhx7/cvserver/controller/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hhx7/cvserver/controller/Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cvserver-1.0-SNAPSHOT.war" beforeDir="false" afterPath="$PROJECT_DIR$/target/cvserver-1.0-SNAPSHOT.war" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -34,8 +38,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/hhx7/cvserver/controller/Test.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="49">
-              <caret line="98" column="40" selection-start-line="98" selection-start-column="40" selection-end-line="98" selection-end-column="40" />
+            <state relative-caret-position="253">
+              <caret line="145" column="30" selection-start-line="145" selection-start-column="30" selection-end-line="145" selection-end-column="30" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -545,7 +549,7 @@
       <workItem from="1553935144152" duration="1399000" />
       <workItem from="1554100895442" duration="3111000" />
       <workItem from="1554372151629" duration="19000" />
-      <workItem from="1554373094829" duration="1214000" />
+      <workItem from="1554373094829" duration="6240000" />
     </task>
     <servers />
   </component>
@@ -582,7 +586,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="158167000" />
+    <option name="totallyTimeSpent" value="163193000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -596,7 +600,7 @@
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1366" height="768" extended-state="7" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4977064" visible="true" weight="0.35432473" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4977064" weight="0.35432473" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -606,7 +610,7 @@
       <window_info id="Web" order="7" sideWeight="0.5022936" side_tool="true" weight="0.2663126" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32866043" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49772382" visible="true" weight="0.23831776" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49772382" visible="true" weight="0.4470405" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -735,8 +739,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/hhx7/cvserver/controller/Test.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="49">
-          <caret line="98" column="40" selection-start-line="98" selection-start-column="40" selection-end-line="98" selection-end-column="40" />
+        <state relative-caret-position="253">
+          <caret line="145" column="30" selection-start-line="145" selection-start-column="30" selection-end-line="145" selection-end-column="30" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

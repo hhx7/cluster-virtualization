@@ -295,7 +295,8 @@ export default {
                 animation: true,
                 symbolSize: 15,
                 datasetIndex: 0,
-                large: true
+                large: true,
+                zlevel: 100
             }, {
                 name: 'c1',
                 type: 'scatter',
@@ -337,7 +338,7 @@ export default {
             if (data.length > state.maxSamplingNum) {
                 samplingRate = state.maxSamplingNum / data.length * state.samplingRate;
             }
-            state.samplingNum = parseInt(data.length * samplingRate);
+            state.samplingNum = 0;
             let n = 0;
             let u = data.length;
             while (u / 10 >= 10) {
@@ -345,6 +346,7 @@ export default {
                 u /= 10;
             }
             state.samplingSliderMaxValue = parseInt(data.length > 100 ? Math.pow(10, n) : 100);
+
             if (data.length > 0 && state.samplingRate > 0) {
                 if (Object.keys(idx).length > 0) {
                     data.forEach((v, i) => {
@@ -398,9 +400,11 @@ export default {
                     }
                     dataset[i].source = samplingData;
 
+
                     let name = 'c' + i + '(' + dataset[series[i].datasetIndex - 1].source.length + ')';
                     Vue.set(series[i], 'name', name);
                     state.scatter_options.legend.data.push(name);
+                    state.samplingNum += dataset[series[i].datasetIndex - 1].source.length;
                 }
 
                 state.scatter_options.dataset = state.scatter_options.dataset.concat(dataset);

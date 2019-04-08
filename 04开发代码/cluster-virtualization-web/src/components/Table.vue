@@ -131,7 +131,11 @@
                     }
                     reader.onload = function (f) {
                         return function (e) {
-                            this.addCsvFile({name: f.name.substring(0, f.name.indexOf('.')), content: e.target.result})
+                            this.addCsvFile({
+                                name: f.name.substring(0, f.name.indexOf('.')),
+                                content: e.target.result,
+                                vm: this
+                            })
                         }.bind(this)
 
                     }.bind(this)(f);
@@ -209,13 +213,6 @@
                 this.gridApi.ensureIndexVisible(dataIndex);
                 this.gridApi.setFocusedCell(dataIndex, this.colHeaders[0].headerName, null);
 
-                // this.gridApi.startEditingCell({
-                //     rowIndex: 0,
-                //     colKey: "lastName",
-                //     rowPinned: pinned,
-                //     keyPress: key,
-                //     charPress: char
-                // });
             },
             onCellValueChanged(params) {
                 //this.addScatterLinePointByIndex(params.rowIndex);

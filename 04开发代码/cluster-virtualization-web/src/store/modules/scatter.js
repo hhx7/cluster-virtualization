@@ -294,6 +294,7 @@ export default {
                 animation: true,
                 symbolSize: 15,
                 datasetIndex: 0,
+                data: [],
                 large: true,
                 zlevel: 100
             }, {
@@ -323,7 +324,8 @@ export default {
         samplingRate: 1,
         samplingNum: 0,
         samplingSliderMaxValue: 100,
-        maxSamplingNum: 30000
+        maxSamplingNum: 30000,
+        lastHighlightPointIndex: 0
     },
     mutations: {
         displayData(state) {
@@ -453,7 +455,9 @@ export default {
         },
 
         clearScatterLinePoint(state) {
-            state.scatter_options.dataset[0].source = [];
+            //state.scatter_options.dataset[0].source = [];
+            state.scatter_options.series[0].data = [];
+            state.lastHighlightPointIndex = -1;
         },
         addScatterLinePointByIndex(state, totalLength) {
             // let seriesIndex = 0, dataIndex = 0, currentLength = 0,
@@ -464,7 +468,7 @@ export default {
             // }
             //
             // dataIndex = totalLength - currentLength;
-            state.scatter_options.dataset[0].source.push(state.scatter_options.dataset[1].source[totalLength]);
+            state.scatter_options.series[0].data.push(state.scatter_options.dataset[1].source[totalLength]);
         },
         updateScatterGraphicPointByData(state, data) {
             state.scatter_graphic_points.push(data);
@@ -475,6 +479,24 @@ export default {
             state.scatter_options.dataset.splice(1);
             state.scatter_options.legend.data = [];
             state.scatter_options.series.splice(1);
+            state.scatter_options.series[0].data = [];
+            state.lastHighlightPointIndex = -1;
+        },
+        highlightLinePointByIndex(state, index) {
+            if (state.lastHighlightPointIndex >= 0 && state.lastHighlightPointIndex < state.scatter_options.series[0].data.length) {
+                Vue.set(state.scatter_options.series[0].data, state.lastHighlightPointIndex, state.scatter_options.series[0].data[state.lastHighlightPointIndex].value);
+            }
+            if (index < state.scatter_options.series[0].data.length) {
+                Vue.set(state.scatter_options.series[0].data, index,
+                    {
+                        value: state.scatter_options.series[0].data[index],
+                        itemStyle: {
+                            color: 'red'
+                        }
+                    });
+            }
+
+            state.lastHighlightPointIndex = index;
         }
     },
     actions: {
@@ -512,14 +534,27 @@ export default {
             commit('clearScatter');
             commit('displayData');
         },
-        fppcaAddScatterLinePoints({state}, {data}) {
-            state.scatter_options.dataset[0].source = data;
+        fppcaAddScatterLinePoints({state, commit}, {data}) {
+            let ndata = data.map((obj) => {
+                return state.dimensions.map((v, i) => {
+                    return obj[v];
+                })
+            });
+            state.scatter_options.series[0].data = ndata;
+            let index = state.lastHighlightPointIndex;
+            state.lastHighlightPointIndex = -1;
+            commit('highlightLinePointByIndex', index);
         },
         addScatterLinePoints({state, rootState, dispatch}, {current_node_id, data}) {
             state.scatter_options.dataset[0].dimensions = state.dimensions;
+            let ndata = data.map((obj) => {
+                return state.dimensions.map((v, i) => {
+                    return obj[v];
+                })
+            });
             switch (state.currentMode) {
                 case state.mode.rawData:
-                    state.scatter_options.dataset[0].source = data;
+                    state.scatter_options.series[0].data = ndata;
                     break;
                 case state.mode.pca:
                     dispatch('fppca', {x: data, headers: state.dimensions, id: current_node_id}, {root: true});

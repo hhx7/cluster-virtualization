@@ -14,7 +14,7 @@ export default {
     actions: {
         uploadCsv: {
             root: true,
-            handler({state}, {headers, data}) {
+            handler({state, dispatch}, {headers, data}) {
                 let nheaders = headers.map(header => header.headerName);
                 let csv = {
                     headers: nheaders,
@@ -29,7 +29,9 @@ export default {
                 axios.post(state.URL_ROOT + '/home/uploadCsv',
                     csv)
                     .then(function (response) {
-
+                        //初始化
+                        dispatch('corrcoef');
+                        dispatch('kmeans', 10);
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -200,7 +202,6 @@ export default {
                             });
                             return nx;
                         });
-                        console.log(response.data.fppca);
                         dispatch('scatter/fppcaAddScatterLinePoints', {data: ndata})
                     }
                 ).catch(function (error) {

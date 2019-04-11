@@ -60,15 +60,15 @@
                 <div class="control">
                     <div class="level">
                         <div class="control level-item">
-                            <input class="slider is-success is-circle is-fullwidth" :step="c_value" :min=getMin
-                                   :max=getMax
-                                   v-model.number="value"
-                                   type="range">
+                            <input class="slider is-success is-circle is-fullwidth" step="1" min="0"
+                                   :max=sliderMax
+                                   v-model.number="sliderValue"
+                                   type="range" @change="highlightLinePoint">
                         </div>
 
 
                         <div class="control level-item">
-                            <button class="button level-item is-small">OK</button>
+                            <button class="button level-item is-small" @click="changeData">OK</button>
                         </div>
                     </div>
                 </div>
@@ -105,6 +105,9 @@
                 },
                 normal_active: 'is-active',
                 range_active: '',
+                sliderMax: 1,
+                sliderValue: 1
+
             }
         },
         computed: {
@@ -112,7 +115,6 @@
                 getStds: 'getStds'
             }),
             getMin: function () {
-                console.log(this.std_deviation);
                 return this.params.value - this.k_value * this.std_deviation;
             },
             getMax: function () {
@@ -142,7 +144,6 @@
             this.current_data_variety.current_node_id = this.params.node.data.id;
             this.current_data_variety.data.push(this.params.node.data);
             this.addScatterLinePoints(this.current_data_variety);
-            this.std_deviation = this.getStds[this.params.column.colId];
         },
 
         methods: {
@@ -150,7 +151,8 @@
                 updateScatterGraphicPointByData: 'updateScatterGraphicPointByData',
                 addScatterLinePointByIndex: 'addScatterLinePointByIndex',
                 addScatterLinePointByData: 'addScatterLinePointByData',
-                clearScatterLinePoint: 'clearScatterLinePoint'
+                clearScatterLinePoint: 'clearScatterLinePoint',
+                highlightLinePointByIndex: 'highlightLinePointByIndex'
             }),
             ...mapActions('scatter', {
                 addScatterLinePoints: 'addScatterLinePoints'
@@ -242,21 +244,36 @@
             generatePointsInInterval() {
                 this.clearScatterLinePoint();
                 this.current_data_variety.data = [];
-
-                // left interval
+                // // left interval
                 for (let i = this.params.value; i >= this.getMin; i -= this.c_value) {
                     let dataObj = JSON.parse(JSON.stringify(this.params.node.data));
                     dataObj[this.params.column.colId] = i;
                     this.current_data_variety.data.push(dataObj);
                 }
                 this.current_data_variety.data.reverse();
+
+                this.sliderValue = this.current_data_variety.data.length - 1;
                 //right interval
                 for (let i = this.params.value + this.c_value; i <= this.getMax; i += this.c_value) {
                     let dataObj = JSON.parse(JSON.stringify(this.params.node.data));
                     dataObj[this.params.column.colId] = i;
                     this.current_data_variety.data.push(dataObj);
                 }
+                this.sliderMax = this.current_data_variety.data.length - 1;
                 this.addScatterLinePoints(this.current_data_variety);
+                this.highlightLinePointByIndex(this.sliderValue);
+            },
+            highlightLinePoint() {
+                this.value = this.current_data_variety.data[this.sliderValue][this.params.column.colId];
+                this.highlightLinePointByIndex(this.sliderValue);
+            }
+        },
+        watch: {
+            getStds: {
+                handler(nval, oval) {
+                    this.std_deviation = nval[this.params.column.colId];
+                },
+                deep: true
             }
         }
     }

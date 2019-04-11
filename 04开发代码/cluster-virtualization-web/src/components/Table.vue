@@ -17,7 +17,7 @@
                 </div>
                 <div class="dropdown-menu" id="dropdown-menu4" role="menu">
                     <div class="dropdown-content">
-                        <div v-if="colHeaders.length">
+                        <div v-if="colHeaders.length" class="feature-list">
                             <div class="dropdown-item level" v-for="header in colHeaders">
                                 <div class="level-left">
                                     <input :id="header.headerName" type="checkbox" name="switchExample"
@@ -234,4 +234,9 @@
 
 <style>
     @import "../../node_modules/bulma-extensions/bulma-switch/dist/css/bulma-switch.min.css";
+
+    .feature-list {
+        height: 200px;
+        overflow: scroll;
+    }
 </style>

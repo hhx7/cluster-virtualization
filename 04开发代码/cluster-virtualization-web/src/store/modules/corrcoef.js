@@ -1,3 +1,5 @@
+import api from '../../api'
+
 export default {
     namespaced: true,
     state: {
@@ -35,6 +37,22 @@ export default {
                     data: ['巴西', '印尼', '美国', '印度', '中国', '世界人口(万)']
                 }
             ],
+            dataZoom: [
+                {
+                    type: 'slider',
+                    show: true,
+                },
+                {
+                    type: 'inside',
+                    yAxisIndex: 0
+                },
+                {
+                    type: 'slider',
+                    show: true,
+                    yAxisIndex: 0,
+                    filterMode: 'empty'
+                }
+            ],
             series: [
                 {
                     type: 'bar',
@@ -51,17 +69,24 @@ export default {
     mutations: {
         displayCorrcoef(state, {corrcoef, features}) {
             let ydata = [];
+            let data = [];
             state.histogram_options.series[0].data = [];
+
             for (let i = 0; i < corrcoef.length; ++i) {
                 for (let j = i; j < corrcoef[i].length; ++j) {
                     if (i !== j) {
                         ydata.push(features[i] + '-' + features[j]);
-                        state.histogram_options.series[0].data.push(corrcoef[i][j]);
+                        data.push(corrcoef[i][j]);
                     }
 
                 }
             }
-            state.histogram_options.yAxis[0].data = ydata;
+            let index = data.map((v, i) => i);
+            api.mergeSort(data, index, 'desc');
+            state.histogram_options.yAxis[0].data = ydata.map((v, i) => {
+                return ydata[index[i]];
+            });
+            state.histogram_options.series[0].data = data;
         }
     },
     actions: {

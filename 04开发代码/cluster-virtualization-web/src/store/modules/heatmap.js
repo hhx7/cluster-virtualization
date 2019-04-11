@@ -41,6 +41,22 @@ export default {
                 //color: ['orangered', 'yellow', 'lightskyblue']
                 //color: ['#d94e5d', '#eac736', '#50a3ba']
             },
+            dataZoom: [
+                {
+                    type: 'slider',
+                    show: true,
+                },
+                {
+                    type: 'inside',
+                    yAxisIndex: 0,
+                },
+                {
+                    type: 'slider',
+                    show: true,
+                    yAxisIndex: 0,
+                    filterMode: 'empty'
+                }
+            ],
             series: [{
                 name: 'Punch Card',
                 type: 'heatmap',

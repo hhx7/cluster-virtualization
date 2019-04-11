@@ -18,7 +18,8 @@ export default {
             headers: [],
             data: [],
             idx: {},
-            col_width: {}
+            col_width: {},
+            stds: {}
         },
         test: 0
     },
@@ -205,12 +206,17 @@ export default {
         showOrHideColumn({commit, state, dispatch}, {headerName, show}) {
             commit('updateTableHeader', {headerName: headerName, show: show});
             dispatch('showOrHideColumn', {colId: headerName, show: show}, {root: true});
+        },
+        std({state}, {colId, std}) {
+            Vue.set(state.csv_file.stds, colId, std);
+        },
+        getStd({dispatch}, {colId}) {
+            dispatch('std', {colId: colId}, {root: true});
         }
 
     },
     getters: {
         getCsv: function (state) {
-            console.log(2);
             return {
                 colHeaders: state.csv_file.headers,
                 data: state.csv_file.data
@@ -223,8 +229,10 @@ export default {
             return state.csv_file.headers;
         },
         getTest: state => {
-            console.log('test update');
             return state.test;
+        },
+        getStds: state => {
+            return state.csv_file.stds;
         }
     }
 };

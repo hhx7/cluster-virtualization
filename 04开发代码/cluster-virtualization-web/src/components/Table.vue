@@ -37,7 +37,7 @@
             <button class="button" @click="exportToExcel()">Excel</button>
             <button class="button" @click="exportToPDF()">PDF</button>
         </div>
-        <ag-grid-vue ref="table" style="width: 100%; height: 200px;"
+        <ag-grid-vue ref="table" style="width: 100%;height: 80%"
                      class="ag-theme-balham"
                      :columnDefs="getHeaders"
                      :gridOptions="gridOptions"

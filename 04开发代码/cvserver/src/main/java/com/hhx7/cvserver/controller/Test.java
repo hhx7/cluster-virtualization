@@ -72,14 +72,19 @@ public class Test {
             String[] args = new String[] { Util.PYTHON_EXEC, Util.PYTHON_ROOT +"/pca.py", csv.getIdAndDataJsonWithoutHeaders()};
             String res =  runPython(args);
             JSONObject j = JSON.parseObject(res);
-            JSONArray array = j.getJSONArray("u");
-
+            JSONArray uarray = j.getJSONArray("u");
+            List<Double> mean = j.getJSONArray("mean").toJavaList(Double.class);
+            List<Double> std = j.getJSONArray("std").toJavaList(Double.class);
             List<List<Double>> u = new ArrayList<>();
-            for (int i=0;i<array.size(); ++i){
-                u.add(array.getJSONArray(i).toJavaList(Double.class));
+            for (int i=0;i<uarray.size(); ++i){
+                u.add(uarray.getJSONArray(i).toJavaList(Double.class));
             }
+            session.setAttribute("mean", mean);
+            session.setAttribute("std", std);
             session.setAttribute("u", u);
             j.remove("u");
+            j.remove("mean");
+            j.remove("std");
             return j.toJSONString();
         }
         return "{ \"res\": \"failed\"}";
@@ -132,9 +137,13 @@ public class Test {
     @RequestMapping(value = "/fppca", produces = "text/plain")
     public @ResponseBody String forwardProjectionPCA(@RequestBody JSONObject json, HttpSession session) {
         List<List<Double>> u =  (List<List<Double>>) session.getAttribute("u");
-        if (u != null){
+        List<Double> mean = (List<Double>) session.getAttribute("mean");
+        List<Double> std = (List<Double>) session.getAttribute("std");
+        if (u != null && mean!=null && std!=null){
             JSONObject j = new JSONObject();
             j.put("u", u);
+            j.put("mean", mean);
+            j.put("std", std);
             String[] args = new String[] { Util.PYTHON_EXEC, Util.PYTHON_ROOT +"/fppca.py",  j.toJSONString(), json.toJSONString()};
             return runPython(args);
         }

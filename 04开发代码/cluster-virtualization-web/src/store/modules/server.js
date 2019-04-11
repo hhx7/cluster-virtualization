@@ -207,6 +207,18 @@ export default {
 
                 })
             }
+        },
+        std: {
+            root: true,
+            handler({state, dispatch}, {colId}) {
+                axios.post(state.URL_ROOT + '/table/std', {colId: colId}).then(
+                    function (response) {
+                        dispatch('table/std', {colId: response.data.colId, std: response.data.std});
+                    }
+                ).catch(function (error) {
+
+                })
+            }
         }
     },
     getters: {}

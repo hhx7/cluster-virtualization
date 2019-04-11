@@ -20,7 +20,6 @@ export default {
                     mark: {show: true},
                     dataZoom: {show: true},
                     dataView: {show: true},
-                    magicType: {show: true, type: ['line', 'bar']},
                     restore: {show: true},
                     saveAsImage: {show: true}
                 }
@@ -321,7 +320,7 @@ export default {
             mds: 2
         },
         currentMode: 0,
-        samplingRate: 0.3,
+        samplingRate: 1,
         samplingNum: 0,
         samplingSliderMaxValue: 100,
         maxSamplingNum: 30000
@@ -454,7 +453,7 @@ export default {
         },
 
         clearScatterLinePoint(state) {
-            state.scatter_options.dataset[0].source.splice(0);
+            state.scatter_options.dataset[0].source = [];
         },
         addScatterLinePointByIndex(state, totalLength) {
             // let seriesIndex = 0, dataIndex = 0, currentLength = 0,

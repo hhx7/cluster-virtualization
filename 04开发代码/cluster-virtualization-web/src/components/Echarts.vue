@@ -6,6 +6,7 @@
 
 <script>
   import echarts from 'echarts' // 引入echarts
+  import '../../static/js/mytheme'
 
   export default {
   name: 'Echarts',
@@ -21,7 +22,7 @@
   methods: {
     draw: function () {
       // 基于准备好的dom，初始化echarts实例
-      this.myChart = echarts.init(document.getElementById(this.id));
+      this.myChart = echarts.init(document.getElementById(this.id), 'westeros');
       // 绘制图表
       this.myChart.setOption(this.options, true);
       window.addEventListener("resize", () => {

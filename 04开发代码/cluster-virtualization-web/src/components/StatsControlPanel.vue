@@ -30,7 +30,7 @@
         props: ['mode'],
         data() {
             return {
-                stats_selected: 0,
+                stats_selected: 1,
                 anova: 0,
                 corrcoef: 1
             };

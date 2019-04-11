@@ -13,6 +13,8 @@ public class Csv {
 	private List<String> headers;
 	private Set<Integer> mask;
 	private List<Row> rows;
+	private List<Double> means;
+	private List<Double> std;
 
 	public Csv() {
 		mask = new HashSet<>();
@@ -36,6 +38,7 @@ public class Csv {
 	public Boolean insertRow(Integer index, Row row) {
 		try{
 			rows.add(index, row);
+			//update mean
 		}catch (IndexOutOfBoundsException e){
 			return false;
 		}
@@ -183,6 +186,31 @@ public class Csv {
 	public Integer rowSize(){
 		return rows.size();
 	}
+
+	public Double mean(String colId) {
+		Integer colIndex = getColIndexFromColId(colId);
+		Double sum = 0.0;
+		Integer num = rowSize();
+
+		for (Row row: rows){
+			Double dataItem = row.getData().get(colIndex);
+			sum+=dataItem;
+		}
+		return sum / num;
+	}
+	public Double std(String colId){
+		Integer colIndex = getColIndexFromColId(colId);
+		Double m = mean(colId);
+		Double p = 0.0;
+
+		for (Row row: rows){
+			Double dataItem = row.getData().get(colIndex);
+			p += Math.pow(dataItem - m, 2);
+		}
+
+		return Math.sqrt(p/rows.size());
+	}
+
 
 	public Integer colSize() {
 		return rowSize() > 0 ? rows.get(0).size() : 0;

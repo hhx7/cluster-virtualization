@@ -15,8 +15,9 @@
             <div class="column">
                 <StatsControlPanel v-bind:mode="stats_view_mode" @displayStatsView="displayStatsView"/>
                 <transition name="fade">
-                    <StatsAnova ref="anova" v-if="current_stats_view === stats_view_mode.anova"/>
-                    <StatsCorrcoef ref="corrcoef" v-if="current_stats_view === stats_view_mode.corrcoef"/>
+                    <component :is="child"></component>
+                    <!--                    <StatsAnova ref="anova" v-if="current_stats_view === stats_view_mode.anova"/>-->
+                    <!--                    <StatsCorrcoef ref="corrcoef" v-if="current_stats_view === stats_view_mode.corrcoef"/>-->
                 </transition>
             </div>
         </div>
@@ -49,7 +50,8 @@
                     anova: 0,
                     corrcoef: 1
                 },
-                current_stats_view: 0
+                current_stats_view: 1,
+                child: 'StatsCorrcoef'
             }
         },
         computed: {
@@ -181,8 +183,14 @@
                 // });
             },
             displayStatsView(mode) {
-                this.current_stats_view = mode;
-                console.log(this.current_stats_view);
+                switch (mode) {
+                    case this.stats_view_mode.anova:
+                        this.child = 'StatsAnova';
+                        break;
+                    case this.stats_view_mode.corrcoef:
+                        this.child = 'StatsCorrcoef';
+                        break;
+                }
             }
         },
         // watch: {

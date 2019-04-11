@@ -39,11 +39,11 @@ export default {
                 {
                     type: 'bar',
                     data: [18203, 23489, 29034, 104970, 131744, 630230],
-                    itemStyle: {
-                        normal: {
-                            color: 'lightskyblue'
-                        }
-                    }
+                    // itemStyle: {
+                    //     normal: {
+                    //         color: 'lightskyblue'
+                    //     }
+                    // }
                 }
             ]
         }

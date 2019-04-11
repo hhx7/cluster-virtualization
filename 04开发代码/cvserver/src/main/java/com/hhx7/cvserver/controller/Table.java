@@ -136,4 +136,19 @@ public class Table {
         }
         return "{ \"res\": \"failed\"}";
     }
+
+    @RequestMapping(value = "/std", method = RequestMethod.POST, produces = "application/json")
+    public @ResponseBody
+    Map<String,Object> std(@RequestBody JSONObject json, HttpSession session) {
+        Csv csv = (Csv) session.getAttribute("csv");
+        String colId = json.getString("colId");
+        Map<String, Object> map=new HashMap<String, Object>();
+
+        if (csv != null && colId!=null && colId!="") {
+            map.put("colId", colId);
+            map.put("std", csv.std(colId));
+        }else
+            map.put("res", "failed");
+        return map;
+    }
 }

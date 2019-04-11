@@ -1,16 +1,16 @@
 <template>
-    <div class="panel test">
+    <div class="panel">
         <div class="panel-heading tabs is-toggle is-toggle-rounded">
             <ul>
-                <li class="is-active">
-                    <a><span>Normal</span></a>
+                <li :class="normal_active">
+                    <a @click="changeView(viewMode.normal)"><span>Normal</span></a>
                 </li>
-                <li>
-                    <a><span>Range</span></a>
+                <li :class="range_active">
+                    <a @click="changeView(viewMode.range)"><span>Range</span></a>
                 </li>
             </ul>
         </div>
-        <div class="panel-block">
+        <div class="panel-block" v-if="currentView === viewMode.normal">
             <div class="control">
                 <div class="level">
                     <div class="control level-item">
@@ -24,50 +24,58 @@
 
             </div>
         </div>
-
-        <div class="panel-block">
-            <div class="control">
+        <div v-if="currentView === viewMode.range">
+            <div class="panel-block">
                 <div class="level">
-                    <div class="control level-item">
-                        <input class="slider is-success is-circle" :step="c_value" :min=getMin :max=getMax
-                               v-model.number="value"
-                               type="range">
+                    <div class="level-left">
+                        <span class="tag is-info is-small">Range:{{ getRange }}</span>
                     </div>
-                    <div class="control level-item">
-                        <label class="label">{{ value }}</label>
-                    </div>
-
-                    <div class="control level-item">
-                        <button class="button level-item">OK</button>
+                    <div class="level-item">
+                        <span class="tag is-info is-small">Current Value: {{ value }}</span>
                     </div>
                 </div>
             </div>
+            <div class="panel-block">
+                <div class="control">
+                    <div class="level">
+                        <div class="level-item">
+                            <span class="tag is-info is-small">K</span>
+                        </div>
+                        <div class="control level-item">
+                            <input class="input range-input is-small" type="number" v-model.number="k_value" min=0
+                                   @keydown.enter="onKvalueChange($event)">
+                        </div>
+                        <div class="level-item">
+                            <span class="tag is-info is-small">Step</span>
+                        </div>
+                        <div class="control level-item">
+                            <input class="input range-input is-small" type="number" v-model.number="c_value" min=1
+                                   @keydown.enter="onCvalueChange($event)">
+                        </div>
 
-        </div>
-
-        <div class="panel-block">
-            <div class="control">
-                <div class="level">
-                    <div class="control level-item">
-                        <input class="input range-input" type="number" v-model.number="k_value" min=0
-                               @keydown.enter="onKvalueChange($event)">
-                    </div>
-                    <div class="control level-item">
-                        <input class="input range-input" type="number" v-model.number="c_value" min=1
-                               @keydown.enter="onCvalueChange($event)">
                     </div>
                 </div>
             </div>
-        </div>
+            <div class="panel-block">
+                <div class="control">
+                    <div class="level">
+                        <div class="control level-item">
+                            <input class="slider is-success is-circle is-fullwidth" :step="c_value" :min=getMin
+                                   :max=getMax
+                                   v-model.number="value"
+                                   type="range">
+                        </div>
 
-        <div class="panel-block">
-            <div class="control">
-                <div class="level">
-                    <button class="button level-item" @click="generatePointsInInterval">OK</button>
+
+                        <div class="control level-item">
+                            <button class="button level-item is-small">OK</button>
+                        </div>
+                    </div>
                 </div>
 
             </div>
         </div>
+
 
 
     </div>
@@ -76,7 +84,7 @@
 
 <script>
     import Vue from 'vue'
-    import {mapActions, mapMutations} from "vuex";
+    import {mapActions, mapGetters, mapMutations} from "vuex";
 
     export default {
         name: "MyCellEditor",
@@ -89,15 +97,29 @@
                 c_value: 1,
                 std_deviation: 1,
                 slider_value: 0,
-                current_data_variety: {current_node_id: 0, data: []}
+                current_data_variety: {current_node_id: 0, data: []},
+                currentView: 0,
+                viewMode: {
+                    normal: 0,
+                    range: 1
+                },
+                normal_active: 'is-active',
+                range_active: '',
             }
         },
         computed: {
+            ...mapGetters('table', {
+                getStds: 'getStds'
+            }),
             getMin: function () {
+                console.log(this.std_deviation);
                 return this.params.value - this.k_value * this.std_deviation;
             },
             getMax: function () {
                 return this.params.value + this.k_value * this.std_deviation;
+            },
+            getRange: function () {
+                return '[' + this.getMin + ', ' + this.getMax + ']';
             }
 
         },
@@ -106,6 +128,7 @@
 
             // only start edit if key pressed is a number, not a letter
             this.cancelBeforeStart = this.params.charPress && ('1234567890'.indexOf(this.params.charPress) < 0);
+            this.getStd({colId: this.params.column.colId});
         },
         mounted() {
             Vue.nextTick(() => {
@@ -115,9 +138,11 @@
                     this.$refs.input.focus();
                 }
             });
+            this.clearScatterLinePoint();
             this.current_data_variety.current_node_id = this.params.node.data.id;
             this.current_data_variety.data.push(this.params.node.data);
             this.addScatterLinePoints(this.current_data_variety);
+            this.std_deviation = this.getStds[this.params.column.colId];
         },
 
         methods: {
@@ -130,6 +155,27 @@
             ...mapActions('scatter', {
                 addScatterLinePoints: 'addScatterLinePoints'
             }),
+            ...mapActions('table', {
+                getStd: 'getStd'
+            }),
+            changeView(mode) {
+                this.clearScatterLinePoint();
+                this.current_data_variety.data = [];
+                this.current_data_variety.current_node_id = this.params.node.data.id;
+                this.current_data_variety.data.push(this.params.node.data);
+                this.addScatterLinePoints(this.current_data_variety);
+                this.currentView = parseInt(mode);
+                switch (this.currentView) {
+                    case this.viewMode.range:
+                        this.range_active = 'is-active';
+                        this.normal_active = '';
+                        break;
+                    case this.viewMode.normal:
+                        this.normal_active = 'is-active';
+                        this.range_active = '';
+                        break;
+                }
+            },
             getValue() {
                 this.clearScatterLinePoint();
                 return this.changed ? this.value : this.params.value;
@@ -187,9 +233,11 @@
             },
             onKvalueChange(event) {
                 event.stopImmediatePropagation();
+                this.generatePointsInInterval();
             },
             onCvalueChange(event) {
                 event.stopImmediatePropagation();
+                this.generatePointsInInterval();
             },
             generatePointsInInterval() {
                 this.clearScatterLinePoint();

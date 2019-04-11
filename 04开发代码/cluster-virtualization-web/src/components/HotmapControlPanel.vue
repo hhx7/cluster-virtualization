@@ -1,7 +1,7 @@
 <template>
     <div class="control-panel">
-        <div class="level first-level">
-            <div class="level-item">
+        <div class="level">
+            <div class="level-left">
                 <div class="select is-rounded is-small">
                     <label>
                         <select v-model="cluster_selected">
@@ -11,22 +11,19 @@
                 </div>
             </div>
             <div class="level-item">
-                <input class="input is-small is-rounded" v-model.number="max_clusters" min="1">
-            </div>
-            <div class="level-item">
-                <button class="button is-rounded is-small" @click="startClustering">OK</button>
-            </div>
-        </div>
-        <div class="level">
-            <div class="level-item">
                 <span class="tag is-info is-small">{{clusterNum}}</span>
             </div>
 
             <div class="level-item">
-                <input class="slider is-fullwidth is-success is-circle" step="1" min="1" :max="max_clusters"
+                <input class="slider is-fullwidth is-success is-circle cluster-slider" step="1" min="1"
+                       :max="max_clusters"
                        v-model.number="clusterNum" @change="cluster" type="range">
             </div>
 
+            <div class="level-item">
+                <input class="input is-small is-rounded max-clusters-input" v-model.number="max_clusters" min="1"
+                       @change="startClustering" placeholder="set max clusters">
+            </div>
             <div class="level-item">
                 <a @click="cluster">
                     <span class="icon has-text-success">
@@ -36,8 +33,6 @@
 
 
             </div>
-
-
         </div>
 
     </div>
@@ -54,8 +49,8 @@
                 stats_selected: 0,
                 k_means: 0,
                 anova: 0,
-                max_clusters: 2,
-                clusterNum: 2
+                max_clusters: 10,
+                clusterNum: 10
             };
         },
         methods: {
@@ -98,10 +93,14 @@
 <style scoped>
     @import "../../node_modules/bulma-extensions/bulma-slider/dist/css/bulma-slider.min.css";
     .control-panel {
-        height: 80px;
+        height: 50px;
     }
 
-    .first-level {
-        margin-bottom: 0;
+    .max-clusters-input {
+        width: 50px;
+    }
+
+    .cluster-slider {
+        margin: 0;
     }
 </style>

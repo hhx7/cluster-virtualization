@@ -22,11 +22,15 @@ public class Test {
 
     @org.junit.Test
     public void test(){
-        Set<Integer> set = new HashSet<>();
-        set.add(1);
-        set.add(2);
-        int i = 1;
-        System.out.println(set.contains(i));
+     List<Integer> test = new ArrayList<>();
+     test.add(1);
+     test.add(2);
+     test.add(3);
+
+     for (int i=0;i<test.size();++i){
+         test.set(i, 4);
+     }
+     System.out.println(test);
     }
 
     private String runPython(String[] args) {

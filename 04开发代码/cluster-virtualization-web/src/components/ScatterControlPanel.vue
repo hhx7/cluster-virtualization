@@ -4,27 +4,31 @@
             <div class="level-left">
                 <div class="dropdown is-hoverable is-up">
                     <div class="dropdown-trigger">
-                        <span class="icon is-small" aria-haspopup="true" aria-controls="dropdown-menu4">
+                        <a class="icon is-small" aria-haspopup="true" aria-controls="dropdown-menu4">
                             <i class="fas fa-cog" aria-hidden="true"></i>
-                        </span>
+                        </a>
                     </div>
                     <div class="dropdown-menu setting" id="dropdown-menu4" role="menu">
                         <div class="dropdown-content">
-                            <div class="level">
-                                <div class="level-left">
-                                    <span class="tag is-info is-small">current sampling num: {{ getSamplingNum }}</span>
+                            <div class="panel">
+                                <div class="panel-block">
+                                    <div class="level">
+                                        <div class="level-item first-level">
+                                            <span class="tag is-info is-small">current sampling num: {{ getSamplingNum }}</span>
+                                        </div>
+                                        <div class="level-item">
+                                            <span class="tag is-info is-small">sampling rate:{{ samplingRate / getSamplingSliderMaxValue}}</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="level-item">
-                                    <span class="tag is-info is-small">sampling rate:{{ samplingRate / getSamplingSliderMaxValue}}</span>
-                                </div>
-                            </div>
-                            <div class="level">
-                                <div class="level-item">
-                                    <input class="slider is-fullwidth is-circle" step="1" min="0"
+                                <div class="panel-block">
+                                    <input class="slider is-fullwidth is-circle sampling-slider" step="1" min="0"
                                            :max="getSamplingSliderMaxValue"
                                            v-model.number="samplingRate" @change="updateSamplingRate" type="range">
                                 </div>
                             </div>
+
+
                         </div>
                     </div>
                 </div>
@@ -83,7 +87,7 @@
                 selected: 0,
                 x_option: null,
                 y_option: null,
-                samplingRate: 30
+                samplingRate: 0
             }
         },
         computed: {
@@ -106,7 +110,7 @@
             }
         },
         mounted() {
-            this.changeSamplingRate(0.3);
+            this.samplingRate = this.getSamplingRate * this.getSamplingSliderMaxValue;
         },
         methods: {
             ...mapActions({
@@ -174,4 +178,9 @@
     .setting {
         width: 500px;
     }
+
+    .sampling-slider {
+        margin: 0;
+    }
+
 </style>

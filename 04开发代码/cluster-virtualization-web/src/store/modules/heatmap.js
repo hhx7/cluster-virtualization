@@ -8,6 +8,7 @@ export default {
             toolbox: {
                 show: true,
                 feature: {
+                    dataZoom: {show: true},
                     restore: {show: true},
                     saveAsImage: {show: true}
                 }
@@ -86,13 +87,13 @@ export default {
         redisplayKMeansData({state, commit, rootState}, {centroids, headers, count}) {
             state.kmeans = [];
             state.heatmap_options.xAxis.data = count;
-            let min = centroids[0][0] * 100, max = centroids[0][0] * 100;
+            let min = centroids[0][0], max = centroids[0][0];
             for (let i = 0; i < centroids.length; ++i) {
                 //state.heatmap_options.xAxis.data.push(i);
                 for (let j = 0; j < centroids[i].length; ++j) {
-                    min = Math.min(min, centroids[i][j] * 100);
-                    max = Math.max(max, centroids[i][j] * 100);
-                    state.kmeans.push([i, j, centroids[i][j] * 100]);
+                    min = Math.min(min, centroids[i][j]);
+                    max = Math.max(max, centroids[i][j]);
+                    state.kmeans.push([i, j, centroids[i][j]]);
                 }
             }
             state.heatmap_options.visualMap.min = min;

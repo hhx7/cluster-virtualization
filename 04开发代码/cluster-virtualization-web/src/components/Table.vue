@@ -46,6 +46,7 @@
                      :infiniteInitialRowCount="infiniteInitialRowCount"
                      @grid-ready="onGridReady"
                      @cell-value-changed="onCellValueChanged"
+                     @filter-changed="onFilterChanged"
         >
         </ag-grid-vue>
     </div>
@@ -86,8 +87,7 @@
                 )
             },
             getHeaders: function () {
-                let a = this.colHeaders.filter(header => header.show === true);
-                return a;
+                return this.colHeaders.filter(header => header.show === true);
             }
         },
         components: {
@@ -155,7 +155,7 @@
                                 lastRow = data.length;
                             }
                             params.successCallback(rowsThisPage, lastRow);
-                        }, 500);
+                        }, 0);
                     }
                 };
                 this.gridApi.setDatasource(dataSource);
@@ -205,18 +205,28 @@
                 this.createRow(selectedRow.rowIndex);
             },
             onStartEditing(id) {
-                let node = this.gridApi.getRowNode(id);
-                node.setSelected(true);
-                let dataIndex = node.rowIndex;
+
+                //let dataIndex = node.rowIndex;
+                let dataIndex = 0;
+                for (let i = 0; i < this.data; ++i) {
+                    if (this.data.id === id) {
+                        dataIndex = i;
+                        break;
+                    }
+                }
                 if (this.gridApi.getInfiniteRowCount() < dataIndex)
                     this.gridApi.setInfiniteRowCount(dataIndex + 1, false);
                 this.gridApi.ensureIndexVisible(dataIndex);
                 this.gridApi.setFocusedCell(dataIndex, this.colHeaders[0].headerName, null);
+                let node = this.gridApi.getRowNode(id);
+                node.setSelected(true);
 
             },
             onCellValueChanged(params) {
                 //this.addScatterLinePointByIndex(params.rowIndex);
                 this.cellValueChanged({id: params.data.id, colId: params.column.colId, value: params.value});
+            },
+            onFilterChanged(params) {
             }
         },
         watch: {

@@ -167,7 +167,7 @@ export default {
             handler({state, commit}, {x1id, x2id, colId}) {
                 axios.post(state.URL_ROOT + '/home/anova', {x1id: x1id, x2id: x2id, colId: colId}).then(
                     function (response) {
-                        commit('anova/setAnovaResult', response.data)
+                        commit('anova/setAnovaResult', {feature: colId, data: response.data})
                         // dispatch('heatmap/redisplayKMeansData', {data: response.data.centroids});
                         // dispatch('scatter/cluster', {idx: response.data.idx});
                     }

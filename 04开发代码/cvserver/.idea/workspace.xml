@@ -7,10 +7,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1e47dcf3-9499-46e7-8a38-bc7b9c6d2511" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../cluster-virtualization-web/src/components/HotmapControlPanel.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../cluster-virtualization-web/src/components/HotmapControlPanel.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cluster-virtualization-web/src/components/MyCellEditor.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../cluster-virtualization-web/src/components/MyCellEditor.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cluster-virtualization-web/src/store/modules/scatter.js" beforeDir="false" afterPath="$PROJECT_DIR$/../cluster-virtualization-web/src/store/modules/scatter.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cluster-virtualization-web/src/store/modules/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/../cluster-virtualization-web/src/store/modules/server.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../07结项/数据聚类可视化分析工具.odt" beforeDir="false" afterPath="$PROJECT_DIR$/../../07结项/数据聚类可视化分析工具.odt" afterDir="false" />
     </list>
@@ -58,8 +54,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/hhx7/cvserver/controller/Table.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="129">
-              <caret line="125" column="19" selection-start-line="125" selection-start-column="19" selection-end-line="125" selection-end-column="19" />
+            <state relative-caret-position="109">
+              <caret line="124" lean-forward="true" selection-start-line="124" selection-end-line="124" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -570,7 +566,7 @@
       <workItem from="1554372151629" duration="19000" />
       <workItem from="1554373094829" duration="6243000" />
       <workItem from="1554946468861" duration="5379000" />
-      <workItem from="1554984543795" duration="621000" />
+      <workItem from="1554984543795" duration="3969000" />
     </task>
     <servers />
   </component>
@@ -607,7 +603,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="169196000" />
+    <option name="totallyTimeSpent" value="172544000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -822,8 +818,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/hhx7/cvserver/controller/Table.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="129">
-          <caret line="125" column="19" selection-start-line="125" selection-start-column="19" selection-end-line="125" selection-end-column="19" />
+        <state relative-caret-position="109">
+          <caret line="124" lean-forward="true" selection-start-line="124" selection-end-line="124" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

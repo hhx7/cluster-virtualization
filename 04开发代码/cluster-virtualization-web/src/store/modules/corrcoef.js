@@ -34,7 +34,10 @@ export default {
             yAxis: [
                 {
                     type: 'category',
-                    data: ['巴西', '印尼', '美国', '印度', '中国', '世界人口(万)']
+                  data: ['巴西', '印尼', '美国', '印度', '中国', '世界人口(万)'],
+                  axisLabel: {
+                    rotate: 60
+                  }
                 }
             ],
             dataZoom: [

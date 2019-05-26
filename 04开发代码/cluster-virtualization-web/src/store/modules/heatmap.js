@@ -30,7 +30,10 @@ export default {
                 data: [],//['Saturday', 'Friday', 'Thursday', 'Wednesday', 'Tuesday', 'Monday', 'Sunday'],
                 splitArea: {
                     show: true
-                }
+                },
+              axisLabel: {
+                rotate: 60
+              }
             },
             visualMap: {
                 //min: 0,
@@ -39,7 +42,7 @@ export default {
                 orient: 'horizontal',
                 left: 'center',
                 bottom: '15%',
-                //color: ['orangered', 'yellow', 'lightskyblue']
+              color: ['orangered', 'yellow', 'lightskyblue']
                 //color: ['#d94e5d', '#eac736', '#50a3ba']
             },
             dataZoom: [

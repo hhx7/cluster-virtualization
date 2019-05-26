@@ -54,11 +54,11 @@
 </template>
 
 <script>
-    import {AgGridVue} from "ag-grid-vue";
-    import {mapActions, mapMutations} from 'vuex'
-    import MyCellEditor from './MyCellEditor'
+  import {AgGridVue} from "ag-grid-vue";
+  import {mapActions, mapMutations} from 'vuex'
+  import MyCellEditor from './MyCellEditor'
 
-    export default {
+  export default {
         name: "Table",
         props: ['data', 'colHeaders'],
         data() {
@@ -208,8 +208,8 @@
 
                 //let dataIndex = node.rowIndex;
                 let dataIndex = 0;
-                for (let i = 0; i < this.data; ++i) {
-                    if (this.data.id === id) {
+              for (let i = 0; i < this.data.length; ++i) {
+                if (this.data[i].id === id) {
                         dataIndex = i;
                         break;
                     }

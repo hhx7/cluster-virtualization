@@ -83,10 +83,10 @@
 </template>
 
 <script>
-    import Vue from 'vue'
-    import {mapActions, mapGetters, mapMutations} from "vuex";
+  import Vue from 'vue'
+  import {mapActions, mapGetters, mapMutations} from "vuex";
 
-    export default {
+  export default {
         name: "MyCellEditor",
         data() {
             return {
@@ -245,7 +245,7 @@
                 this.clearScatterLinePoint();
                 this.current_data_variety.data = [];
                 // // left interval
-                for (let i = this.params.value; i >= this.getMin; i -= this.c_value) {
+              for (let i = this.params.value; i >= this.getMin; i -= this.c_value * this.std_deviation) {
                     let dataObj = JSON.parse(JSON.stringify(this.params.node.data));
                     dataObj[this.params.column.colId] = i;
                     this.current_data_variety.data.push(dataObj);
@@ -254,7 +254,7 @@
 
                 this.sliderValue = this.current_data_variety.data.length - 1;
                 //right interval
-                for (let i = this.params.value + this.c_value; i <= this.getMax; i += this.c_value) {
+              for (let i = this.params.value + this.c_value; i <= this.getMax; i += this.c_value * this.std_deviation) {
                     let dataObj = JSON.parse(JSON.stringify(this.params.node.data));
                     dataObj[this.params.column.colId] = i;
                     this.current_data_variety.data.push(dataObj);

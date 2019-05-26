@@ -14,7 +14,7 @@ export default {
     state: {
         csv_file: {
             name: '',
-            containHeaders: false,
+          containHeaders: true,
             headers: [],
             data: [],
             idx: {},
@@ -116,8 +116,8 @@ export default {
     },
     actions: {
         addCsvFile({commit, state, dispatch}, {name, content, vm}) {
-            let parseData = (data, headers, totalDataLength) => {
-                vm.$worker.run((data, headers) => {
+          let parseData = (data, headers, totalDataLength, containHeaders) => {
+            vm.$worker.run((data, headers, containHeaders) => {
                     let guid = function () {
                         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
                             var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -125,15 +125,23 @@ export default {
                         });
                     };
 
-                    return data.map((row) => {
-                        let nrow = {};
-                        nrow['id'] = guid();
-                        for (let j in headers) {
-                            nrow[headers[j]] = row[j];
-                        }
-                        return nrow;
-                    });
-                }, [data, headers]).then((res) => {
+              if (containHeaders) {
+                return data.map((row) => {
+                  row['id'] = guid();
+                  return row;
+                });
+              } else {
+                return data.map((row) => {
+                  let nrow = {};
+                  nrow['id'] = guid();
+                  for (let j in headers) {
+                    nrow[headers[j]] = row[j];
+                  }
+                  return nrow;
+                });
+              }
+
+            }, [data, headers, containHeaders]).then((res) => {
                         state.csv_file.data = state.csv_file.data.concat(res);
                         if (state.csv_file.data.length === totalDataLength) {
                             dispatch('uploadCsv', {
@@ -153,13 +161,15 @@ export default {
                 skipEmptyLines: true,
                 complete: function (results) {
                     if (state.csv_file.containHeaders) {
-                        state.csv_file.headers = results.meta.fields.map(function (item) {
+                      let headers = results.meta.fields;
+                      state.csv_file.headers = headers.map(function (item) {
                             return {headerName: item, field: item, sortable: true, filter: true, show: true};
                         });
+                      let totalDataLength = results.data.length;
                         let data = results.data;
                         let data1 = data.splice(0, 1000);
-                        parseData(data1, headers);
-                        parseData(data, headers);
+                      parseData(data1, headers, totalDataLength, state.csv_file.containHeaders);
+                      parseData(data, headers, totalDataLength, state.csv_file.containHeaders);
                     } else {
                         let headers = api.generateHeaders(results.data[0].length);
                         state.csv_file.headers = headers.map(function (item) {
@@ -168,8 +178,8 @@ export default {
                         let totalDataLength = results.data.length;
                         let data = results.data;
                         let data1 = data.splice(0, 1000);
-                        parseData(data1, headers, totalDataLength);
-                        parseData(data, headers, totalDataLength);
+                      parseData(data1, headers, totalDataLength, state.csv_file.containHeaders);
+                      parseData(data, headers, totalDataLength, state.csv_file.containHeaders);
                     }
                 }
             })

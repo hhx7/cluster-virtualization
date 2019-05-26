@@ -48,7 +48,7 @@
                 <div class="level-left">
                     <div class="select is-rounded is-small">
                         <label>
-                            <select v-model="x_option">
+                          <select class="axis-width" v-model="x_option">
                                 <option v-for="header in myHeaders"> {{ header.headerName }}</option>
                             </select>
                         </label>
@@ -57,7 +57,7 @@
                 <div class="level-item">
                     <div class="select is-rounded is-small">
                         <label>
-                            <select v-model="y_option">
+                          <select class="axis-width" v-model="y_option">
                                 <option v-for="header in myHeaders"> {{
                                     header.headerName }}
                                 </option>
@@ -74,9 +74,9 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters, mapMutations} from "vuex";
+  import {mapActions, mapGetters, mapMutations} from "vuex";
 
-    export default {
+  export default {
         name: "ControlPanel",
         props: ['headers'],
         data() {
@@ -181,6 +181,10 @@
 
     .sampling-slider {
         margin: 0;
+    }
+
+    .axis-width {
+      width: 100px;
     }
 
 </style>

@@ -24,7 +24,7 @@
     "bulma-start": "0.0.2",
     "echarts": "^4.2.1",
     "file-saver": "^2.0.1",
-    "handsontable": "^6.2.2",
+    "handsontable": "^10.0.0",
     "handsontable-pro": "^6.2.2",
     "js2excel": "^1.0.1",
     "jspdf": "^1.5.3",
